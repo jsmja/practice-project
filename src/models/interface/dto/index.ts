@@ -4,3 +4,4 @@ export type { IMarketingDto } from './IMarketingDto';
 export type { ICrmStatDto } from './ICrmStatDto';
 export type { IPageStatDto } from './IPageStatDto';
 export type { IPointHistoryDto } from './IPointHistoryDto';
+export type { ISendHistoryDto } from './ISendHistoryDto';

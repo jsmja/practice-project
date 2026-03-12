@@ -10,7 +10,7 @@ import type { ICampaignDto } from '@/models/interface/dto';
 import { CAMPAIGN_STATUS } from '@/models/type';
 import { useFilterState } from '@/hooks/useFilterState';
 import { NOOP_PAGINATION } from '@/lib/constants';
-import { MOCK_CAMPAIGNS } from '@/mocks/campaigns';
+import { useCampaignList } from '@/hooks/client/campaigns/useCampaignsClient';
 
 const STATUS_VARIANT: Record<string, 'success' | 'info' | 'destructive' | 'warning'> = {
   [CAMPAIGN_STATUS.SENT]: 'success',
@@ -55,9 +55,11 @@ export function CrmCampaignListPage() {
   const navigate = useNavigate();
   const { filters, handleFilterChange, handleReset } = useFilterState(FILTERS);
 
-  const sentCount = useMemo(() => MOCK_CAMPAIGNS.filter((c) => c.status === CAMPAIGN_STATUS.SENT).length, []);
-  const reservedCount = useMemo(() => MOCK_CAMPAIGNS.filter((c) => c.status === CAMPAIGN_STATUS.RESERVED).length, []);
-  const failedCount = useMemo(() => MOCK_CAMPAIGNS.filter((c) => c.status === CAMPAIGN_STATUS.FAILED).length, []);
+  const { data: campaigns = [] } = useCampaignList();
+
+  const sentCount = useMemo(() => campaigns.filter((c) => c.status === CAMPAIGN_STATUS.SENT).length, []);
+  const reservedCount = useMemo(() => campaigns.filter((c) => c.status === CAMPAIGN_STATUS.RESERVED).length, []);
+  const failedCount = useMemo(() => campaigns.filter((c) => c.status === CAMPAIGN_STATUS.FAILED).length, []);
 
   return (
     <div>
@@ -76,7 +78,7 @@ export function CrmCampaignListPage() {
 
       {/* Summary Cards */}
       <div className="mb-6 grid grid-cols-4 gap-4">
-        <StatCard title="전체 캠페인" value={MOCK_CAMPAIGNS.length} icon={<Send size={18} />} />
+        <StatCard title="전체 캠페인" value={campaigns.length} icon={<Send size={18} />} />
         <StatCard title="발송 완료" value={sentCount} icon={<CheckCircle size={18} />} />
         <StatCard title="발송 예정" value={reservedCount} icon={<Clock size={18} />} />
         <StatCard title="발송 실패" value={failedCount} icon={<AlertTriangle size={18} />} />
@@ -93,7 +95,7 @@ export function CrmCampaignListPage() {
       {/* Table */}
       <DataTable
         columns={COLUMNS}
-        data={MOCK_CAMPAIGNS}
+        data={campaigns}
         pagination={NOOP_PAGINATION}
       />
     </div>

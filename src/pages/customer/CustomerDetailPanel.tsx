@@ -3,7 +3,8 @@ import { X, Copy } from 'lucide-react';
 import { Badge } from '@/components/common/Badge';
 import type { ICustomerDto } from '@/models/interface/dto';
 import { CONSENT_STATUS } from '@/models/type';
-import { MOCK_SEND_HISTORY } from '@/mocks/customers';
+import { useCustomerSendHistory } from '@/hooks/client/customers/useCustomersClient';
+
 
 interface ICustomerDetailPanelProps {
   customer: ICustomerDto | null;
@@ -12,6 +13,7 @@ interface ICustomerDetailPanelProps {
 }
 
 export function CustomerDetailPanel({ customer, isOpen, onClose }: ICustomerDetailPanelProps) {
+  const { data: sendHistory = [] } = useCustomerSendHistory(customer?.customerId ?? '');
   return (
     <>
       {/* Overlay */}
@@ -88,7 +90,7 @@ export function CustomerDetailPanel({ customer, isOpen, onClose }: ICustomerDeta
                       </tr>
                     </thead>
                     <tbody>
-                      {MOCK_SEND_HISTORY.map((item, idx) => (
+                      {sendHistory.map((item, idx) => (
                         <tr key={idx} className="border-t border-border">
                           <td className="px-3 py-2">{item.date}</td>
                           <td className="px-3 py-2">

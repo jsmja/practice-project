@@ -6,7 +6,7 @@ import type { IMarketingDto } from '@/models/interface/dto';
 import { MARKETING_STATUS } from '@/models/type';
 import { useFilterState } from '@/hooks/useFilterState';
 import { NOOP_PAGINATION } from '@/lib/constants';
-import { MOCK_MARKETING_DATA } from '@/mocks/marketing';
+import { useMarketingList } from '@/hooks/client/marketing/useMarketingClient';
 
 const FILTERS = [
   { key: 'type', label: '유형', value: 'all', options: [{ label: '전체', value: 'all' }] },
@@ -43,6 +43,8 @@ const COLUMNS = [
 export function MarketingStatusPage() {
   const { filters, handleFilterChange, handleReset } = useFilterState(FILTERS);
 
+  const { data: marketingList = [] } = useMarketingList();
+
   return (
     <div>
       <PageHeader title="마케팅 현황" />
@@ -56,7 +58,7 @@ export function MarketingStatusPage() {
 
       <DataTable
         columns={COLUMNS}
-        data={MOCK_MARKETING_DATA}
+        data={marketingList}
         pagination={NOOP_PAGINATION}
       />
     </div>

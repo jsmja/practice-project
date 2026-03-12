@@ -10,7 +10,7 @@ import { ExcelDownloadButton } from '@/components/common/ExcelDownloadButton';
 import { Send, CheckCircle, Coins } from 'lucide-react';
 import type { ICrmStatDto } from '@/models/interface/dto';
 import { NOOP_PAGINATION, PERIOD_TABS } from '@/lib/constants';
-import { MOCK_CRM_STATS } from '@/mocks/statistics';
+import { useCrmStats } from '@/hooks/client/statistics/useStatisticsClient';
 
 const COLUMNS = [
   { key: 'no', header: 'NO', width: '50px' },
@@ -36,6 +36,8 @@ const COLUMNS = [
 
 export function CrmStatisticsPage() {
   const [activePeriod, setActivePeriod] = useState('일주일');
+
+  const { data: crmStats = [] } = useCrmStats();
 
   return (
     <div>
@@ -97,7 +99,7 @@ export function CrmStatisticsPage() {
       </div>
       <DataTable
         columns={COLUMNS}
-        data={MOCK_CRM_STATS}
+        data={crmStats}
         pagination={NOOP_PAGINATION}
       />
     </div>

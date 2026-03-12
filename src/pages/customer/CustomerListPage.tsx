@@ -9,7 +9,7 @@ import type { ICustomerDto } from '@/models/interface/dto';
 import { CONSENT_STATUS } from '@/models/type';
 import { useFilterState } from '@/hooks/useFilterState';
 import { NOOP_PAGINATION } from '@/lib/constants';
-import { MOCK_CUSTOMERS } from '@/mocks/customers';
+import { useCustomerList } from '@/hooks/client/customers/useCustomersClient';
 
 const FILTERS = [
   { key: 'source', label: '유입 경로', value: 'all', options: [{ label: '전체', value: 'all' }, { label: '카페24', value: 'cafe24' }, { label: '직접유입', value: 'direct' }] },
@@ -47,6 +47,8 @@ export function CustomerListPage() {
   const [selectedCustomer, setSelectedCustomer] = useState<ICustomerDto | null>(null);
   const [searchCategory, setSearchCategory] = useState('all');
   const [searchKeyword, setSearchKeyword] = useState('');
+
+  const { data: customers = [] } = useCustomerList();
 
   return (
     <div className="relative">
@@ -102,12 +104,12 @@ export function CustomerListPage() {
       {/* Table */}
       <DataTable
         columns={COLUMNS}
-        data={MOCK_CUSTOMERS}
+        data={customers}
         selectable
         selectedRows={selectedRows}
         onSelectionChange={setSelectedRows}
         onRowClick={(row) => setSelectedCustomer(row)}
-        totalLabel={`전체 ${MOCK_CUSTOMERS.length}건`}
+        totalLabel={`전체 ${customers.length}건`}
         pagination={NOOP_PAGINATION}
       />
 

@@ -5,24 +5,8 @@ import { DataTable } from '@/components/common/DataTable';
 import { Badge } from '@/components/common/Badge';
 import { cn } from '@/lib/utils';
 import { Coins, Plus } from 'lucide-react';
-
-interface IPointHistory {
-  [key: string]: unknown;
-  no: number;
-  date: string;
-  type: string;
-  description: string;
-  amount: number;
-  balance: number;
-}
-
-const MOCK_HISTORY: IPointHistory[] = [
-  { no: 1, date: '2025.12.20 10:30', type: '사용', description: '친구톡 발송 - 크리스마스 할인 안내 (150건)', amount: -270, balance: 730 },
-  { no: 2, date: '2025.12.18 14:30', type: '사용', description: '알림톡 발송 - 주문 확인 알림 (45건)', amount: -32, balance: 1000 },
-  { no: 3, date: '2025.12.15 09:00', type: '충전', description: '포인트 충전 (카드결제)', amount: 1000, balance: 1032 },
-  { no: 4, date: '2025.12.10 11:00', type: '사용', description: '알림톡 발송 - 배송 지연 안내 (12건)', amount: -8, balance: 32 },
-  { no: 5, date: '2025.12.01 10:00', type: '충전', description: '신규 가입 보너스 포인트', amount: 40, balance: 40 },
-];
+import { usePointHistory } from '@/hooks/client/points/usePointsClient';
+import type { IPointHistoryDto } from '@/models/interface/dto';
 
 const COLUMNS = [
   { key: 'no', header: 'NO', width: '50px' },
@@ -31,7 +15,7 @@ const COLUMNS = [
     key: 'type',
     header: '유형',
     width: '80px',
-    render: (row: IPointHistory) => (
+    render: (row: IPointHistoryDto) => (
       <Badge variant={row.type === '충전' ? 'success' : 'info'}>{row.type}</Badge>
     ),
   },
@@ -41,7 +25,7 @@ const COLUMNS = [
     header: '금액',
     width: '100px',
     sortable: true,
-    render: (row: IPointHistory) => (
+    render: (row: IPointHistoryDto) => (
       <span className={cn('font-medium', row.amount > 0 ? 'text-green-600' : 'text-red-500')}>
         {row.amount > 0 ? '+' : ''}{row.amount}P
       </span>
@@ -51,7 +35,7 @@ const COLUMNS = [
     key: 'balance',
     header: '잔액',
     width: '100px',
-    render: (row: IPointHistory) => <span className="font-medium">{row.balance}P</span>,
+    render: (row: IPointHistoryDto) => <span className="font-medium">{row.balance}P</span>,
   },
 ];
 
@@ -61,6 +45,8 @@ const TYPE_TABS = ['전체', '충전', '사용'];
 export function PointManagementPage() {
   const [activePeriod, setActivePeriod] = useState('전체');
   const [activeType, setActiveType] = useState('전체');
+
+  const { data: pointHistory = [] } = usePointHistory();
 
   return (
     <div>
@@ -141,7 +127,7 @@ export function PointManagementPage() {
 
       <DataTable
         columns={COLUMNS}
-        data={MOCK_HISTORY}
+        data={pointHistory}
         pagination={{ currentPage: 1, totalPages: 1, onPageChange: () => {} }}
       />
     </div>
