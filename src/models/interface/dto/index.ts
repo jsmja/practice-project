@@ -10,3 +10,4 @@ export type { IPaymentHistoryDto } from './IPaymentHistoryDto';
 export type { IServiceProductDto } from './IServiceProductDto';
 export type { IBannerDto } from './IBannerDto';
 export type { IBannerTemplateDto } from './IBannerTemplateDto';
+export type { ICrmSummaryDto } from './ICrmSummaryDto';

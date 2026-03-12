@@ -1,0 +1,15 @@
+{
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo '[자동규칙] 구현/개발 작업 시: ① CLAUDE.md 컨벤션 준수 ② 복잡한 작업은 Plan 서브에이전트 활용 ③ 코드베이스 탐색은 Explore 서브에이전트 활용 ④ 독립 작업은 병렬 처리'"
+          }
+        ]
+      }
+    ]
+  }
+}

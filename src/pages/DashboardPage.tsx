@@ -1,6 +1,9 @@
+import { useNavigate } from 'react-router-dom';
 import { PageHeader } from '@/components/common/PageHeader';
 import { StatCard } from '@/components/common/StatCard';
 import { Badge } from '@/components/common/Badge';
+import { cn } from '@/lib/utils';
+import { useCrmSummary } from '@/hooks/client/statistics/useStatisticsClient';
 import {
   MessageSquare,
   Send,
@@ -12,6 +15,9 @@ import {
   MessageCircle,
   Zap,
   ArrowRight,
+  Eye,
+  MousePointer,
+  TrendingUp,
 } from 'lucide-react';
 
 const SERVICE_LINKS = [
@@ -25,6 +31,9 @@ const SERVICE_LINKS = [
 ];
 
 export function DashboardPage() {
+  const navigate = useNavigate();
+  const { data: summary } = useCrmSummary();
+
   return (
     <div>
       <PageHeader title="대시보드" />
@@ -74,36 +83,73 @@ export function DashboardPage() {
         </div>
       </div>
 
-      {/* CRM 현황 (NEW) */}
+      {/* CRM 발송 현황 */}
       <div className="mb-6">
-        <div className="mb-3 flex items-center gap-2">
-          <h3 className="text-sm font-semibold text-foreground">CRM 발송 현황</h3>
-          <Badge variant="kakao">NEW</Badge>
+        <div className="mb-3 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <h3 className="text-sm font-semibold text-foreground">CRM 발송 현황</h3>
+            <Badge variant="kakao">NEW</Badge>
+          </div>
+          <button
+            onClick={() => navigate('/statistics/crm')}
+            className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground"
+          >
+            상세보기 <ArrowRight size={12} />
+          </button>
         </div>
-        <div className="grid grid-cols-4 gap-4">
+
+        {/* 상단 4개 StatCard */}
+        <div className="mb-4 grid grid-cols-4 gap-4">
           <StatCard
-            title="오늘 발송 건수"
-            value="0건"
+            title="이번 주 발송"
+            value={summary ? `${summary.totalSent.toLocaleString()}건` : '0건'}
             icon={<Send size={18} />}
           />
           <StatCard
             title="발송 성공률"
-            value="0%"
-            description="최근 7일 기준"
+            value={summary ? `${summary.sendRate}%` : '0%'}
+            change={{ value: '전주 대비 +1.2%', isPositive: true }}
+            description={summary?.period}
             icon={<CheckCircle size={18} />}
           />
           <StatCard
             title="이번 달 총 발송"
-            value="0건"
+            value="125,890건"
+            change={{ value: '지난달 대비 +8.3%', isPositive: true }}
             icon={<MessageSquare size={18} />}
           />
           <StatCard
             title="잔여 포인트"
-            value="0P"
+            value="4,820P"
             description="충전하기 →"
             icon={<Coins size={18} />}
           />
         </div>
+
+        {/* 퍼널 지표 인라인 */}
+        {summary && (
+          <div className="overflow-hidden rounded-xl border border-border bg-white">
+            <div className="flex divide-x divide-border">
+              {[
+                { icon: <Send size={14} />, label: '발송률', value: `${summary.sendRate}%`, count: `${summary.totalSent.toLocaleString()}건`, color: 'text-indigo-600', bg: 'bg-indigo-50' },
+                { icon: <Eye size={14} />, label: '열람률', value: `${summary.openRate}%`, count: `${summary.totalOpen.toLocaleString()}건`, color: 'text-blue-600', bg: 'bg-blue-50' },
+                { icon: <MousePointer size={14} />, label: '클릭률', value: `${summary.clickRate}%`, count: `${summary.totalClick.toLocaleString()}건`, color: 'text-amber-600', bg: 'bg-amber-50' },
+                { icon: <TrendingUp size={14} />, label: '전환률', value: `${summary.conversionRate}%`, count: `${summary.totalConversion.toLocaleString()}건`, color: 'text-rose-600', bg: 'bg-rose-50' },
+              ].map((item) => (
+                <div key={item.label} className="flex flex-1 items-center gap-3 px-5 py-4">
+                  <div className={cn('flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full', item.bg, item.color)}>
+                    {item.icon}
+                  </div>
+                  <div>
+                    <p className="text-xs text-muted-foreground">{item.label}</p>
+                    <p className={cn('text-lg font-bold', item.color)}>{item.value}</p>
+                    <p className="text-[10px] text-muted-foreground">{item.count}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
 
       {/* 서비스 연동 현황 */}
