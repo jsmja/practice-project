@@ -3,8 +3,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Layout } from '@/components/common/Layout';
 import { DashboardPage } from '@/pages/DashboardPage';
 import { CustomerListPage } from '@/pages/customer/CustomerListPage';
-import { CrmCampaignListPage } from '@/pages/marketing/CrmCampaignListPage';
-import { CrmCampaignCreatePage } from '@/pages/marketing/CrmCampaignCreatePage';
+import { CrmManagementPage } from '@/pages/marketing/CrmManagementPage';
 import { MarketingStatusPage } from '@/pages/marketing/MarketingStatusPage';
 import { EventBannerManagementPage } from '@/pages/marketing/EventBannerManagementPage';
 import { ServiceIntegrationPage } from '@/pages/service/ServiceIntegrationPage';
@@ -29,8 +28,7 @@ function App() {
             <Route path="/customers" element={<CustomerListPage />} />
             <Route path="/marketing/status" element={<MarketingStatusPage />} />
             <Route path="/marketing/event-banners" element={<EventBannerManagementPage />} />
-            <Route path="/marketing/crm" element={<CrmCampaignListPage />} />
-            <Route path="/marketing/crm/create" element={<CrmCampaignCreatePage />} />
+            <Route path="/marketing/crm" element={<CrmManagementPage />} />
             <Route path="/service-integration" element={<ServiceIntegrationPage />} />
             <Route path="/statistics/customers" element={<CustomerStatisticsPage />} />
             <Route path="/statistics/marketing" element={<MarketingStatisticsPage />} />
