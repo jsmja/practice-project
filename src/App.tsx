@@ -6,6 +6,7 @@ import { CustomerListPage } from '@/pages/customer/CustomerListPage';
 import { CrmCampaignListPage } from '@/pages/marketing/CrmCampaignListPage';
 import { CrmCampaignCreatePage } from '@/pages/marketing/CrmCampaignCreatePage';
 import { MarketingStatusPage } from '@/pages/marketing/MarketingStatusPage';
+import { EventBannerManagementPage } from '@/pages/marketing/EventBannerManagementPage';
 import { ServiceIntegrationPage } from '@/pages/service/ServiceIntegrationPage';
 import { CrmStatisticsPage } from '@/pages/statistics/CrmStatisticsPage';
 import { CustomerStatisticsPage } from '@/pages/statistics/CustomerStatisticsPage';
@@ -27,6 +28,7 @@ function App() {
             <Route path="/dashboard" element={<DashboardPage />} />
             <Route path="/customers" element={<CustomerListPage />} />
             <Route path="/marketing/status" element={<MarketingStatusPage />} />
+            <Route path="/marketing/event-banners" element={<EventBannerManagementPage />} />
             <Route path="/marketing/crm" element={<CrmCampaignListPage />} />
             <Route path="/marketing/crm/create" element={<CrmCampaignCreatePage />} />
             <Route path="/service-integration" element={<ServiceIntegrationPage />} />

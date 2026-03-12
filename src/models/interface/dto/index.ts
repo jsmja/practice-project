@@ -8,3 +8,5 @@ export type { ISendHistoryDto } from './ISendHistoryDto';
 export type { ISubscriptionDto } from './ISubscriptionDto';
 export type { IPaymentHistoryDto } from './IPaymentHistoryDto';
 export type { IServiceProductDto } from './IServiceProductDto';
+export type { IBannerDto } from './IBannerDto';
+export type { IBannerTemplateDto } from './IBannerTemplateDto';

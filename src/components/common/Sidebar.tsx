@@ -46,11 +46,10 @@ const MENU_ITEMS: IMenuItem[] = [
     children: [{ label: '고객 리스트', path: '/customers', highlight: true }],
   },
   {
-    label: '마케팅',
+    label: '이벤트 배너',
     icon: <MessageCircle size={18} />,
     children: [
-      { label: '마케팅 현황', path: '/marketing/status' },
-      { label: '마케팅 만들기', path: '/marketing/create' },
+      { label: '배너 관리', path: '/marketing/event-banners', highlight: true },
       { label: 'CRM 현황', path: '/marketing/crm', highlight: true },
       { label: 'CRM 만들기', path: '/marketing/crm/create', highlight: true },
     ],
@@ -93,7 +92,7 @@ export function Sidebar() {
   const location = useLocation();
   const [expandedMenus, setExpandedMenus] = useState<Record<string, boolean>>({
     '고객 관리': true,
-    '마케팅': true,
+    '이벤트 배너': true,
     '통계': true,
     '설정': true,
     '유료서비스': true,
