@@ -17,7 +17,7 @@ const queryClient = new QueryClient();
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <BrowserRouter>
+      <BrowserRouter basename="/practice-project/">
         <Routes>
           <Route element={<Layout />}>
             <Route path="/" element={<Navigate to="/dashboard" replace />} />
