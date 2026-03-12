@@ -5,3 +5,6 @@ export type { ICrmStatDto } from './ICrmStatDto';
 export type { IPageStatDto } from './IPageStatDto';
 export type { IPointHistoryDto } from './IPointHistoryDto';
 export type { ISendHistoryDto } from './ISendHistoryDto';
+export type { ISubscriptionDto } from './ISubscriptionDto';
+export type { IPaymentHistoryDto } from './IPaymentHistoryDto';
+export type { IServiceProductDto } from './IServiceProductDto';

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { PageHeader } from '@/components/common/PageHeader';
 import { StatCard } from '@/components/common/StatCard';
 import { DataTable } from '@/components/common/DataTable';
@@ -43,6 +44,7 @@ const PERIOD_TABS = ['최근 1개월', '최근 3개월', '최근 6개월', '전�
 const TYPE_TABS = ['전체', '충전', '사용'];
 
 export function PointManagementPage() {
+  const navigate = useNavigate();
   const [activePeriod, setActivePeriod] = useState('전체');
   const [activeType, setActiveType] = useState('전체');
 
@@ -53,9 +55,9 @@ export function PointManagementPage() {
       <PageHeader
         title="포인트 관리"
         actions={
-          <button className="flex items-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground transition-colors hover:bg-gray-800">
+          <button onClick={() => navigate('/payment/apply')} className="flex items-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground transition-colors hover:bg-gray-800">
             <Plus size={16} />
-            충전하기
+            서비스 신청/충전
           </button>
         }
       />

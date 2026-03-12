@@ -13,6 +13,7 @@ import {
   ChevronDown,
   ChevronRight,
   Copy,
+  Receipt,
 } from 'lucide-react';
 
 interface IMenuChildItem {
@@ -70,6 +71,15 @@ const MENU_ITEMS: IMenuItem[] = [
   },
   { label: '멤버 관리', icon: <UserCog size={18} />, path: '/members' },
   {
+    label: '유료서비스',
+    icon: <Receipt size={18} />,
+    children: [
+      { label: '구독현황', path: '/payment/subscription', highlight: true },
+      { label: '서비스 신청', path: '/payment/apply', highlight: true },
+      { label: '결제내역', path: '/payment/history', highlight: true },
+    ],
+  },
+  {
     label: '설정',
     icon: <Settings size={18} />,
     children: [
@@ -86,6 +96,7 @@ export function Sidebar() {
     '마케팅': true,
     '통계': true,
     '설정': true,
+    '유료서비스': true,
   });
 
   const toggleMenu = (label: string) => {
