@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import {
-  MessageSquare,
   Users,
   FileText,
   Send,
