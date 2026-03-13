@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { PageHeader } from '@/components/common/PageHeader';
 import { Badge } from '@/components/common/Badge';
-import { Check, CreditCard } from 'lucide-react';
+import { Check } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { MOCK_SERVICE_PRODUCTS } from '@/mocks/payment';
 

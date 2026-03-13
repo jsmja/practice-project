@@ -1,0 +1,39 @@
+name: 기획 검수 (Planner Review)
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  planner-review:
+    name: 기획 검수
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: TypeScript 타입 검사
+        run: npx tsc --noEmit
+
+      - name: 기획 기능 구현 검수
+        run: |
+          chmod +x .github/scripts/planner-check.sh
+          .github/scripts/planner-check.sh
+
+      - name: 검수 결과 업로드 (실패 시에도)
+        if: always()
+        run: echo "기획 검수 완료"

@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { PageHeader } from '@/components/common/PageHeader';
 import { Badge } from '@/components/common/Badge';
-import { CreditCard, ChevronRight, Coins, AlertTriangle } from 'lucide-react';
+import { ChevronRight, Coins, AlertTriangle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { MOCK_SUBSCRIPTIONS, MOCK_SERVICE_PRODUCTS } from '@/mocks/payment';
 import { MOCK_POINT_BALANCE } from '@/mocks/points';
