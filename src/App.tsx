@@ -7,6 +7,7 @@ import { CrmManagementPage } from '@/pages/marketing/CrmManagementPage';
 import { MarketingStatusPage } from '@/pages/marketing/MarketingStatusPage';
 import { EventBannerManagementPage } from '@/pages/marketing/EventBannerManagementPage';
 import { ServiceIntegrationPage } from '@/pages/service/ServiceIntegrationPage';
+import { KakaoMessageApplyPage } from '@/pages/service/KakaoMessageApplyPage';
 import { CrmStatisticsPage } from '@/pages/statistics/CrmStatisticsPage';
 import { CustomerStatisticsPage } from '@/pages/statistics/CustomerStatisticsPage';
 import { MarketingStatisticsPage } from '@/pages/statistics/MarketingStatisticsPage';
@@ -30,6 +31,7 @@ function App() {
             <Route path="/marketing/event-banners" element={<EventBannerManagementPage />} />
             <Route path="/marketing/crm" element={<CrmManagementPage />} />
             <Route path="/service-integration" element={<ServiceIntegrationPage />} />
+            <Route path="/service-integration/kakao-message" element={<KakaoMessageApplyPage />} />
             <Route path="/statistics/customers" element={<CustomerStatisticsPage />} />
             <Route path="/statistics/marketing" element={<MarketingStatisticsPage />} />
             <Route path="/statistics/crm" element={<CrmStatisticsPage />} />

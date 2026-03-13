@@ -3,18 +3,19 @@ import { NavLink, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import {
   LayoutDashboard,
-  Layers,
-  Users,
-  MessageCircle,
-  Link as LinkIcon,
-  BarChart3,
-  UserCog,
-  Settings,
+  CirclePlus,
+  Contact,
+  Megaphone,
+  Network,
+  BarChart2,
+  UserRound,
+  CreditCard,
+  SlidersHorizontal,
   ChevronDown,
   ChevronRight,
   Copy,
-  Receipt,
 } from 'lucide-react';
+
 
 interface IMenuChildItem {
   label: string;
@@ -34,7 +35,7 @@ const MENU_ITEMS: IMenuItem[] = [
   { label: '대시보드', icon: <LayoutDashboard size={18} />, path: '/dashboard' },
   {
     label: '헤이보드',
-    icon: <Layers size={18} />,
+    icon: <CirclePlus size={18} />,
     children: [
       { label: '버튼/카드관리', path: '/heyboard/buttons' },
       { label: '카드 템플릿 관리', path: '/heyboard/templates' },
@@ -42,12 +43,12 @@ const MENU_ITEMS: IMenuItem[] = [
   },
   {
     label: '고객 관리',
-    icon: <Users size={18} />,
+    icon: <Contact size={18} />,
     children: [{ label: '고객 리스트', path: '/customers', highlight: true }],
   },
   {
     label: '마케팅',
-    icon: <MessageCircle size={18} />,
+    icon: <Megaphone size={18} />,
     children: [
       { label: '배너 관리', path: '/marketing/event-banners', highlight: true },
       { label: 'CRM 관리', path: '/marketing/crm', highlight: true },
@@ -55,22 +56,23 @@ const MENU_ITEMS: IMenuItem[] = [
   },
   {
     label: '서비스 연동',
-    icon: <LinkIcon size={18} />,
+    icon: <Network size={18} />,
     path: '/service-integration',
+    highlight: true,
   },
   {
     label: '통계',
-    icon: <BarChart3 size={18} />,
+    icon: <BarChart2 size={18} />,
     children: [
       { label: '고객 유입 통계', path: '/statistics/customers' },
       { label: '마케팅 통계', path: '/statistics/marketing' },
       { label: 'CRM 발송 통계', path: '/statistics/crm', highlight: true },
     ],
   },
-  { label: '멤버 관리', icon: <UserCog size={18} />, path: '/members' },
+  { label: '멤버 관리', icon: <UserRound size={18} />, path: '/members' },
   {
     label: '유료서비스',
-    icon: <Receipt size={18} />,
+    icon: <CreditCard size={18} />,
     children: [
       { label: '구독현황', path: '/payment/subscription', highlight: true },
       { label: '서비스 신청', path: '/payment/apply', highlight: true },
@@ -80,7 +82,7 @@ const MENU_ITEMS: IMenuItem[] = [
   },
   {
     label: '설정',
-    icon: <Settings size={18} />,
+    icon: <SlidersHorizontal size={18} />,
     children: [
       { label: '회사 정보 관리', path: '/settings/company' },
     ],
@@ -173,12 +175,17 @@ export function Sidebar() {
                     'flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm transition-colors',
                     isActive
                       ? 'bg-amber-50 font-medium text-foreground'
-                      : 'text-muted-foreground hover:bg-muted hover:text-foreground'
+                      : item.highlight
+                        ? 'text-amber-700 hover:bg-amber-50 hover:text-amber-800'
+                        : 'text-muted-foreground hover:bg-muted hover:text-foreground'
                   )
                 }
               >
                 {item.icon}
-                <span className="font-medium">{item.label}</span>
+                <span className="flex-1 font-medium">{item.label}</span>
+                {item.highlight && (
+                  <span className="h-1.5 w-1.5 flex-shrink-0 rounded-full bg-amber-400" />
+                )}
               </NavLink>
             )}
           </div>
@@ -197,7 +204,7 @@ export function Sidebar() {
       {/* User info */}
       <div className="flex items-center gap-2.5 border-t border-border px-4 py-3">
         <div className="flex h-8 w-8 items-center justify-center rounded-full bg-muted">
-          <Settings size={14} className="text-muted-foreground" />
+          <SlidersHorizontal size={14} className="text-muted-foreground" />
         </div>
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-1.5">
