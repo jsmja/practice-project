@@ -75,6 +75,7 @@ const MENU_ITEMS: IMenuItem[] = [
       { label: '구독현황', path: '/payment/subscription', highlight: true },
       { label: '서비스 신청', path: '/payment/apply', highlight: true },
       { label: '결제내역', path: '/payment/history', highlight: true },
+      { label: '포인트 충전', path: '/settings/points', highlight: true },
     ],
   },
   {
@@ -82,7 +83,6 @@ const MENU_ITEMS: IMenuItem[] = [
     icon: <Settings size={18} />,
     children: [
       { label: '회사 정보 관리', path: '/settings/company' },
-      { label: '포인트 관리', path: '/settings/points', highlight: true },
     ],
   },
 ];
