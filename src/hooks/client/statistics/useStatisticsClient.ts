@@ -9,9 +9,13 @@ export function useCrmSummary() {
     queryFn: async () => {
       if (!isSupabaseConfigured) return MOCK_CRM_SUMMARY;
 
-      const { data, error } = await supabase.from('crm_summary').select('*').single();
-      if (error) throw error;
-      return data;
+      try {
+        const { data, error } = await supabase.from('crm_summary').select('*').single();
+        if (error || !data) return MOCK_CRM_SUMMARY;
+        return data;
+      } catch {
+        return MOCK_CRM_SUMMARY;
+      }
     },
   });
 }
