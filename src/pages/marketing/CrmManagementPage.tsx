@@ -15,16 +15,19 @@ import { CrmCampaignCreateForm } from './CrmCampaignCreatePage';
 
 const STATUS_VARIANT: Record<string, 'success' | 'info' | 'destructive' | 'warning'> = {
   [CAMPAIGN_STATUS.SENT]: 'success',
-  [CAMPAIGN_STATUS.RESERVED]: 'info',
+  [CAMPAIGN_STATUS.PENDING]: 'info',
+  [CAMPAIGN_STATUS.SENDING]: 'warning',
   [CAMPAIGN_STATUS.FAILED]: 'destructive',
 };
 
 const TYPE_VARIANT: Record<string, 'default' | 'info' | 'warning' | 'success'> = {
-  '텍스트형': 'default',
-  '이미지형': 'info',
-  '와이드 이미지형': 'success',
-  '와이드 아이템 리스트형': 'warning',
-  '캐러셀 피드형': 'info',
+  '커스텀 캠페인': 'default',
+  '웰컴백 캠페인': 'info',
+  '신규회원 이탈방지': 'success',
+  '재구매 유도': 'warning',
+  '구매 감사': 'info',
+  '생일 축하': 'success',
+  'VIP 전용': 'warning',
 };
 
 const FILTERS = [
@@ -34,11 +37,13 @@ const FILTERS = [
     value: 'all',
     options: [
       { label: '전체', value: 'all' },
-      { label: '텍스트형', value: '텍스트형' },
-      { label: '이미지형', value: '이미지형' },
-      { label: '와이드 이미지형', value: '와이드 이미지형' },
-      { label: '와이드 아이템 리스트형', value: '와이드 아이템 리스트형' },
-      { label: '캐러셀 피드형', value: '캐러셀 피드형' },
+      { label: '커스텀 캠페인', value: '커스텀 캠페인' },
+      { label: '웰컴백 캠페인', value: '웰컴백 캠페인' },
+      { label: '신규회원 이탈방지', value: '신규회원 이탈방지' },
+      { label: '재구매 유도', value: '재구매 유도' },
+      { label: '구매 감사', value: '구매 감사' },
+      { label: '생일 축하', value: '생일 축하' },
+      { label: 'VIP 전용', value: 'VIP 전용' },
     ],
   },
   {
@@ -47,9 +52,10 @@ const FILTERS = [
     value: 'all',
     options: [
       { label: '전체', value: 'all' },
-      { label: '발송완료', value: 'done' },
-      { label: '예약중', value: 'reserved' },
-      { label: '실패', value: 'failed' },
+      { label: '대기', value: '대기' },
+      { label: '발송중', value: '발송중' },
+      { label: '완료', value: '완료' },
+      { label: '실패', value: '실패' },
     ],
   },
 ];
@@ -59,7 +65,7 @@ const COLUMNS = [
   { key: 'name', header: '캠페인명' },
   {
     key: 'type',
-    header: '메시지 유형',
+    header: '캠페인 유형',
     width: '160px',
     render: (row: ICampaignDto) => (
       <Badge variant={TYPE_VARIANT[row.type] ?? 'default'}>{row.type}</Badge>
@@ -69,14 +75,14 @@ const COLUMNS = [
   {
     key: 'status',
     header: '상태',
-    width: '100px',
+    width: '90px',
     render: (row: ICampaignDto) => (
       <Badge variant={STATUS_VARIANT[row.status] ?? 'default'}>{row.status}</Badge>
     ),
   },
-  { key: 'targetCount', header: '대상 수', width: '80px' },
-  { key: 'successCount', header: '성공 수', width: '80px' },
-  { key: 'failCount', header: '실패 수', width: '80px' },
+  { key: 'targetCount', header: '대상 수', width: '75px' },
+  { key: 'successCount', header: '성공 수', width: '75px' },
+  { key: 'failCount', header: '실패 수', width: '75px' },
 ];
 
 type TabType = '캠페인 현황' | '캠페인 만들기';
@@ -87,7 +93,7 @@ export function CrmManagementPage() {
   const { data: campaigns = [] } = useCampaignList();
 
   const sentCount = useMemo(() => campaigns.filter((c) => c.status === CAMPAIGN_STATUS.SENT).length, [campaigns]);
-  const reservedCount = useMemo(() => campaigns.filter((c) => c.status === CAMPAIGN_STATUS.RESERVED).length, [campaigns]);
+  const pendingCount = useMemo(() => campaigns.filter((c) => c.status === CAMPAIGN_STATUS.PENDING || c.status === CAMPAIGN_STATUS.SENDING).length, [campaigns]);
   const failedCount = useMemo(() => campaigns.filter((c) => c.status === CAMPAIGN_STATUS.FAILED).length, [campaigns]);
 
   return (
@@ -131,7 +137,7 @@ export function CrmManagementPage() {
           <div className="mb-6 grid grid-cols-4 gap-4">
             <StatCard title="전체 캠페인" value={campaigns.length} icon={<Send size={18} />} />
             <StatCard title="발송 완료" value={sentCount} icon={<CheckCircle size={18} />} />
-            <StatCard title="발송 예정" value={reservedCount} icon={<Clock size={18} />} />
+            <StatCard title="발송 예정/중" value={pendingCount} icon={<Clock size={18} />} />
             <StatCard title="발송 실패" value={failedCount} icon={<AlertTriangle size={18} />} />
           </div>
 

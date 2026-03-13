@@ -1,8 +1,9 @@
 export type BadgeVariantType = 'default' | 'success' | 'warning' | 'destructive' | 'info' | 'kakao';
 
 export const CAMPAIGN_STATUS = {
-  SENT: '발송완료',
-  RESERVED: '예약중',
+  PENDING: '대기',
+  SENDING: '발송중',
+  SENT: '완료',
   FAILED: '실패',
 } as const;
 

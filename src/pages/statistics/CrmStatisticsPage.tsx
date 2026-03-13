@@ -40,9 +40,9 @@ const COLUMNS = [
   { key: 'campaignName', header: '캠페인명' },
   {
     key: 'type',
-    header: '발송 유형',
-    width: '100px',
-    render: (row: ICrmStatDto) => <Badge variant="kakao">{row.type}</Badge>,
+    header: '캠페인 유형',
+    width: '130px',
+    render: (row: ICrmStatDto) => <Badge variant="default">{row.type}</Badge>,
   },
   { key: 'sendDate', header: '발송일', width: '120px' },
   {
@@ -294,24 +294,23 @@ export function CrmStatisticsPage() {
             </div>
           </SectionCard>
 
-          {/* 발송 유형별 통계 */}
-          <SectionCard title="발송 유형별 통계" className="mb-6">
-            <div className="grid grid-cols-3 gap-4">
-              <div className="rounded-lg border border-yellow-200 bg-yellow-50 p-4">
-                <p className="text-xs text-muted-foreground">알림톡</p>
-                <p className="mt-1 text-xl font-bold">177건</p>
-                <p className="mt-1 text-xs text-green-600">성공률 98.3%</p>
-              </div>
-              <div className="rounded-lg border border-blue-200 bg-blue-50 p-4">
-                <p className="text-xs text-muted-foreground">친구톡</p>
-                <p className="mt-1 text-xl font-bold">5,370건</p>
-                <p className="mt-1 text-xs text-green-600">성공률 97.9%</p>
-              </div>
-              <div className="rounded-lg border border-purple-200 bg-purple-50 p-4">
-                <p className="text-xs text-muted-foreground">브랜드 메시지</p>
-                <p className="mt-1 text-xl font-bold">0건</p>
-                <p className="mt-1 text-xs text-muted-foreground">미사용</p>
-              </div>
+          {/* 캠페인 유형별 통계 */}
+          <SectionCard title="캠페인 유형별 통계" className="mb-6">
+            <div className="grid grid-cols-3 gap-3">
+              {[
+                { label: '커스텀 캠페인', count: '3,200', rate: '98.0%', color: 'border-slate-200 bg-slate-50', textColor: 'text-slate-600' },
+                { label: '웰컴백 캠페인', count: '1,850', rate: '98.0%', color: 'border-blue-200 bg-blue-50', textColor: 'text-blue-600' },
+                { label: 'VIP 전용', count: '320', rate: '98.1%', color: 'border-yellow-200 bg-yellow-50', textColor: 'text-yellow-700' },
+                { label: '신규회원 이탈방지', count: '120', rate: '98.3%', color: 'border-emerald-200 bg-emerald-50', textColor: 'text-emerald-600' },
+                { label: '구매 감사', count: '45', rate: '100%', color: 'border-pink-200 bg-pink-50', textColor: 'text-pink-600' },
+                { label: '생일 축하', count: '80', rate: '97.5%', color: 'border-violet-200 bg-violet-50', textColor: 'text-violet-600' },
+              ].map(({ label, count, rate, color, textColor }) => (
+                <div key={label} className={`rounded-lg border p-3 ${color}`}>
+                  <p className="text-xs text-muted-foreground">{label}</p>
+                  <p className="mt-1 text-lg font-bold">{count}건</p>
+                  <p className={`mt-1 text-xs font-medium ${textColor}`}>성공률 {rate}</p>
+                </div>
+              ))}
             </div>
           </SectionCard>
 

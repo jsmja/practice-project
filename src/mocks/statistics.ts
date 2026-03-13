@@ -18,12 +18,12 @@ export const MOCK_CRM_SUMMARY: ICrmSummaryDto = {
 };
 
 export const MOCK_CRM_STATS: ICrmStatDto[] = [
-  { no: 1, campaignName: '봄 신메뉴 출시 이벤트 안내', type: '친구톡', sendDate: '2026.03.10', targetCount: 3200, successCount: 3136, failCount: 64, cost: 470 },
-  { no: 2, campaignName: '3월 재방문 고객 할인 쿠폰', type: '친구톡', sendDate: '2026.03.08', targetCount: 1850, successCount: 1813, failCount: 37, cost: 272 },
-  { no: 3, campaignName: '주문 완료 확인 알림', type: '알림톡', sendDate: '2026.03.07', targetCount: 45, successCount: 45, failCount: 0, cost: 32 },
-  { no: 4, campaignName: 'VIP 고객 특별 혜택 안내', type: '친구톡', sendDate: '2026.03.05', targetCount: 320, successCount: 314, failCount: 6, cost: 47 },
-  { no: 5, campaignName: '신규 회원 이탈 방지 30일', type: '알림톡', sendDate: '2026.03.04', targetCount: 120, successCount: 118, failCount: 2, cost: 35 },
-  { no: 6, campaignName: '배송 지연 안내', type: '알림톡', sendDate: '2026.03.03', targetCount: 12, successCount: 11, failCount: 1, cost: 8 },
+  { no: 1, campaignName: '봄 신메뉴 출시 이벤트 안내', type: '커스텀 캠페인', sendDate: '2026.03.10', targetCount: 3200, successCount: 3136, failCount: 64, cost: 470 },
+  { no: 2, campaignName: '3월 재방문 고객 할인 쿠폰', type: '웰컴백 캠페인', sendDate: '2026.03.08', targetCount: 1850, successCount: 1813, failCount: 37, cost: 272 },
+  { no: 3, campaignName: '구매 감사 메시지', type: '구매 감사', sendDate: '2026.03.07', targetCount: 45, successCount: 45, failCount: 0, cost: 32 },
+  { no: 4, campaignName: 'VIP 고객 특별 혜택 안내', type: 'VIP 전용', sendDate: '2026.03.05', targetCount: 320, successCount: 314, failCount: 6, cost: 47 },
+  { no: 5, campaignName: '신규 회원 이탈방지 30일', type: '신규회원 이탈방지', sendDate: '2026.03.04', targetCount: 120, successCount: 118, failCount: 2, cost: 35 },
+  { no: 6, campaignName: '생일 축하 쿠폰 발송', type: '생일 축하', sendDate: '2026.03.03', targetCount: 80, successCount: 78, failCount: 2, cost: 12 },
 ];
 
 export const MOCK_COUPON_RANKING = [

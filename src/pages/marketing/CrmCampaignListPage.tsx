@@ -14,7 +14,8 @@ import { useCampaignList } from '@/hooks/client/campaigns/useCampaignsClient';
 
 const STATUS_VARIANT: Record<string, 'success' | 'info' | 'destructive' | 'warning'> = {
   [CAMPAIGN_STATUS.SENT]: 'success',
-  [CAMPAIGN_STATUS.RESERVED]: 'info',
+  [CAMPAIGN_STATUS.PENDING]: 'info',
+  [CAMPAIGN_STATUS.SENDING]: 'warning',
   [CAMPAIGN_STATUS.FAILED]: 'destructive',
 };
 
@@ -57,9 +58,9 @@ export function CrmCampaignListPage() {
 
   const { data: campaigns = [] } = useCampaignList();
 
-  const sentCount = useMemo(() => campaigns.filter((c) => c.status === CAMPAIGN_STATUS.SENT).length, []);
-  const reservedCount = useMemo(() => campaigns.filter((c) => c.status === CAMPAIGN_STATUS.RESERVED).length, []);
-  const failedCount = useMemo(() => campaigns.filter((c) => c.status === CAMPAIGN_STATUS.FAILED).length, []);
+  const sentCount = useMemo(() => campaigns.filter((c) => c.status === CAMPAIGN_STATUS.SENT).length, [campaigns]);
+  const pendingCount = useMemo(() => campaigns.filter((c) => c.status === CAMPAIGN_STATUS.PENDING || c.status === CAMPAIGN_STATUS.SENDING).length, [campaigns]);
+  const failedCount = useMemo(() => campaigns.filter((c) => c.status === CAMPAIGN_STATUS.FAILED).length, [campaigns]);
 
   return (
     <div>
@@ -80,7 +81,7 @@ export function CrmCampaignListPage() {
       <div className="mb-6 grid grid-cols-4 gap-4">
         <StatCard title="전체 캠페인" value={campaigns.length} icon={<Send size={18} />} />
         <StatCard title="발송 완료" value={sentCount} icon={<CheckCircle size={18} />} />
-        <StatCard title="발송 예정" value={reservedCount} icon={<Clock size={18} />} />
+        <StatCard title="발송 예정/중" value={pendingCount} icon={<Clock size={18} />} />
         <StatCard title="발송 실패" value={failedCount} icon={<AlertTriangle size={18} />} />
       </div>
 
