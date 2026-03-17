@@ -51,7 +51,7 @@ export function SubscriptionPage() {
               }
             </div>
             <div>
-              <p className="text-xs text-muted-foreground">CRM 발송 포인트 잔액</p>
+              <p className="text-xs text-muted-foreground">메시지 발송 포인트 잔액</p>
               <p className={cn('text-lg font-bold tabular-nums', MOCK_POINT_BALANCE <= 10000 ? 'text-red-600' : MOCK_POINT_BALANCE <= 50000 ? 'text-amber-600' : 'text-foreground')}>
                 {MOCK_POINT_BALANCE.toLocaleString()}P
               </p>

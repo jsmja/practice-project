@@ -146,7 +146,7 @@ export function ServiceApplyPage() {
               </div>
               <div className="mt-3 rounded-lg bg-gray-50 px-4 py-3 text-xs text-muted-foreground">
                 <p>· 등록된 카드는 구독 서비스 월정액 자동 결제에만 사용됩니다</p>
-                <p>· CRM 발송 포인트 충전은 별도로 진행됩니다 (설정 &gt; 포인트 관리)</p>
+                <p>· 메시지 발송 포인트 충전은 별도로 진행됩니다 (설정 &gt; 포인트 관리)</p>
                 <p>· 언제든지 마이페이지에서 카드 정보를 변경하거나 구독을 취소할 수 있습니다</p>
               </div>
             </div>

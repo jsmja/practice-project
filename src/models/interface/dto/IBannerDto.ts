@@ -3,6 +3,7 @@ export interface IBannerDto {
   title: string;
   industry: string;
   purpose: string;
+  bannerType: string;
   targetCustomer: string;
   status: string;
   impressions: number;

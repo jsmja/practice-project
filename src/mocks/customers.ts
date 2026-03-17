@@ -1,4 +1,4 @@
-import type { ICustomerDto } from '@/models/interface/dto';
+import type { ICustomerDto, ISendHistoryDto } from '@/models/interface/dto';
 
 export const MOCK_CUSTOMERS: ICustomerDto[] = [
   { no: 1, name: '-', phone: '-', marketingConsent: '미동의', browserId: '90c35e79-a9ab-3401-31e5-6e2b0a5babc1', customerId: 'ffqdqd', lastAccess: '2025.12.17 14:34:24' },
@@ -11,8 +11,18 @@ export const MOCK_CUSTOMERS: ICustomerDto[] = [
   { no: 8, name: '-', phone: '-', marketingConsent: '-', browserId: '3f7e92f1-92d3-6679-9a31-33a39ac246c2', customerId: '7c12c867-36b2-4006-a5d5-9ac5dde23117', lastAccess: '2025.07.21 17:39:08' },
 ];
 
-export const MOCK_SEND_HISTORY = [
-  { date: '2025.12.15 10:30', type: '알림톡', template: '주문 확인', status: '성공' },
-  { date: '2025.12.10 14:20', type: '친구톡', template: '할인 안내', status: '성공' },
-  { date: '2025.11.28 09:00', type: '알림톡', template: '배송 완료', status: '실패' },
+export const MOCK_SEND_HISTORY: ISendHistoryDto[] = [
+  { customerId: 'ffqdqd', date: '2026.03.17 09:00', type: '전체 친구 대상', sendFrequency: '반복', sendRound: 4, totalRounds: 5, sentCount: 0, totalCount: 200, status: '예정' },
+  { customerId: 'ffqdqd', date: '2026.03.16 10:30', type: '커스텀 캠페인', sendFrequency: '1회', sendRound: 1, totalRounds: 1, sentCount: 24, totalCount: 100, status: '성공' },
+  { customerId: 'ffqdqd', date: '2026.03.14 14:20', type: '전체 친구 대상', sendFrequency: '반복', sendRound: 3, totalRounds: 5, sentCount: 150, totalCount: 150, status: '성공' },
+  { customerId: 'ffqdqd', date: '2026.03.12 09:00', type: '장바구니 리마인딩', sendFrequency: '반복', sendRound: 2, totalRounds: 3, sentCount: 42, totalCount: 50, status: '종료' },
+  { customerId: 'ffqdqd', date: '2026.03.10 11:15', type: '커스텀 캠페인', sendFrequency: '반복', sendRound: 2, totalRounds: 4, sentCount: 88, totalCount: 200, status: '성공' },
+  { customerId: 'ffqdqd', date: '2026.03.08 16:45', type: '재방문 유도', sendFrequency: '1회', sendRound: 1, totalRounds: 1, sentCount: 0, totalCount: 80, status: '실패', failReason: '캐시부족' },
+  { customerId: 'ffqdqd', date: '2026.03.05 10:00', type: '전체 친구 대상', sendFrequency: '반복', sendRound: 2, totalRounds: 5, sentCount: 120, totalCount: 120, status: '성공' },
+  { customerId: 'ffqdqd', date: '2026.03.03 13:30', type: '장바구니 리마인딩', sendFrequency: '반복', sendRound: 1, totalRounds: 3, sentCount: 8, totalCount: 30, status: '중지' },
+  { customerId: 'ffqdqd', date: '2026.02.28 09:45', type: '커스텀 캠페인', sendFrequency: '반복', sendRound: 1, totalRounds: 4, sentCount: 200, totalCount: 500, status: '성공' },
+  { customerId: 'ffqdqd', date: '2026.02.25 14:00', type: '신규 고객 환영', sendFrequency: '1회', sendRound: 1, totalRounds: 1, sentCount: 55, totalCount: 60, status: '종료' },
+  { customerId: 'ffqdqd', date: '2026.02.22 11:20', type: '재방문 유도', sendFrequency: '반복', sendRound: 1, totalRounds: 2, sentCount: 0, totalCount: 45, status: '실패', failReason: '캐시부족' },
+  { customerId: 'ffqdqd', date: '2026.02.18 10:10', type: '전체 친구 대상', sendFrequency: '반복', sendRound: 1, totalRounds: 5, sentCount: 300, totalCount: 300, status: '성공' },
+  { customerId: 'ffqdqd', date: '2026.02.14 15:30', type: '커스텀 캠페인', sendFrequency: '1회', sendRound: 1, totalRounds: 1, sentCount: 78, totalCount: 100, status: '성공' },
 ];

@@ -96,7 +96,7 @@ function ChargeModal({ onClose }: { onClose: () => void }) {
           {step === 'select' && (
             <>
               <p className="mb-4 text-xs text-muted-foreground">
-                충전한 포인트는 <span className="font-medium text-foreground">1P = 1원</span>으로 CRM 발송에 사용됩니다.
+                충전한 포인트는 <span className="font-medium text-foreground">1P = 1원</span>으로 메시지 발송에 사용됩니다.
                 유효기간은 충전일로부터 <span className="font-medium text-foreground">1년</span>입니다.
               </p>
 
@@ -339,7 +339,7 @@ function BalanceWarning({ balance, onCharge }: { balance: number; onCharge: () =
     <div className={cn('mb-4 flex items-center gap-3 rounded-xl border px-4 py-3', isDanger ? 'border-red-200 bg-red-50' : 'border-amber-200 bg-amber-50')}>
       {isDanger ? <AlertCircle size={18} className="flex-shrink-0 text-red-500" /> : <AlertTriangle size={18} className="flex-shrink-0 text-amber-500" />}
       <p className={cn('flex-1 text-xs', isDanger ? 'text-red-700' : 'text-amber-700')}>
-        {isDanger ? '포인트 잔액이 부족합니다. 충전 후 CRM 발송이 가능합니다.' : '포인트 잔액이 50,000P 이하입니다. 발송 전에 미리 충전해 두세요.'}
+        {isDanger ? '포인트 잔액이 부족합니다. 충전 후 메시지 발송이 가능합니다.' : '포인트 잔액이 50,000P 이하입니다. 발송 전에 미리 충전해 두세요.'}
       </p>
       <button onClick={onCharge} className={cn('flex-shrink-0 rounded-lg px-3 py-1.5 text-xs font-semibold transition-colors', isDanger ? 'bg-red-500 text-white hover:bg-red-600' : 'bg-amber-500 text-white hover:bg-amber-600')}>
         충전하기
@@ -370,7 +370,7 @@ export function PointManagementPage() {
     <div>
       <PageHeader
         title="포인트 관리"
-        description="CRM 발송에 사용되는 포인트를 충전하고 내역을 확인합니다"
+        description="메시지 발송에 사용되는 포인트를 충전하고 내역을 확인합니다"
         actions={
           <div className="flex gap-2">
             <button

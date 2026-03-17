@@ -32,7 +32,7 @@ interface IMenuItem {
 }
 
 const MENU_ITEMS: IMenuItem[] = [
-  { label: '대시보드', icon: <LayoutDashboard size={18} />, path: '/dashboard' },
+  { label: '대시보드', icon: <LayoutDashboard size={18} />, path: '/dashboard', highlight: true },
   {
     label: '헤이보드',
     icon: <CirclePlus size={18} />,
@@ -51,7 +51,7 @@ const MENU_ITEMS: IMenuItem[] = [
     icon: <Megaphone size={18} />,
     children: [
       { label: '배너 관리', path: '/marketing/event-banners', highlight: true },
-      { label: 'CRM 관리', path: '/marketing/crm', highlight: true },
+      { label: '메시지 관리', path: '/marketing/crm', highlight: true },
     ],
   },
   {
@@ -66,7 +66,7 @@ const MENU_ITEMS: IMenuItem[] = [
     children: [
       { label: '고객 유입 통계', path: '/statistics/customers' },
       { label: '마케팅 통계', path: '/statistics/marketing' },
-      { label: 'CRM 발송 통계', path: '/statistics/crm', highlight: true },
+      { label: '메시지 발송 통계', path: '/statistics/crm', highlight: true },
     ],
   },
   { label: '멤버 관리', icon: <UserRound size={18} />, path: '/members' },
