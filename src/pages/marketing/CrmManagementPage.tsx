@@ -5,7 +5,9 @@ import { StatCard } from '@/components/common/StatCard';
 import { DataTable } from '@/components/common/DataTable';
 import { Badge } from '@/components/common/Badge';
 import { FilterBar } from '@/components/common/FilterBar';
-import { Plus, CheckCircle, Clock, AlertTriangle, Ban, CircleStop, MessageCircle, ArrowRight, Settings } from 'lucide-react';
+import { Plus, CheckCircle, Clock, AlertTriangle, Ban, CircleStop, MessageCircle, ArrowRight, Settings, Coins } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { MOCK_POINT_BALANCE } from '@/mocks/points';
 import type { ICampaignDto } from '@/models/interface/dto';
 import { CAMPAIGN_STATUS } from '@/models/type';
 import { useFilterState } from '@/hooks/useFilterState';
@@ -106,7 +108,7 @@ export function CrmManagementPage() {
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const { filters, handleFilterChange, handleReset } = useFilterState(FILTERS);
   const { data: campaigns = [] } = useCampaignList();
-  const { kakaoLinked } = useServiceStore();
+  const { kakaoLinked, setKakaoLinked } = useServiceStore();
 
   const successCount = useMemo(() => campaigns.filter((c) => c.status === CAMPAIGN_STATUS.SUCCESS).length, [campaigns]);
   const scheduledCount = useMemo(() => campaigns.filter((c) => c.status === CAMPAIGN_STATUS.SCHEDULED).length, [campaigns]);
@@ -131,6 +133,21 @@ export function CrmManagementPage() {
     setStatusFilter(statusFilter === status ? 'all' : status);
   };
 
+  const devToggle = (
+    <div className="rounded-lg border-2 border-dashed border-amber-300 bg-amber-50 px-4 py-2">
+      <label className="flex cursor-pointer items-center gap-2">
+        <span className="text-xs font-medium text-amber-700">개발자 모드: 카카오 연동 상태 전환</span>
+        <input
+          type="checkbox"
+          checked={kakaoLinked}
+          onChange={(e) => setKakaoLinked(e.target.checked)}
+          className="h-4 w-4 rounded"
+        />
+        <span className="text-xs text-amber-600">{kakaoLinked ? '연동됨' : '미연동'}</span>
+      </label>
+    </div>
+  );
+
   // 서비스 미연동 상태
   if (!kakaoLinked) {
     return (
@@ -139,6 +156,7 @@ export function CrmManagementPage() {
           title="캠페인 메시지 관리"
           description="카카오 브랜드 메시지 캠페인을 만들고 발송 현황을 관리합니다"
         />
+        {devToggle}
 
         <div className="flex flex-col items-center justify-center rounded-2xl border border-border/60 bg-white py-20">
           <div className="mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-amber-100">
@@ -212,6 +230,35 @@ export function CrmManagementPage() {
           </button>
         }
       />
+
+      {devToggle}
+
+      {/* 포인트 잔액 */}
+      <div className={cn(
+        'flex items-center justify-between rounded-xl border p-4',
+        MOCK_POINT_BALANCE <= 10000 ? 'border-red-200 bg-red-50' : MOCK_POINT_BALANCE <= 50000 ? 'border-amber-200 bg-amber-50' : 'border-border bg-white'
+      )}>
+        <div className="flex items-center gap-3">
+          <div className={cn('flex h-9 w-9 items-center justify-center rounded-lg', MOCK_POINT_BALANCE <= 50000 ? 'bg-amber-100' : 'bg-muted')}>
+            {MOCK_POINT_BALANCE <= 50000
+              ? <AlertTriangle size={16} className="text-amber-600" />
+              : <Coins size={16} className="text-muted-foreground" />
+            }
+          </div>
+          <div>
+            <p className="text-xs text-muted-foreground">메시지 발송 포인트 잔액</p>
+            <p className={cn('text-base font-bold tabular-nums', MOCK_POINT_BALANCE <= 10000 ? 'text-red-600' : MOCK_POINT_BALANCE <= 50000 ? 'text-amber-600' : 'text-foreground')}>
+              {MOCK_POINT_BALANCE.toLocaleString()}P
+            </p>
+          </div>
+        </div>
+        <button
+          onClick={() => navigate('/settings/points')}
+          className="rounded-lg border border-border bg-white px-3 py-1.5 text-xs font-medium transition-colors hover:bg-muted"
+        >
+          충전하기
+        </button>
+      </div>
 
       {/* 상태별 StatCard */}
       <div className="grid grid-cols-5 gap-4">
