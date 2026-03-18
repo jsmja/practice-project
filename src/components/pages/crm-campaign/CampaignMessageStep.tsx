@@ -2,7 +2,6 @@ import { useState } from 'react';
 import {
   AlignLeft,
   Image,
-  Plus,
   Trash2,
   Check,
   Upload,
@@ -167,20 +166,10 @@ export function CampaignMessageStep({
   onSelectMessageType,
   bodyText,
   onBodyTextChange,
-  headerText,
-  onHeaderTextChange,
   buttons,
   onButtonsChange,
   imageUploaded,
   onImageUploadedChange,
-  wideItems,
-  onWideItemsChange,
-  carouselCards,
-  onCarouselCardsChange,
-  couponEnabled,
-  onCouponEnabledChange,
-  couponName,
-  onCouponNameChange,
 }: ICampaignMessageStepProps) {
   const selectedMessageType = MESSAGE_TYPES.find((t) => t.id === selectedMessageTypeId);
   const [showVarPalette, setShowVarPalette] = useState(false);

@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import {
-  Upload,
   Trash2,
   Plus,
   GripVertical,

@@ -1,6 +1,5 @@
 import { cn } from '@/lib/utils';
 import { SectionCard } from '@/components/common/SectionCard';
-import { Badge } from '@/components/common/Badge';
 import { MOCK_ACTIVE_CAMPAIGNS } from '@/mocks/dashboard';
 import { ArrowRight, Flame, AlertTriangle, Copy, Pause, FlaskConical } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';

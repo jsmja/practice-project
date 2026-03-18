@@ -1,6 +1,5 @@
 import { useState, useMemo } from 'react';
-import { Plus, Paintbrush, Check, Eye, Pause, FileEdit, XCircle, Layout, Settings, Users, ChevronDown, ChevronUp, Target, Calendar, RefreshCw, Clock, Timer, MousePointer } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { Plus, Paintbrush, Eye, Pause, FileEdit, XCircle, Layout, Settings, Users, ChevronDown, ChevronUp, Target, Calendar, RefreshCw, Clock, Timer, MousePointer } from 'lucide-react';
 import { PageHeader } from '@/components/common/PageHeader';
 import { StatCard } from '@/components/common/StatCard';
 import { WizardEditorLayout } from '@/components/common/WizardEditorLayout';

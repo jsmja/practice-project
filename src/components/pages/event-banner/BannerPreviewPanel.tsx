@@ -301,7 +301,6 @@ function ContentPreview({
   iconBgColor,
   promoCards,
   youtubeUrl,
-  consentGuideText,
   consentButtonLabel,
 }: {
   subType: BannerSubType | null;
@@ -311,7 +310,7 @@ function ContentPreview({
   iconBgColor: string;
   promoCards: IPromoCard[];
   youtubeUrl: string;
-  consentGuideText: string;
+  consentGuideText?: string;
   consentButtonLabel: string;
 }) {
   if (subType === '기본형' || !subType) {
