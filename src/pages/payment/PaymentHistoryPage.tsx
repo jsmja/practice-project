@@ -8,13 +8,15 @@ import type { IPaymentHistoryDto } from '@/models/interface/dto';
 import { MOCK_PAYMENT_HISTORY } from '@/mocks/payment';
 import { NOOP_PAGINATION } from '@/lib/constants';
 
-const STATUS_VARIANT: Record<string, 'success' | 'warning' | 'destructive' | 'default'> = {
+const STATUS_VARIANT: Record<string, 'success' | 'warning' | 'destructive' | 'default' | 'info'> = {
   결제완료: 'success',
+  충전완료: 'info',
+  환불완료: 'warning',
   결제취소: 'warning',
   결제실패: 'destructive',
 };
 
-const STATUS_TABS = ['전체', '결제완료', '결제취소', '결제실패'];
+const STATUS_TABS = ['전체', '결제완료', '충전완료', '환불완료', '결제취소', '결제실패'];
 const PERIOD_TABS = ['전체', '주', '월'];
 
 const COLUMNS = [
@@ -36,7 +38,9 @@ const COLUMNS = [
     width: '110px',
     sortable: true,
     render: (row: IPaymentHistoryDto) => (
-      <span className="font-medium">{row.amount.toLocaleString()}원</span>
+      <span className={cn('font-medium', row.amount < 0 && 'text-red-500')}>
+        {row.amount < 0 ? `${row.amount.toLocaleString()}원` : `${row.amount.toLocaleString()}원`}
+      </span>
     ),
   },
   { key: 'reason', header: '사유', width: '100px' },
