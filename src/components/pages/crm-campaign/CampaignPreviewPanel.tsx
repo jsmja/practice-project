@@ -169,23 +169,36 @@ export function CampaignPreviewPanel({
       </div>
 
       {/* 포인트/발송 정보 */}
-      <div className="mt-4 rounded-xl border border-border/60 bg-white p-4">
-        <div className="space-y-2.5">
-          <div className="flex items-center justify-between">
-            <span className="text-xs text-muted-foreground">현재 포인트</span>
-            <span className="text-sm font-bold text-foreground">48,500<span className="text-xs font-normal text-muted-foreground"> P</span></span>
+      {(() => {
+        const unitPrice = 25;
+        const recipients = isAllFriends ? 24 : recipientFilter.grade === '전체' ? 82 : 0;
+        const estimatedCost = unitPrice * recipients;
+        return (
+          <div className="mt-4 rounded-xl border border-border/60 bg-white p-4">
+            <div className="space-y-2.5">
+              <div className="flex items-center justify-between">
+                <span className="text-xs text-muted-foreground">현재 포인트</span>
+                <span className="text-sm font-bold text-foreground">48,500<span className="text-xs font-normal text-muted-foreground"> P</span></span>
+              </div>
+              <div className="h-px bg-border/60" />
+              <div className="flex items-center justify-between">
+                <span className="text-xs text-muted-foreground">발송 단가</span>
+                <span className="text-sm font-medium text-foreground">{unitPrice}<span className="text-xs font-normal text-muted-foreground"> P/건</span></span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-xs text-muted-foreground">발송 모수</span>
+                <span className="text-sm font-medium text-foreground">{recipients.toLocaleString()}<span className="text-xs font-normal text-muted-foreground"> 명</span></span>
+              </div>
+              <div className="h-px bg-border/60" />
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-medium text-muted-foreground">예상 차감 포인트</span>
+                <span className="text-sm font-bold text-primary">{estimatedCost.toLocaleString()}<span className="text-xs font-normal text-muted-foreground"> P</span></span>
+              </div>
+              <p className="text-[10px] text-muted-foreground">= {unitPrice}P × {recipients.toLocaleString()}명</p>
+            </div>
           </div>
-          <div className="flex items-center justify-between">
-            <span className="text-xs text-muted-foreground">예상 차감 포인트</span>
-            <span className="text-sm font-bold text-primary">{isAllFriends ? '360' : recipientFilter.grade === '전체' ? '1,230' : '0'}<span className="text-xs font-normal text-muted-foreground"> P</span></span>
-          </div>
-          <div className="h-px bg-border/60" />
-          <div className="flex items-center justify-between">
-            <span className="text-xs text-muted-foreground">발송 모수</span>
-            <span className="text-sm font-bold text-foreground">{isAllFriends ? '24' : recipientFilter.grade === '전체' ? '82' : '0'}<span className="text-xs font-normal text-muted-foreground"> 명</span></span>
-          </div>
-        </div>
-      </div>
+        );
+      })()}
 
       <ProgressBar currentStep={currentStep} />
     </div>
