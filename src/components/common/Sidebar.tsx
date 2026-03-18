@@ -10,6 +10,7 @@ import {
   BarChart2,
   UserRound,
   CreditCard,
+  Coins,
   SlidersHorizontal,
   ChevronDown,
   ChevronRight,
@@ -52,7 +53,6 @@ const MENU_ITEMS: IMenuItem[] = [
     children: [
       { label: '배너 관리', path: '/marketing/event-banners', highlight: true },
       { label: '메시지 관리', path: '/marketing/crm', highlight: true },
-      { label: '포인트 관리', path: '/settings/points', highlight: true },
     ],
   },
   {
@@ -72,12 +72,19 @@ const MENU_ITEMS: IMenuItem[] = [
   },
   { label: '멤버 관리', icon: <UserRound size={18} />, path: '/members' },
   {
-    label: '결제 관리',
+    label: '구독 서비스',
     icon: <CreditCard size={18} />,
     children: [
-      { label: '구독현황', path: '/payment/subscription', highlight: true },
       { label: '서비스 신청', path: '/payment/apply', highlight: true },
+      { label: '구독현황', path: '/payment/subscription', highlight: true },
+    ],
+  },
+  {
+    label: '결제/포인트',
+    icon: <Coins size={18} />,
+    children: [
       { label: '결제내역', path: '/payment/history', highlight: true },
+      { label: '포인트 관리', path: '/settings/points', highlight: true },
     ],
   },
   {
@@ -96,7 +103,8 @@ export function Sidebar() {
     '마케팅': true,
     '통계': true,
     '설정': true,
-    '결제 관리': true,
+    '구독 서비스': true,
+    '결제/포인트': true,
   });
 
   const toggleMenu = (label: string) => {
