@@ -164,13 +164,13 @@ function ChargeModal({ onClose }: { onClose: () => void }) {
                     <span className="text-sm font-medium">{finalAmount.toLocaleString()}원</span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-muted-foreground">수수료 (3.3%)</span>
-                    <span className="text-sm font-medium">{Math.round(finalAmount * 0.033).toLocaleString()}원</span>
+                    <span className="text-sm text-muted-foreground">수수료 (10%)</span>
+                    <span className="text-sm font-medium">{Math.round(finalAmount * 0.1).toLocaleString()}원</span>
                   </div>
                   <div className="border-t border-border pt-2">
                     <div className="flex items-center justify-between">
                       <span className="text-sm font-semibold">총 결제 금액</span>
-                      <span className="text-lg font-bold text-primary">{(finalAmount + Math.round(finalAmount * 0.033)).toLocaleString()}원</span>
+                      <span className="text-lg font-bold text-primary">{(finalAmount + Math.round(finalAmount * 0.1)).toLocaleString()}원</span>
                     </div>
                     <p className="mt-0.5 text-right text-xs text-muted-foreground">충전 포인트: {finalAmount.toLocaleString()}P</p>
                   </div>
@@ -198,8 +198,8 @@ function ChargeModal({ onClose }: { onClose: () => void }) {
                   {[
                     { label: '충전 포인트', value: `${finalAmount.toLocaleString()}P` },
                     { label: '충전 금액', value: `${finalAmount.toLocaleString()}원` },
-                    { label: '수수료 (3.3%)', value: `${Math.round(finalAmount * 0.033).toLocaleString()}원` },
-                    { label: '총 결제 금액', value: `${(finalAmount + Math.round(finalAmount * 0.033)).toLocaleString()}원`, bold: true },
+                    { label: '수수료 (10%)', value: `${Math.round(finalAmount * 0.1).toLocaleString()}원` },
+                    { label: '총 결제 금액', value: `${(finalAmount + Math.round(finalAmount * 0.1)).toLocaleString()}원`, bold: true },
                     { label: '결제 수단', value: '토스페이 · 신한카드 1234' },
                     { label: '유효기간', value: '충전일로부터 1년' },
                   ].map(({ label, value, bold }: { label: string; value: string; bold?: boolean }) => (
