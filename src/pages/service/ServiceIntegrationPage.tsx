@@ -91,7 +91,7 @@ export function ServiceIntegrationPage() {
       description:
         '카카오톡 채널 친구 및 수신 동의 회원에게 다양한 마케팅 메시지를 발송할 수 있어요.',
       actionType: kakaoLinked ? 'chevron' : 'apply',
-      path: kakaoLinked ? '/marketing/crm' : '/service-integration/kakao-message',
+      path: kakaoLinked ? '/service-integration/kakao-message' : '/service-integration/kakao-message',
     },
     {
       id: 'cafe24',

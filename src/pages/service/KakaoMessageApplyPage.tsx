@@ -25,7 +25,96 @@ interface ITermsState {
 export function KakaoMessageApplyPage() {
   const navigate = useNavigate();
 
-  const { setKakaoLinked } = useServiceStore();
+  const { kakaoLinked, setKakaoLinked } = useServiceStore();
+
+  // 연동 완료 상태 → 상세 페이지
+  if (kakaoLinked) {
+    return (
+      <div className="space-y-6">
+        {/* Header */}
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => navigate('/service-integration')}
+              className="flex h-8 w-8 items-center justify-center rounded-lg border border-border transition-colors hover:bg-muted"
+            >
+              <ArrowLeft size={16} />
+            </button>
+            <h1 className="text-base font-bold">카카오 브랜드메시지</h1>
+            <span className="rounded bg-green-100 px-2 py-0.5 text-xs font-medium text-green-700">연동완료</span>
+          </div>
+        </div>
+
+        {/* 연동 정보 */}
+        <section className="rounded-xl border border-border bg-white">
+          <div className="border-b border-border px-6 py-4">
+            <h2 className="text-sm font-bold">연동 정보</h2>
+          </div>
+          <div className="divide-y divide-border px-6">
+            <div className="flex items-center gap-6 py-4">
+              <span className="w-40 text-sm text-muted-foreground">카카오채널 아이디</span>
+              <span className="text-sm font-medium">@heythere_crm</span>
+            </div>
+            <div className="flex items-center gap-6 py-4">
+              <span className="w-40 text-sm text-muted-foreground">채널 산업 분류</span>
+              <span className="text-sm font-medium">쇼핑: 의류, 잡화, 뷰티, 생활용품 등</span>
+            </div>
+            <div className="flex items-center gap-6 py-4">
+              <span className="w-40 text-sm text-muted-foreground">비즈니스 채널 인증</span>
+              <span className="text-sm font-medium text-green-600">인증 완료</span>
+            </div>
+            <div className="flex items-center gap-6 py-4">
+              <span className="w-40 text-sm text-muted-foreground">연동일</span>
+              <span className="text-sm font-medium">2026.03.18</span>
+            </div>
+            <div className="flex items-center gap-6 py-4">
+              <span className="w-40 text-sm text-muted-foreground">080 수신거부 번호</span>
+              <span className="text-sm font-medium">080-123-4567</span>
+            </div>
+          </div>
+        </section>
+
+        {/* 발송 현황 요약 */}
+        <section className="rounded-xl border border-border bg-white p-6">
+          <h2 className="mb-4 text-sm font-bold">발송 현황</h2>
+          <div className="grid grid-cols-3 gap-4">
+            <div className="rounded-lg bg-gray-50 p-4 text-center">
+              <p className="text-2xl font-bold text-primary">1,240</p>
+              <p className="mt-1 text-xs text-muted-foreground">총 발송 건수</p>
+            </div>
+            <div className="rounded-lg bg-gray-50 p-4 text-center">
+              <p className="text-2xl font-bold text-emerald-500">92.3%</p>
+              <p className="mt-1 text-xs text-muted-foreground">발송 성공률</p>
+            </div>
+            <div className="rounded-lg bg-gray-50 p-4 text-center">
+              <p className="text-2xl font-bold text-foreground">48,500P</p>
+              <p className="mt-1 text-xs text-muted-foreground">포인트 잔액</p>
+            </div>
+          </div>
+        </section>
+
+        {/* 연동 해지 / 재신청 */}
+        <section className="rounded-xl border border-border bg-white p-6">
+          <h2 className="mb-2 text-sm font-bold">서비스 관리</h2>
+          <p className="mb-4 text-xs text-muted-foreground">연동을 해지하면 메시지 발송이 중단되며, 재신청 시 다시 이용할 수 있습니다.</p>
+          <div className="flex gap-3">
+            <button
+              onClick={() => { setKakaoLinked(false); navigate('/service-integration'); }}
+              className="rounded-lg border border-red-200 px-4 py-2 text-sm font-medium text-red-500 transition-colors hover:bg-red-50"
+            >
+              연동 해지하기
+            </button>
+            <button
+              onClick={() => navigate('/marketing/crm')}
+              className="rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-primary/90"
+            >
+              캠페인 관리로 이동
+            </button>
+          </div>
+        </section>
+      </div>
+    );
+  }
 
   // 기본정보
   const [channelId, setChannelId] = useState('');
