@@ -1,15 +1,17 @@
 import { useState, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { PageHeader } from '@/components/common/PageHeader';
 import { StatCard } from '@/components/common/StatCard';
 import { DataTable } from '@/components/common/DataTable';
 import { Badge } from '@/components/common/Badge';
 import { FilterBar } from '@/components/common/FilterBar';
-import { Plus, CheckCircle, Clock, AlertTriangle, Ban, CircleStop } from 'lucide-react';
+import { Plus, CheckCircle, Clock, AlertTriangle, Ban, CircleStop, MessageCircle, ArrowRight, Settings } from 'lucide-react';
 import type { ICampaignDto } from '@/models/interface/dto';
 import { CAMPAIGN_STATUS } from '@/models/type';
 import { useFilterState } from '@/hooks/useFilterState';
 import { NOOP_PAGINATION } from '@/lib/constants';
 import { useCampaignList } from '@/hooks/client/campaigns/useCampaignsClient';
+import { useServiceStore } from '@/store/useServiceStore';
 import { CrmCampaignCreateForm } from './CrmCampaignCreatePage';
 
 const STATUS_VARIANT: Record<string, 'success' | 'info' | 'destructive' | 'warning' | 'default'> = {
@@ -99,10 +101,12 @@ const COLUMNS = [
 type ViewType = 'list' | 'create';
 
 export function CrmManagementPage() {
+  const navigate = useNavigate();
   const [activeView, setActiveView] = useState<ViewType>('list');
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const { filters, handleFilterChange, handleReset } = useFilterState(FILTERS);
   const { data: campaigns = [] } = useCampaignList();
+  const { kakaoLinked } = useServiceStore();
 
   const successCount = useMemo(() => campaigns.filter((c) => c.status === CAMPAIGN_STATUS.SUCCESS).length, [campaigns]);
   const scheduledCount = useMemo(() => campaigns.filter((c) => c.status === CAMPAIGN_STATUS.SCHEDULED).length, [campaigns]);
@@ -126,6 +130,63 @@ export function CrmManagementPage() {
   const handleStatCardClick = (status: string) => {
     setStatusFilter(statusFilter === status ? 'all' : status);
   };
+
+  // 서비스 미연동 상태
+  if (!kakaoLinked) {
+    return (
+      <div className="flex flex-col gap-6">
+        <PageHeader
+          title="캠페인 메시지 관리"
+          description="카카오 브랜드 메시지 캠페인을 만들고 발송 현황을 관리합니다"
+        />
+
+        <div className="flex flex-col items-center justify-center rounded-2xl border border-border/60 bg-white py-20">
+          <div className="mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-amber-100">
+            <MessageCircle size={36} className="text-amber-500" />
+          </div>
+          <h3 className="mb-2 text-lg font-bold text-foreground">카카오 브랜드메시지 서비스 연동이 필요합니다</h3>
+          <p className="mb-1 text-sm text-muted-foreground">캠페인 메시지를 발송하려면 먼저 카카오 브랜드메시지 서비스를 신청해 주세요.</p>
+          <p className="mb-8 text-xs text-muted-foreground">서비스 연동 후 캠페인 만들기, 발송 관리 등 모든 기능을 이용할 수 있습니다.</p>
+
+          <div className="flex gap-3">
+            <button
+              onClick={() => navigate('/service-integration')}
+              className="flex items-center gap-2 rounded-lg bg-primary px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-primary/90"
+            >
+              <Settings size={16} />
+              서비스 연동하기
+              <ArrowRight size={14} />
+            </button>
+          </div>
+
+          <div className="mt-8 rounded-xl border border-border/60 bg-gray-50 px-6 py-4">
+            <p className="mb-2 text-xs font-semibold text-foreground">서비스 연동 절차</p>
+            <div className="flex items-center gap-3 text-xs text-muted-foreground">
+              <span className="flex items-center gap-1.5">
+                <span className="flex h-5 w-5 items-center justify-center rounded-full bg-primary text-xs text-white">1</span>
+                서비스 연동 페이지 이동
+              </span>
+              <ArrowRight size={12} className="text-border" />
+              <span className="flex items-center gap-1.5">
+                <span className="flex h-5 w-5 items-center justify-center rounded-full bg-primary text-xs text-white">2</span>
+                카카오 브랜드메시지 신청
+              </span>
+              <ArrowRight size={12} className="text-border" />
+              <span className="flex items-center gap-1.5">
+                <span className="flex h-5 w-5 items-center justify-center rounded-full bg-primary text-xs text-white">3</span>
+                채널 인증 완료
+              </span>
+              <ArrowRight size={12} className="text-border" />
+              <span className="flex items-center gap-1.5">
+                <span className="flex h-5 w-5 items-center justify-center rounded-full bg-primary text-xs text-white">4</span>
+                캠페인 만들기 시작!
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   if (activeView === 'create') {
     return (

@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom';
+import { useServiceStore } from '@/store/useServiceStore';
 import {
   ChevronRight,
   RefreshCw,
@@ -33,6 +34,7 @@ interface IServiceItem {
 
 export function ServiceIntegrationPage() {
   const navigate = useNavigate();
+  const { kakaoLinked } = useServiceStore();
 
   const SERVICES: IServiceItem[] = [
     {
@@ -82,12 +84,14 @@ export function ServiceIntegrationPage() {
       name: '카카오 브랜드메시지',
       badges: [
         { label: '메시지', className: 'rounded bg-amber-100 px-1.5 py-0.5 text-xs font-medium text-amber-700' },
-        { label: '미신청', className: 'text-xs text-muted-foreground' },
+        kakaoLinked
+          ? { label: '연동완료', className: 'rounded bg-green-100 px-1.5 py-0.5 text-xs font-medium text-green-700' }
+          : { label: '미신청', className: 'text-xs text-muted-foreground' },
       ],
       description:
         '카카오톡 채널 친구 및 수신 동의 회원에게 다양한 마케팅 메시지를 발송할 수 있어요.',
-      actionType: 'apply',
-      path: '/service-integration/kakao-message',
+      actionType: kakaoLinked ? 'chevron' : 'apply',
+      path: kakaoLinked ? '/marketing/crm' : '/service-integration/kakao-message',
     },
     {
       id: 'cafe24',

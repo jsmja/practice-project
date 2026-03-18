@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Upload, ExternalLink, HelpCircle, Info, ChevronDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useServiceStore } from '@/store/useServiceStore';
 
 const INDUSTRY_OPTIONS = [
   '음식: 식당, 카페, 디저트, 식품 등',
@@ -23,6 +24,8 @@ interface ITermsState {
 
 export function KakaoMessageApplyPage() {
   const navigate = useNavigate();
+
+  const { setKakaoLinked } = useServiceStore();
 
   // 기본정보
   const [channelId, setChannelId] = useState('');
@@ -428,7 +431,7 @@ export function KakaoMessageApplyPage() {
       <div className="flex justify-center pb-8">
         <button
           disabled={!canSubmit}
-          onClick={() => navigate('/service-integration')}
+          onClick={() => { setKakaoLinked(true); navigate('/service-integration'); }}
           className={cn(
             'rounded-lg px-10 py-3 text-sm font-semibold transition-colors',
             canSubmit
