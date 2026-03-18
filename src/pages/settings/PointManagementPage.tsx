@@ -450,62 +450,83 @@ export function PointManagementPage() {
       <PageHeader
         title="포인트 관리"
         description="메시지 발송에 사용되는 포인트를 충전하고 내역을 확인합니다"
-        actions={
-          <div className="flex gap-2">
-            <button
-              onClick={() => setShowRefundModal(true)}
-              className="flex items-center gap-2 rounded-lg border border-border px-4 py-2.5 text-sm font-medium transition-colors hover:bg-muted"
-            >
-              <RefreshCw size={15} />
-              환불 신청
-            </button>
-            <button
-              onClick={() => setShowChargeModal(true)}
-              className="flex items-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-primary/90"
-            >
-              <Plus size={15} />
-              포인트 충전
-            </button>
-          </div>
-        }
       />
 
       <BalanceWarning balance={balance} onCharge={() => setShowChargeModal(true)} />
 
-      {/* 잔액 + 단가 */}
-      <div className="mb-6 grid grid-cols-4 gap-4">
-        <div className="col-span-1 rounded-xl border border-border bg-white p-5">
-          <div className="mb-3 flex items-center gap-2">
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-amber-100">
-              <Coins size={18} className="text-amber-600" />
-            </div>
-            <p className="text-xs font-medium text-muted-foreground">현재 잔액</p>
-          </div>
-          <p className={cn('text-2xl font-bold tabular-nums', balanceColor)}>
-            {balance.toLocaleString()}P
-          </p>
-          <p className="mt-0.5 text-[10px] text-muted-foreground">= {balance.toLocaleString()}원</p>
-          <button
-            onClick={() => setShowChargeModal(true)}
-            className="mt-4 w-full rounded-lg bg-primary py-2 text-xs font-semibold text-white transition-colors hover:bg-primary/90"
-          >
-            충전하기
-          </button>
-        </div>
+      {/* 잔액 카드 (충전/환불 버튼 포함) */}
+      {(() => {
+        const pendingRefund = pointHistory
+          .filter((h) => h.type === '환불신청')
+          .reduce((sum, h) => sum + Math.abs(h.amount), 0);
+        const availableBalance = balance - pendingRefund;
 
-        <div className="col-span-3 rounded-xl border border-border bg-white p-5">
-          <p className="mb-3 text-xs font-semibold">브랜드 메시지 발송 단가</p>
-          <div className="flex items-center gap-4 rounded-lg border border-border p-4">
-            <div>
-              <p className="text-2xl font-bold">{UNIT_PRICE}P<span className="text-sm font-normal text-muted-foreground"> /건</span></p>
-              <p className="mt-0.5 text-xs text-muted-foreground">= {UNIT_PRICE}원/건 (기본형·와이드 이미지형 동일)</p>
+        return (
+          <div className="grid grid-cols-4 gap-4">
+            <div className="col-span-2 rounded-xl border border-border bg-white p-5">
+              <div className="mb-4 flex items-center gap-2">
+                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-amber-100">
+                  <Coins size={18} className="text-amber-600" />
+                </div>
+                <p className="text-sm font-medium">포인트 현황</p>
+              </div>
+
+              <div className="mb-4 space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-muted-foreground">총 잔액</span>
+                  <span className={cn('text-2xl font-bold tabular-nums', balanceColor)}>{balance.toLocaleString()}P</span>
+                </div>
+                {pendingRefund > 0 && (
+                  <>
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm text-amber-600">환불 대기 (출금 보류)</span>
+                      <span className="text-sm font-bold text-amber-600">-{pendingRefund.toLocaleString()}P</span>
+                    </div>
+                    <div className="border-t border-border pt-2">
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm font-medium">사용 가능 잔액</span>
+                        <span className="text-xl font-bold text-primary">{availableBalance.toLocaleString()}P</span>
+                      </div>
+                    </div>
+                  </>
+                )}
+              </div>
+
+              <div className="flex gap-2">
+                <button
+                  onClick={() => setShowChargeModal(true)}
+                  className="flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-primary py-2.5 text-sm font-semibold text-white transition-colors hover:bg-primary/90"
+                >
+                  <Plus size={14} />
+                  충전하기
+                </button>
+                <button
+                  onClick={() => setShowRefundModal(true)}
+                  className="flex flex-1 items-center justify-center gap-1.5 rounded-lg border border-border py-2.5 text-sm font-medium transition-colors hover:bg-muted"
+                >
+                  <RefreshCw size={14} />
+                  환불 신청
+                </button>
+              </div>
+            </div>
+
+            <div className="col-span-2 rounded-xl border border-border bg-white p-5">
+              <p className="mb-3 text-sm font-medium">브랜드 메시지 발송 단가</p>
+              <div className="flex items-center gap-4 rounded-lg border border-border p-4">
+                <div>
+                  <p className="text-2xl font-bold">{UNIT_PRICE}P<span className="text-sm font-normal text-muted-foreground"> /건</span></p>
+                  <p className="mt-0.5 text-xs text-muted-foreground">= {UNIT_PRICE}원/건 (기본형·와이드 이미지형 동일)</p>
+                </div>
+              </div>
+              <p className="mt-3 text-[10px] text-muted-foreground">
+                · 발송 실패 시 해당 건수만큼 자동 환불됩니다<br />
+                · 잔액 부족 시 발송이 중단됩니다<br />
+                · 포인트 유효기간: 충전일로부터 1년
+              </p>
             </div>
           </div>
-          <p className="mt-3 text-[10px] text-muted-foreground">
-            · 발송 실패 시 해당 건수만큼 자동 환불됩니다 &nbsp;·&nbsp; 잔액 부족 시 발송이 중단됩니다 &nbsp;·&nbsp; 포인트 유효기간: 충전일로부터 1년
-          </p>
-        </div>
-      </div>
+        );
+      })()}
 
       {/* 환불 신청 현황 */}
       {pointHistory.some((h) => h.type === '환불신청') && (
