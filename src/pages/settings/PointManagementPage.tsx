@@ -434,6 +434,7 @@ export function PointManagementPage() {
   const [activeType, setActiveType] = useState('전체');
   const [showChargeModal, setShowChargeModal] = useState(false);
   const [showRefundModal, setShowRefundModal] = useState(false);
+  const [refundDetailOpen, setRefundDetailOpen] = useState(false);
 
   const { data: pointHistory = [] } = usePointHistory();
 
@@ -502,10 +503,17 @@ export function PointManagementPage() {
                 </button>
                 <button
                   onClick={() => setShowRefundModal(true)}
-                  className="flex flex-1 items-center justify-center gap-1.5 rounded-lg border border-border py-2.5 text-sm font-medium transition-colors hover:bg-muted"
+                  disabled={pendingRefund > 0}
+                  title={pendingRefund > 0 ? '처리 중인 환불 신청이 있습니다' : undefined}
+                  className={cn(
+                    'flex flex-1 items-center justify-center gap-1.5 rounded-lg border py-2.5 text-sm font-medium transition-colors',
+                    pendingRefund > 0
+                      ? 'cursor-not-allowed border-border bg-muted text-muted-foreground'
+                      : 'border-border hover:bg-muted'
+                  )}
                 >
                   <RefreshCw size={14} />
-                  환불 신청
+                  {pendingRefund > 0 ? '환불 처리중' : '환불 신청'}
                 </button>
               </div>
             </div>
@@ -528,28 +536,47 @@ export function PointManagementPage() {
         );
       })()}
 
-      {/* 환불 신청 현황 */}
+      {/* 환불 신청 현황 (접기형) */}
       {pointHistory.some((h) => h.type === '환불신청') && (
-        <div className="rounded-xl border border-amber-200 bg-amber-50 p-5">
-          <h3 className="mb-3 flex items-center gap-2 text-sm font-semibold">
-            <AlertTriangle size={15} className="text-amber-500" />
-            환불 신청 현황
-          </h3>
-          <div className="space-y-2">
-            {pointHistory.filter((h) => h.type === '환불신청').map((h) => (
-              <div key={h.no} className="flex items-center justify-between rounded-lg border border-amber-200 bg-white px-4 py-3">
-                <div>
-                  <p className="text-sm font-medium">{h.description}</p>
-                  <p className="text-xs text-muted-foreground">{h.date}</p>
-                </div>
-                <div className="text-right">
-                  <p className="text-sm font-bold text-red-500">{h.amount.toLocaleString()}P</p>
-                  <span className="rounded bg-amber-100 px-1.5 py-0.5 text-xs font-medium text-amber-700">처리 대기중</span>
-                </div>
+        <div className="rounded-xl border border-amber-200 bg-amber-50">
+          <button
+            onClick={() => setRefundDetailOpen(!refundDetailOpen)}
+            className="flex w-full items-center justify-between px-5 py-3"
+          >
+            <div className="flex items-center gap-2">
+              <AlertTriangle size={14} className="text-amber-500" />
+              <span className="text-sm font-semibold text-amber-700">환불 신청 현황</span>
+              <span className="rounded bg-amber-200 px-1.5 py-0.5 text-xs font-bold text-amber-800">처리 대기중</span>
+              <span className="text-sm font-bold text-red-500">
+                {pointHistory.filter((h) => h.type === '환불신청').reduce((s, h) => s + Math.abs(h.amount), 0).toLocaleString()}P
+              </span>
+            </div>
+            <ChevronDown size={16} className={cn('text-amber-500 transition-transform', refundDetailOpen && 'rotate-180')} />
+          </button>
+          {refundDetailOpen && (
+            <div className="border-t border-amber-200 px-5 pb-4 pt-3">
+              <div className="space-y-2">
+                {pointHistory.filter((h) => h.type === '환불신청').map((h) => (
+                  <div key={h.no} className="flex items-center justify-between rounded-lg border border-amber-200 bg-white px-4 py-3">
+                    <div>
+                      <p className="text-sm font-medium">{h.description}</p>
+                      <p className="text-xs text-muted-foreground">{h.date}</p>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <p className="text-sm font-bold text-red-500">{h.amount.toLocaleString()}P</p>
+                      <button
+                        onClick={() => alert('환불 신청이 취소되었습니다.')}
+                        className="rounded-lg border border-red-200 px-2.5 py-1 text-xs font-medium text-red-500 transition-colors hover:bg-red-50"
+                      >
+                        신청 취소
+                      </button>
+                    </div>
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
-          <p className="mt-2 text-xs text-amber-600">운영팀 검토 후 영업일 기준 3~5일 이내 처리됩니다.</p>
+              <p className="mt-2 text-xs text-amber-600">운영팀 검토 후 영업일 기준 3~5일 이내 처리됩니다.</p>
+            </div>
+          )}
         </div>
       )}
 
