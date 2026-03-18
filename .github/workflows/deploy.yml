@@ -5,6 +5,7 @@ on:
     branches:
       - main
       - main_branch_대시보드변경
+      - 헤이데어_CRM_대시보드-변경
 
 permissions:
   contents: read
