@@ -21,6 +21,7 @@ const TYPE_VARIANT: Record<string, 'success' | 'info' | 'destructive' | 'warning
   충전: 'success',
   차감: 'destructive',
   환불: 'info',
+  환불신청: 'warning',
   만료: 'warning',
 };
 
@@ -58,7 +59,7 @@ const COLUMNS = [
 ];
 
 const PERIOD_TABS = ['최근 1개월', '최근 3개월', '최근 6개월', '전체'];
-const TYPE_TABS = ['전체', '충전', '차감', '환불', '만료'];
+const TYPE_TABS = ['전체', '충전', '차감', '환불', '환불신청', '만료'];
 
 // ─── 충전 모달 ─────────────────────────────────────────────────────────────────
 
@@ -505,6 +506,31 @@ export function PointManagementPage() {
           </p>
         </div>
       </div>
+
+      {/* 환불 신청 현황 */}
+      {pointHistory.some((h) => h.type === '환불신청') && (
+        <div className="rounded-xl border border-amber-200 bg-amber-50 p-5">
+          <h3 className="mb-3 flex items-center gap-2 text-sm font-semibold">
+            <AlertTriangle size={15} className="text-amber-500" />
+            환불 신청 현황
+          </h3>
+          <div className="space-y-2">
+            {pointHistory.filter((h) => h.type === '환불신청').map((h) => (
+              <div key={h.no} className="flex items-center justify-between rounded-lg border border-amber-200 bg-white px-4 py-3">
+                <div>
+                  <p className="text-sm font-medium">{h.description}</p>
+                  <p className="text-xs text-muted-foreground">{h.date}</p>
+                </div>
+                <div className="text-right">
+                  <p className="text-sm font-bold text-red-500">{h.amount.toLocaleString()}P</p>
+                  <span className="rounded bg-amber-100 px-1.5 py-0.5 text-xs font-medium text-amber-700">처리 대기중</span>
+                </div>
+              </div>
+            ))}
+          </div>
+          <p className="mt-2 text-xs text-amber-600">운영팀 검토 후 영업일 기준 3~5일 이내 처리됩니다.</p>
+        </div>
+      )}
 
       {/* 내역 */}
       <div className="mb-3 flex items-center justify-between">

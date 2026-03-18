@@ -3,7 +3,8 @@ import type { IPointHistoryDto } from '@/models/interface/dto';
 export const MOCK_POINT_BALANCE = 48500;
 
 export const MOCK_POINT_HISTORY: IPointHistoryDto[] = [
-  { no: 1, date: '2026.03.10 14:30', type: '차감', description: '웰컴백 캠페인 발송 (이미지형 100건)', amount: -2000, balance: 48500 },
+  { no: 1, date: '2026.03.15 09:00', type: '환불신청', description: '계좌 환불 신청 (서비스 미사용) · 국민은행 ****5678', amount: -30000, balance: 18500 },
+  { no: 3, date: '2026.03.10 14:30', type: '차감', description: '웰컴백 캠페인 발송 (이미지형 100건)', amount: -2000, balance: 48500 },
   { no: 2, date: '2026.03.07 10:15', type: '환불', description: '봄 신메뉴 캠페인 실패 13건 자동 환불', amount: 200, balance: 50500 },
   { no: 3, date: '2026.03.07 10:00', type: '차감', description: '봄 신메뉴 캠페인 발송 (텍스트형 800건)', amount: -12000, balance: 50300 },
   { no: 4, date: '2026.03.05 09:15', type: '차감', description: 'VIP 전용 캠페인 발송 (텍스트형 100건)', amount: -1500, balance: 62300 },
