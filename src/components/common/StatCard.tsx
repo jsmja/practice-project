@@ -19,7 +19,7 @@ export function StatCard({ title, value, change, icon, description, className, i
       className={cn(
         'h-full rounded-2xl border border-border/60 bg-white p-5 shadow-sm transition-all',
         onClick && 'cursor-pointer hover:border-gray-300 hover:shadow-md',
-        isActive && 'border-foreground ring-1 ring-foreground/10',
+        isActive && 'border-primary ring-1 ring-foreground/10',
         className,
       )}
     >

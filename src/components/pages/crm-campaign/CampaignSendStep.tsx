@@ -1,19 +1,13 @@
-import { Check } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface ICampaignSendStepProps {
-  sendOption: 'now' | 'reserved';
-  onSendOptionChange: (option: 'now' | 'reserved') => void;
+  sendOption: 'once' | 'repeat';
+  onSendOptionChange: (option: 'once' | 'repeat') => void;
   sendDate: string;
   onSendDateChange: (date: string) => void;
   sendTime: string;
   onSendTimeChange: (time: string) => void;
 }
-
-const SEND_OPTIONS = [
-  { id: 'now' as const, icon: '⚡', label: '즉시 발송', sub: '저장 즉시 메시지를 발송합니다' },
-  { id: 'reserved' as const, icon: '📅', label: '예약 발송', sub: '지정한 날짜와 시간에 자동 발송합니다' },
-];
 
 export function CampaignSendStep({
   sendOption,
@@ -25,44 +19,81 @@ export function CampaignSendStep({
 }: ICampaignSendStepProps) {
   return (
     <div>
-      <h2 className="mb-4 text-base font-semibold">발송 일정을 설정해주세요</h2>
-      <div className="space-y-3">
-        {SEND_OPTIONS.map((opt) => (
-          <button
-            key={opt.id}
-            onClick={() => onSendOptionChange(opt.id)}
-            className={cn(
-              'flex w-full items-center gap-4 rounded-xl border-2 p-5 text-left transition-all',
-              sendOption === opt.id ? 'border-foreground bg-gray-50' : 'border-border/60 hover:border-gray-300'
-            )}
-          >
-            <span className="text-2xl">{opt.icon}</span>
-            <div>
-              <p className="font-medium">{opt.label}</p>
-              <p className="text-sm text-muted-foreground">{opt.sub}</p>
-            </div>
-            {sendOption === opt.id && (
-              <div className="ml-auto flex h-5 w-5 items-center justify-center rounded-full bg-foreground">
-                <Check size={11} className="text-white" />
-              </div>
-            )}
-          </button>
-        ))}
-        {sendOption === 'reserved' && (
-          <div className="ml-12 rounded-xl border border-border/60 bg-white p-4">
-            <div className="flex gap-4">
-              <div>
-                <label className="mb-1 block text-xs text-muted-foreground">날짜</label>
-                <input type="date" value={sendDate} onChange={(e) => onSendDateChange(e.target.value)} className="rounded-lg border border-border/60 px-3 py-2 text-sm outline-none focus:border-primary" />
-              </div>
-              <div>
-                <label className="mb-1 block text-xs text-muted-foreground">시간</label>
-                <input type="time" value={sendTime} onChange={(e) => onSendTimeChange(e.target.value)} className="rounded-lg border border-border/60 px-3 py-2 text-sm outline-none focus:border-primary" />
-              </div>
-            </div>
-          </div>
-        )}
+      <h2 className="mb-1 text-base font-semibold">발송 조건 설정</h2>
+      <p className="mb-5 text-xs text-muted-foreground">발송 스케줄과 조건을 설정해 주세요.</p>
+
+      <div className="rounded-xl border border-border/60">
+        <table className="w-full text-sm">
+          <tbody className="divide-y divide-border/60">
+            {/* 횟수 */}
+            <tr>
+              <td className="w-40 bg-gray-50/70 px-5 py-4 text-xs font-medium text-muted-foreground">횟수</td>
+              <td className="px-5 py-4">
+                <div className="flex items-center gap-4">
+                  <label className="flex cursor-pointer items-center gap-1.5">
+                    <RadioDot checked={sendOption === 'once'} onClick={() => onSendOptionChange('once')} />
+                    <span className="text-sm">1회 발송</span>
+                  </label>
+                  <label className="flex cursor-pointer items-center gap-1.5">
+                    <RadioDot checked={sendOption === 'repeat'} onClick={() => onSendOptionChange('repeat')} />
+                    <span className="text-sm">반복 발송</span>
+                  </label>
+                </div>
+              </td>
+            </tr>
+            {/* 발송시각 */}
+            <tr>
+              <td className="w-40 bg-gray-50/70 px-5 py-4 text-xs font-medium text-muted-foreground">
+                발송시각 <span className="text-red-500">*</span>
+              </td>
+              <td className="px-5 py-4">
+                <div className="flex items-center gap-2">
+                  <input
+                    type="date"
+                    value={sendDate}
+                    onChange={(e) => onSendDateChange(e.target.value)}
+                    placeholder="YYYY-MM-DD"
+                    className="rounded-lg border border-border/60 px-3 py-1.5 text-sm outline-none focus:border-primary"
+                  />
+                  <select
+                    value={sendTime}
+                    onChange={(e) => onSendTimeChange(e.target.value)}
+                    className="rounded-lg border border-border/60 px-3 py-1.5 text-sm outline-none focus:border-primary"
+                  >
+                    <option value="">00 : 00</option>
+                    {Array.from({ length: 24 }, (_, h) => (
+                      <option key={h} value={`${String(h).padStart(2, '0')}:00`}>
+                        {String(h).padStart(2, '0')} : 00
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      {/* 안내 사항 */}
+      <div className="mt-4 rounded-xl border border-border/60 bg-gray-50/70 px-5 py-4 text-xs leading-relaxed text-muted-foreground">
+        <p>· 해당 캠페인은 현재 시각 기준 30분 이후부터 발송 가능합니다. (원하는 발송 시간이 있을 경우, 최소 30분 전에 등록해 주세요.)</p>
+        <p className="mt-1 text-orange-500">· 친구톡은 광고성 메시지로 야간발송 제한 시간에는 발송할 수 없습니다. (발송 제한시간: 20:50~익일 8:00)</p>
       </div>
     </div>
+  );
+}
+
+function RadioDot({ checked, onClick }: { checked: boolean; onClick: () => void }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={cn(
+        'flex h-4 w-4 flex-shrink-0 items-center justify-center rounded-full border-2',
+        checked ? 'border-primary' : 'border-gray-300'
+      )}
+    >
+      {checked && <div className="h-2 w-2 rounded-full bg-primary" />}
+    </button>
   );
 }

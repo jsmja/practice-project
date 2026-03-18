@@ -127,7 +127,7 @@ export function AiBannerGenerator({
             </button>
             <button
               onClick={onSave}
-              className="flex flex-1 items-center justify-center gap-1.5 rounded-xl bg-foreground py-2.5 text-sm font-medium text-white transition-colors hover:bg-gray-800"
+              className="flex flex-1 items-center justify-center gap-1.5 rounded-xl bg-primary py-2.5 text-sm font-medium text-white transition-colors hover:bg-primary/90"
             >
               <Save size={14} />
               배너 저장

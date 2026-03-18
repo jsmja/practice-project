@@ -109,7 +109,7 @@ function ChargeModal({ onClose }: { onClose: () => void }) {
                       onClick={() => { setSelectedAmount(amt); setIsCustom(false); }}
                       className={cn(
                         'rounded-lg border-2 py-2.5 text-sm font-medium transition-colors',
-                        !isCustom && selectedAmount === amt ? 'border-foreground bg-foreground text-white' : 'border-border hover:border-gray-400'
+                        !isCustom && selectedAmount === amt ? 'border-primary bg-primary text-white' : 'border-border hover:border-gray-400'
                       )}
                     >
                       {(amt / 10000).toLocaleString()}만원
@@ -119,7 +119,7 @@ function ChargeModal({ onClose }: { onClose: () => void }) {
                     onClick={() => { setIsCustom(true); setSelectedAmount(null); }}
                     className={cn(
                       'rounded-lg border-2 py-2.5 text-sm font-medium transition-colors',
-                      isCustom ? 'border-foreground bg-foreground text-white' : 'border-border hover:border-gray-400'
+                      isCustom ? 'border-primary bg-primary text-white' : 'border-border hover:border-gray-400'
                     )}
                   >
                     직접 입력
@@ -169,7 +169,7 @@ function ChargeModal({ onClose }: { onClose: () => void }) {
                 disabled={!isValid}
                 className={cn(
                   'w-full rounded-xl py-3 text-sm font-semibold transition-colors',
-                  isValid ? 'bg-foreground text-white hover:bg-gray-800' : 'cursor-not-allowed bg-muted text-muted-foreground'
+                  isValid ? 'bg-primary text-white hover:bg-primary/90' : 'cursor-not-allowed bg-muted text-muted-foreground'
                 )}
               >
                 충전하기
@@ -197,7 +197,7 @@ function ChargeModal({ onClose }: { onClose: () => void }) {
               </div>
               <div className="flex gap-3">
                 <button onClick={() => setStep('select')} className="flex-1 rounded-xl border border-border py-3 text-sm font-medium transition-colors hover:bg-muted">이전</button>
-                <button onClick={() => setStep('complete')} className="flex-1 rounded-xl bg-foreground py-3 text-sm font-semibold text-white transition-colors hover:bg-gray-800">결제 확인</button>
+                <button onClick={() => setStep('complete')} className="flex-1 rounded-xl bg-primary py-3 text-sm font-semibold text-white transition-colors hover:bg-primary/90">결제 확인</button>
               </div>
             </>
           )}
@@ -210,7 +210,7 @@ function ChargeModal({ onClose }: { onClose: () => void }) {
               <p className="mb-1 text-lg font-bold">{finalAmount.toLocaleString()}P 충전 완료!</p>
               <p className="mb-1 text-sm text-muted-foreground">현재 잔액: {(MOCK_POINT_BALANCE + finalAmount).toLocaleString()}P</p>
               <p className="mb-6 text-xs text-muted-foreground">유효기간: 충전일로부터 1년</p>
-              <button onClick={onClose} className="w-full rounded-xl bg-foreground py-3 text-sm font-semibold text-white transition-colors hover:bg-gray-800">확인</button>
+              <button onClick={onClose} className="w-full rounded-xl bg-primary py-3 text-sm font-semibold text-white transition-colors hover:bg-primary/90">확인</button>
             </div>
           )}
         </div>
@@ -251,7 +251,7 @@ function RefundModal({ onClose }: { onClose: () => void }) {
               </div>
               <p className="mb-1 text-lg font-bold">환불 신청이 접수되었습니다</p>
               <p className="mb-6 text-sm text-muted-foreground">검토 후 영업일 기준 3~5일 이내 처리됩니다</p>
-              <button onClick={onClose} className="w-full rounded-xl bg-foreground py-3 text-sm font-semibold text-white transition-colors hover:bg-gray-800">확인</button>
+              <button onClick={onClose} className="w-full rounded-xl bg-primary py-3 text-sm font-semibold text-white transition-colors hover:bg-primary/90">확인</button>
             </div>
           ) : (
             <>
@@ -317,7 +317,7 @@ function RefundModal({ onClose }: { onClose: () => void }) {
                 <button
                   onClick={() => { if (isValid) setSubmitted(true); }}
                   disabled={!isValid}
-                  className={cn('flex-1 rounded-xl py-3 text-sm font-semibold transition-colors', isValid ? 'bg-foreground text-white hover:bg-gray-800' : 'cursor-not-allowed bg-muted text-muted-foreground')}
+                  className={cn('flex-1 rounded-xl py-3 text-sm font-semibold transition-colors', isValid ? 'bg-primary text-white hover:bg-primary/90' : 'cursor-not-allowed bg-muted text-muted-foreground')}
                 >
                   신청하기
                 </button>
@@ -367,7 +367,7 @@ export function PointManagementPage() {
   const balanceColor = balance <= 10000 ? 'text-red-600' : balance <= 50000 ? 'text-amber-600' : 'text-foreground';
 
   return (
-    <div>
+    <div className="space-y-6">
       <PageHeader
         title="포인트 관리"
         description="메시지 발송에 사용되는 포인트를 충전하고 내역을 확인합니다"
@@ -382,7 +382,7 @@ export function PointManagementPage() {
             </button>
             <button
               onClick={() => setShowChargeModal(true)}
-              className="flex items-center gap-2 rounded-lg bg-foreground px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-gray-800"
+              className="flex items-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-primary/90"
             >
               <Plus size={15} />
               포인트 충전
@@ -408,7 +408,7 @@ export function PointManagementPage() {
           <p className="mt-0.5 text-[10px] text-muted-foreground">= {balance.toLocaleString()}원</p>
           <button
             onClick={() => setShowChargeModal(true)}
-            className="mt-4 w-full rounded-lg bg-foreground py-2 text-xs font-semibold text-white transition-colors hover:bg-gray-800"
+            className="mt-4 w-full rounded-lg bg-primary py-2 text-xs font-semibold text-white transition-colors hover:bg-primary/90"
           >
             충전하기
           </button>
@@ -437,14 +437,14 @@ export function PointManagementPage() {
         <div className="flex items-center gap-3">
           <div className="flex gap-1">
             {PERIOD_TABS.map((tab) => (
-              <button key={tab} onClick={() => setActivePeriod(tab)} className={cn('rounded-lg border px-3 py-1.5 text-xs transition-colors', activePeriod === tab ? 'border-foreground bg-foreground text-white' : 'border-border hover:bg-muted')}>
+              <button key={tab} onClick={() => setActivePeriod(tab)} className={cn('rounded-lg border px-3 py-1.5 text-xs transition-colors', activePeriod === tab ? 'border-primary bg-primary text-white' : 'border-border hover:bg-muted')}>
                 {tab}
               </button>
             ))}
           </div>
           <div className="flex gap-1">
             {TYPE_TABS.map((tab) => (
-              <button key={tab} onClick={() => setActiveType(tab)} className={cn('rounded-lg border px-3 py-1.5 text-xs transition-colors', activeType === tab ? 'border-foreground bg-foreground text-white' : 'border-border hover:bg-muted')}>
+              <button key={tab} onClick={() => setActiveType(tab)} className={cn('rounded-lg border px-3 py-1.5 text-xs transition-colors', activeType === tab ? 'border-primary bg-primary text-white' : 'border-border hover:bg-muted')}>
                 {tab}
               </button>
             ))}

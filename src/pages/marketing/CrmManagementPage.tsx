@@ -144,7 +144,7 @@ export function CrmManagementPage() {
         actions={
           <button
             onClick={() => setActiveView('create')}
-            className="flex items-center gap-1.5 rounded-lg bg-foreground px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-gray-800"
+            className="flex items-center gap-1.5 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-primary/90"
           >
             <Plus size={15} />
             캠페인 만들기

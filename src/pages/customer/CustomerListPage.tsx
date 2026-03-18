@@ -51,7 +51,7 @@ export function CustomerListPage() {
   const { data: customers = [] } = useCustomerList();
 
   return (
-    <div className="relative">
+    <div className="relative space-y-6">
       <PageHeader
         title="고객 리스트"
         actions={
@@ -95,7 +95,7 @@ export function CustomerListPage() {
               className="rounded-lg border border-border bg-white py-2 pl-9 pr-3 text-sm outline-none transition-colors focus:border-primary focus:ring-1 focus:ring-primary"
             />
           </div>
-          <button className="rounded-lg bg-foreground px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-gray-800">
+          <button className="rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-primary/90">
             검색
           </button>
         </div>

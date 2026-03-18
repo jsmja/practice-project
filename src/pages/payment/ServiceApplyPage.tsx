@@ -42,7 +42,7 @@ export function ServiceApplyPage() {
   const canProceed = selectedIds.size > 0 && agreedPolicy;
 
   return (
-    <div>
+    <div className="space-y-6">
       <PageHeader title="서비스 신청" description="원하시는 서비스 상품을 선택하고 결제를 진행해주세요" />
 
       {/* Step Indicator */}
@@ -53,7 +53,7 @@ export function ServiceApplyPage() {
               <div
                 className={cn(
                   'flex h-6 w-6 items-center justify-center rounded-full text-xs font-bold',
-                  idx <= currentStep ? 'bg-foreground text-white' : 'bg-muted text-muted-foreground'
+                  idx <= currentStep ? 'bg-primary text-white' : 'bg-muted text-muted-foreground'
                 )}
               >
                 {idx < currentStep ? <Check size={12} /> : idx + 1}
@@ -79,7 +79,7 @@ export function ServiceApplyPage() {
                   onClick={() => setSubscriptionType(type)}
                   className={cn(
                     'flex items-center gap-2 rounded-lg border px-4 py-2 text-sm transition-colors',
-                    subscriptionType === type ? 'border-foreground bg-foreground text-white' : 'border-border hover:bg-muted'
+                    subscriptionType === type ? 'border-primary bg-primary text-white' : 'border-border hover:bg-muted'
                   )}
                 >
                   {type} (자동갱신)
@@ -103,13 +103,13 @@ export function ServiceApplyPage() {
                     onClick={() => toggleService(product.id)}
                     className={cn(
                       'rounded-xl border-2 bg-white p-5 text-left transition-colors',
-                      isSelected ? 'border-foreground' : 'border-border hover:border-gray-400'
+                      isSelected ? 'border-primary' : 'border-border hover:border-gray-400'
                     )}
                   >
                     <div className="mb-2 flex items-center justify-between">
                       <span className="font-semibold">{product.name}</span>
                       <div className={cn('flex h-5 w-5 items-center justify-center rounded-full border-2 transition-colors',
-                        isSelected ? 'border-foreground bg-foreground' : 'border-border'
+                        isSelected ? 'border-primary bg-primary' : 'border-border'
                       )}>
                         {isSelected && <Check size={10} className="text-white" />}
                       </div>
@@ -185,7 +185,7 @@ export function ServiceApplyPage() {
               disabled={!canProceed}
               className={cn(
                 'rounded-lg px-6 py-2.5 text-sm font-medium transition-colors',
-                canProceed ? 'bg-foreground text-white hover:bg-gray-800' : 'cursor-not-allowed bg-muted text-muted-foreground'
+                canProceed ? 'bg-primary text-white hover:bg-primary/90' : 'cursor-not-allowed bg-muted text-muted-foreground'
               )}
             >
               다음
@@ -226,7 +226,7 @@ export function ServiceApplyPage() {
 
           <div className="flex justify-center gap-3">
             <button onClick={() => setCurrentStep(0)} className="rounded-lg border border-border px-6 py-2.5 text-sm font-medium transition-colors hover:bg-muted">이전</button>
-            <button onClick={() => navigate('/payment/subscription')} className="rounded-lg bg-foreground px-6 py-2.5 text-sm font-medium text-white transition-colors hover:bg-gray-800">카드 등록 완료 (테스트)</button>
+            <button onClick={() => navigate('/payment/subscription')} className="rounded-lg bg-primary px-6 py-2.5 text-sm font-medium text-white transition-colors hover:bg-primary/90">카드 등록 완료 (테스트)</button>
           </div>
         </div>
       )}

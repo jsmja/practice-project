@@ -52,7 +52,7 @@ export function BannerTargetStep({
                 className={cn(
                   'rounded-full border px-3.5 py-1.5 text-xs font-medium transition-colors',
                   targetGrade === g
-                    ? 'border-foreground bg-foreground text-white'
+                    ? 'border-primary bg-primary text-white'
                     : 'border-border/60 hover:border-gray-400'
                 )}
               >
@@ -76,7 +76,7 @@ export function BannerTargetStep({
                     className={cn(
                       'rounded-full border px-3.5 py-1.5 text-xs font-medium transition-colors',
                       targetGender === g
-                        ? 'border-foreground bg-foreground text-white'
+                        ? 'border-primary bg-primary text-white'
                         : 'border-border/60 hover:border-gray-400'
                     )}
                   >
@@ -95,7 +95,7 @@ export function BannerTargetStep({
                     className={cn(
                       'rounded-full border px-3.5 py-1.5 text-xs font-medium transition-colors',
                       targetAgeGroup === a
-                        ? 'border-foreground bg-foreground text-white'
+                        ? 'border-primary bg-primary text-white'
                         : 'border-border/60 hover:border-gray-400'
                     )}
                   >
@@ -121,16 +121,16 @@ export function BannerTargetStep({
                 className={cn(
                   'flex w-full items-center gap-3 rounded-xl border-2 p-4 text-left transition-all',
                   displaySchedule === opt.id
-                    ? 'border-foreground bg-gray-50'
+                    ? 'border-primary bg-gray-50'
                     : 'border-border/60 hover:border-gray-300'
                 )}
               >
                 <div className={cn(
                   'flex h-4 w-4 items-center justify-center rounded-full border-2',
-                  displaySchedule === opt.id ? 'border-foreground' : 'border-gray-300'
+                  displaySchedule === opt.id ? 'border-primary' : 'border-gray-300'
                 )}>
                   {displaySchedule === opt.id && (
-                    <div className="h-2 w-2 rounded-full bg-foreground" />
+                    <div className="h-2 w-2 rounded-full bg-primary" />
                   )}
                 </div>
                 <div>

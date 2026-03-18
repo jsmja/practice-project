@@ -6,6 +6,8 @@ export interface IWizardStep {
   id: number;
   label: string;
   icon: ReactNode;
+  /** 스텝 라벨 옆에 표시할 뱃지 텍스트 (예: 선택한 유형명) */
+  badge?: string;
 }
 
 interface IWizardStepIndicatorProps {
@@ -27,7 +29,7 @@ export function WizardStepIndicator({ steps, currentStep, onStepClick }: IWizard
               onClick={() => { if (isCompleted) { onStepClick(step.id); } }}
               className={cn(
                 'flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-xs font-medium transition-all',
-                isActive && 'bg-foreground text-white shadow-sm',
+                isActive && 'bg-primary text-white shadow-sm',
                 isCompleted && 'cursor-pointer bg-green-100 text-green-700 hover:bg-green-200',
                 !isActive && !isCompleted && 'cursor-default bg-muted text-muted-foreground'
               )}

@@ -7,26 +7,26 @@ export default {
         sans: ['Pretendard', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'sans-serif'],
       },
       colors: {
-        border: '#e5e5e5',
-        input: '#e5e5e5',
-        ring: '#0a0a0a',
+        border: '#e8e5f0',
+        input: '#e8e5f0',
+        ring: '#7C3AED',
         background: '#ffffff',
-        foreground: '#0a0a0a',
+        foreground: '#1e1b2e',
         primary: {
-          DEFAULT: '#171717',
-          foreground: '#fafafa',
+          DEFAULT: '#7C3AED',
+          foreground: '#ffffff',
         },
         secondary: {
-          DEFAULT: '#f5f5f5',
-          foreground: '#171717',
+          DEFAULT: '#f5f3ff',
+          foreground: '#4c1d95',
         },
         muted: {
-          DEFAULT: '#f5f5f5',
-          foreground: '#737373',
+          DEFAULT: '#f5f3ff',
+          foreground: '#6b7280',
         },
         accent: {
-          DEFAULT: '#f5f5f5',
-          foreground: '#171717',
+          DEFAULT: '#ede9fe',
+          foreground: '#5b21b6',
         },
         destructive: {
           DEFAULT: '#ef4444',
@@ -34,16 +34,16 @@ export default {
         },
         card: {
           DEFAULT: '#ffffff',
-          foreground: '#0a0a0a',
+          foreground: '#1e1b2e',
         },
         popover: {
           DEFAULT: '#ffffff',
-          foreground: '#0a0a0a',
+          foreground: '#1e1b2e',
         },
         sidebar: {
-          DEFAULT: '#fafafa',
-          foreground: '#737373',
-          active: '#171717',
+          DEFAULT: '#faf8ff',
+          foreground: '#6b7280',
+          active: '#7C3AED',
         },
         kakao: {
           DEFAULT: '#fee500',
@@ -122,6 +122,11 @@ export default {
           '75%': { opacity: '0' },
           '100%': { opacity: '0' },
         },
+        // 미리보기 패널 등장 애니메이션
+        previewEnter: {
+          '0%': { opacity: '0', transform: 'scale(0.92) translateY(8px)' },
+          '100%': { opacity: '1', transform: 'scale(1) translateY(0)' },
+        },
       },
       animation: {
         'dim-cycle': 'dimCycle 3s ease-in-out infinite',
@@ -132,6 +137,7 @@ export default {
         'cursor-exit-cycle': 'cursorExitCycle 4s ease-in-out infinite',
         'exit-popup-cycle': 'exitPopupCycle 4s ease-in-out infinite',
         'exit-dim-cycle': 'exitDimCycle 4s ease-in-out infinite',
+        'preview-enter': 'previewEnter 0.4s cubic-bezier(0.16,1,0.3,1)',
       },
       borderRadius: {
         sm: '0.25rem',

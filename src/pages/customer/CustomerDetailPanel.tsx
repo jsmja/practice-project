@@ -158,7 +158,7 @@ export function CustomerDetailPanel({ customer, isOpen, onClose }: ICustomerDeta
                                     <Badge variant={STATUS_BADGE_MAP[item.status] ?? 'default'}>
                                       {item.status}
                                     </Badge>
-                                    <span className="absolute bottom-full left-1/2 z-10 mb-1.5 hidden -translate-x-1/2 whitespace-nowrap rounded-md bg-foreground px-2.5 py-1 text-xs text-white shadow-lg group-hover:block">
+                                    <span className="absolute bottom-full left-1/2 z-10 mb-1.5 hidden -translate-x-1/2 whitespace-nowrap rounded-md bg-primary px-2.5 py-1 text-xs text-white shadow-lg group-hover:block">
                                       {item.failReason}
                                       <span className="absolute left-1/2 top-full -translate-x-1/2 border-4 border-transparent border-t-foreground" />
                                     </span>
@@ -203,7 +203,7 @@ export function CustomerDetailPanel({ customer, isOpen, onClose }: ICustomerDeta
                           className={cn(
                             'flex h-7 w-7 items-center justify-center rounded-lg text-xs font-medium transition-colors',
                             p === page
-                              ? 'bg-foreground text-white'
+                              ? 'bg-primary text-white'
                               : 'text-muted-foreground hover:bg-muted hover:text-foreground',
                           )}
                         >

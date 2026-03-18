@@ -46,7 +46,7 @@ export function MarketingStatusPage() {
   const { data: marketingList = [] } = useMarketingList();
 
   return (
-    <div>
+    <div className="space-y-6">
       <PageHeader title="마케팅 현황" />
 
       <FilterBar

@@ -2,13 +2,18 @@ import { useState } from 'react';
 import {
   AlignLeft,
   Image,
-  LayoutList,
-  Layers,
   Plus,
   Trash2,
   Check,
   Upload,
   ChevronDown,
+  Sparkles,
+  Variable,
+  Smile,
+  Link as LinkIcon,
+  Tag,
+  FlaskConical,
+  TrendingUp,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -23,7 +28,6 @@ interface IMessageType {
   imageSpec?: string;
   maxButtons: number;
   maxChars: number;
-  color: string;
 }
 
 export interface IButton {
@@ -51,14 +55,25 @@ export interface IWideItem {
 // ─── 상수 ────────────────────────────────────────────────────────────────────
 
 const MESSAGE_TYPES: IMessageType[] = [
-  { id: 'text', name: '텍스트형', icon: <AlignLeft size={24} />, description: '텍스트만으로 구성된 기본 메시지', details: '본문 최대 400자 · 버튼 최대 5개', maxButtons: 5, maxChars: 400, color: 'border-gray-400 bg-gray-50' },
-  { id: 'image', name: '이미지형', icon: <Image size={24} />, description: '썸네일 이미지 + 텍스트 조합', details: '이미지 500×250px · 본문 최대 400자 · 버튼 최대 5개', imageSpec: '500×250px', maxButtons: 5, maxChars: 400, color: 'border-blue-400 bg-blue-50' },
-  { id: 'wide-image', name: '와이드 이미지형', icon: <Image size={24} />, description: '전체 폭 이미지로 강렬한 인상', details: '이미지 800×600px · 본문 최대 76자 · 버튼 최대 2개', imageSpec: '800×600px', maxButtons: 2, maxChars: 76, color: 'border-green-400 bg-green-50' },
-  { id: 'wide-item-list', name: '와이드 아이템 리스트형', icon: <LayoutList size={24} />, description: '여러 상품/이벤트를 리스트로 소개', details: '아이템 2~4개 · 이미지 300×300px · 버튼 최대 2개', imageSpec: '300×300px', maxButtons: 2, maxChars: 400, color: 'border-amber-400 bg-amber-50' },
-  { id: 'carousel', name: '캐러셀 피드형', icon: <Layers size={24} />, description: '슬라이드 카드로 여러 콘텐츠 소개', details: '카드 2~6개 · 이미지 500×500px · 카드당 버튼 최대 2개', imageSpec: '500×500px', maxButtons: 2, maxChars: 400, color: 'border-purple-400 bg-purple-50' },
+  { id: 'basic', name: '기본형', icon: <AlignLeft size={18} />, description: '텍스트 + 이미지(선택) 조합 메시지', details: '본문 최대 400자 · 이미지 추가 시 이미지형 · 버튼 최대 5개', imageSpec: '500×250px', maxButtons: 5, maxChars: 400 },
+  { id: 'wide-image', name: '와이드 이미지형', icon: <Image size={18} />, description: '전체 폭 이미지로 강렬한 인상', details: '이미지 800×600px · 본문 최대 76자 · 버튼 최대 2개', imageSpec: '800×600px', maxButtons: 2, maxChars: 76 },
 ];
 
-const BUTTON_TYPES = ['웹링크', '앱링크', '봇키워드', '채널 추가', '상담톡 전환', '봇 전환'];
+const PERSONALIZATION_VARS = [
+  { label: '#{고객명}', desc: '고객 이름' },
+  { label: '#{브랜드명}', desc: '쇼핑몰명' },
+  { label: '#{최근구매상품}', desc: '마지막 구매 상품명' },
+  { label: '#{포인트잔액}', desc: '보유 포인트' },
+  { label: '#{쿠폰코드}', desc: '발급 쿠폰 코드' },
+  { label: '#{회원등급}', desc: '현재 회원 등급' },
+];
+
+const AI_SUGGESTIONS = [
+  '고객님, 오랜만이에요! 다시 만나 반가워요 😊 특별 할인 쿠폰을 드립니다.',
+  '#{고객명}님을 위한 맞춤 추천! 이번 시즌 인기 상품을 확인해보세요.',
+  '장바구니에 담아두신 상품, 지금 구매하시면 추가 할인 혜택이 있어요!',
+  '#{고객명}님, 새로운 상품이 도착했어요! 놓치기 아까운 시즌 신상품을 지금 바로 확인해 보세요 🎁',
+];
 
 // ─── 서브 컴포넌트 ───────────────────────────────────────────────────────────
 
@@ -66,16 +81,18 @@ function ButtonBuilder({ buttons, maxButtons, onChange }: { buttons: IButton[]; 
   const addButton = () => { if (buttons.length >= maxButtons) return; onChange([...buttons, { id: Date.now(), type: '웹링크', label: '', url: '' }]); };
   const removeButton = (id: number) => onChange(buttons.filter((b) => b.id !== id));
   const updateButton = (id: number, field: keyof IButton, value: string) => onChange(buttons.map((b) => (b.id === id ? { ...b, [field]: value } : b)));
+  const BUTTON_TYPES = ['웹링크', '앱링크', '봇키워드', '채널 추가', '상담톡 전환', '봇 전환'];
 
   return (
     <div>
-      <div className="mb-2 flex items-center justify-between">
-        <p className="text-xs font-medium">버튼 설정 <span className="text-muted-foreground">(최대 {maxButtons}개)</span></p>
-        {buttons.length < maxButtons && (
-          <button type="button" onClick={addButton} className="flex items-center gap-1 rounded-lg border border-dashed border-border/60 px-2.5 py-1 text-xs text-muted-foreground hover:border-primary hover:text-primary">
-            <Plus size={11} /> 버튼 추가
-          </button>
-        )}
+      <div className="mb-3 flex items-center gap-2">
+        <p className="text-sm font-medium">버튼추가 <span className="text-red-500">*</span></p>
+        <button type="button" onClick={addButton} disabled={buttons.length >= maxButtons} className="flex items-center gap-1 rounded-lg border border-border/60 px-3 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:bg-muted disabled:opacity-40">
+          <LinkIcon size={11} /> 링크형
+        </button>
+        <button type="button" className="flex items-center gap-1 rounded-lg border border-border/60 px-3 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:bg-muted">
+          <Tag size={11} /> 쿠폰형
+        </button>
       </div>
       {buttons.length === 0 && (
         <div className="flex h-10 items-center justify-center rounded-lg border border-dashed border-border/60 text-xs text-muted-foreground">버튼을 추가하세요</div>
@@ -166,34 +183,43 @@ export function CampaignMessageStep({
   onCouponNameChange,
 }: ICampaignMessageStepProps) {
   const selectedMessageType = MESSAGE_TYPES.find((t) => t.id === selectedMessageTypeId);
+  const [showVarPalette, setShowVarPalette] = useState(false);
+  const [showAiSuggestions, setShowAiSuggestions] = useState(false);
+  const [abTestEnabled, setAbTestEnabled] = useState(false);
 
-  const addWideItem = () => {
-    if (wideItems.length >= 4) return;
-    onWideItemsChange([...wideItems, { id: Date.now(), title: '', description: '', imageUploaded: false }]);
-  };
-
-  const addCarouselCard = () => {
-    if (carouselCards.length >= 6) return;
-    onCarouselCardsChange([...carouselCards, { id: Date.now(), title: '', description: '', imageUploaded: false, buttons: [] }]);
+  const insertVar = (varLabel: string) => {
+    onBodyTextChange(bodyText + varLabel);
+    setShowVarPalette(false);
   };
 
   return (
     <div>
-      <h2 className="mb-1 text-base font-semibold">메시지 유형과 내용을 작성해주세요</h2>
-      <p className="mb-4 text-xs text-muted-foreground">카카오 브랜드 메시지 유형을 선택하고 내용을 입력하세요</p>
+      <h2 className="mb-1 text-base font-semibold">메시지 작성</h2>
+
+      {/* 안내 문구 */}
+      <div className="mb-5 rounded-lg border border-border/60 bg-gray-50/70 px-4 py-3 text-xs leading-relaxed text-muted-foreground">
+        <p>· 본문 앞에 (광고)가 자동 표시되며, 메시지 하단에 수신거부 및 수신동의 철회 방법 안내가 표시됩니다.</p>
+        <p>· 수정은 발송 30분 전까지만 가능하며, 메시지 작성 타입(텍스트/이미지/와이드이미지)은 변경 불가. (단, 텍스트↔이미지만 변경 가능)</p>
+        <p className="text-orange-500">· 20세 이상 성인에게만 적합한 내용을 포함할 경우 반드시 [성인 전용 메시지]를 체크해 주세요.(예: 주류, 청소년 이용불가 게임·영화 등)</p>
+      </div>
 
       {/* 메시지 유형 선택 */}
-      <div className="mb-4 grid grid-cols-5 gap-2">
+      <div className="mb-4 grid grid-cols-2 gap-3">
         {MESSAGE_TYPES.map((type) => (
           <button
             key={type.id}
             onClick={() => onSelectMessageType(type.id)}
             className={cn(
               'flex flex-col items-center gap-2 rounded-xl border-2 p-3 text-center transition-all',
-              selectedMessageTypeId === type.id ? type.color : 'border-border/60 bg-white hover:border-gray-300'
+              selectedMessageTypeId === type.id
+                ? 'border-primary bg-primary/5'
+                : 'border-border/60 bg-white hover:border-primary/30'
             )}
           >
-            <div className={cn('flex h-10 w-10 items-center justify-center rounded-lg', selectedMessageTypeId === type.id ? 'bg-white/70' : 'bg-muted')}>
+            <div className={cn(
+              'flex h-10 w-10 items-center justify-center rounded-lg',
+              selectedMessageTypeId === type.id ? 'bg-primary/10 text-primary' : 'bg-muted text-muted-foreground'
+            )}>
               {type.icon}
             </div>
             <p className="text-xs font-semibold leading-tight">{type.name}</p>
@@ -207,150 +233,206 @@ export function CampaignMessageStep({
         </div>
       )}
 
-      {/* 텍스트형 */}
-      {selectedMessageTypeId === 'text' && (
-        <div className="space-y-3">
-          <div className="rounded-xl border border-border/60 bg-white p-4">
-            <label className="mb-1.5 block text-xs font-medium">헤더 텍스트 <span className="text-muted-foreground">(선택)</span></label>
-            <input type="text" value={headerText} onChange={(e) => onHeaderTextChange(e.target.value)} placeholder="상단 헤더 문구" className="w-full rounded-lg border border-border/60 px-3 py-2 text-sm outline-none focus:border-primary" />
-          </div>
-          <div className="rounded-xl border border-border/60 bg-white p-4">
-            <div className="mb-1.5 flex justify-between">
-              <label className="text-xs font-medium">본문 내용 <span className="text-red-500">*</span></label>
-              <span className={cn('text-xs', bodyText.length > 380 ? 'text-red-500' : 'text-muted-foreground')}>{bodyText.length}/400</span>
-            </div>
-            <textarea rows={6} value={bodyText} onChange={(e) => { if (e.target.value.length <= 400) onBodyTextChange(e.target.value); }} placeholder={'메시지 본문을 입력하세요\n\n변수 사용: #{고객명}, #{쿠폰코드} 등'} className="w-full resize-none rounded-lg border border-border/60 p-3 text-sm outline-none focus:border-primary" />
-          </div>
-          <div className="rounded-xl border border-border/60 bg-white p-4">
-            <ButtonBuilder buttons={buttons} maxButtons={5} onChange={onButtonsChange} />
-          </div>
-        </div>
-      )}
-
-      {/* 이미지형 / 와이드 이미지형 */}
-      {(selectedMessageTypeId === 'image' || selectedMessageTypeId === 'wide-image') && (
-        <div className="space-y-3">
-          <div className="rounded-xl border border-border/60 bg-white p-4">
-            <label className="mb-2 block text-xs font-medium">
-              이미지 업로드 <span className="text-red-500">*</span>
-              <span className="ml-1 font-normal text-muted-foreground">({selectedMessageType?.imageSpec})</span>
-            </label>
-            <ImageUploadBox label="이미지를 드래그하거나 클릭하세요" spec={`권장 ${selectedMessageType?.imageSpec} · JPG/PNG · 최대 5MB`} uploaded={imageUploaded} onToggle={() => onImageUploadedChange(!imageUploaded)} />
-          </div>
-          <div className="rounded-xl border border-border/60 bg-white p-4">
-            <div className="mb-1.5 flex justify-between">
-              <label className="text-xs font-medium">본문 내용 <span className="text-red-500">*</span></label>
-              <span className={cn('text-xs', bodyText.length > (selectedMessageType?.maxChars ?? 400) - 20 ? 'text-red-500' : 'text-muted-foreground')}>{bodyText.length}/{selectedMessageType?.maxChars}</span>
-            </div>
-            <textarea rows={selectedMessageTypeId === 'wide-image' ? 3 : 5} value={bodyText} onChange={(e) => { const max = selectedMessageType?.maxChars ?? 400; if (e.target.value.length <= max) onBodyTextChange(e.target.value); }} placeholder={'이미지 아래 본문을 입력하세요\n\n변수 사용: #{고객명}, #{쿠폰코드} 등'} className="w-full resize-none rounded-lg border border-border/60 p-3 text-sm outline-none focus:border-primary" />
-          </div>
-          <div className="rounded-xl border border-border/60 bg-white p-4">
-            <ButtonBuilder buttons={buttons} maxButtons={selectedMessageType?.maxButtons ?? 2} onChange={onButtonsChange} />
-          </div>
-        </div>
-      )}
-
-      {/* 와이드 아이템 리스트형 */}
-      {selectedMessageTypeId === 'wide-item-list' && (
-        <div className="space-y-3">
-          <div className="rounded-xl border border-border/60 bg-white p-4">
-            <div className="mb-3 flex items-center justify-between">
-              <label className="text-xs font-medium">아이템 목록 <span className="text-red-500">*</span> <span className="font-normal text-muted-foreground">(2~4개)</span></label>
-              {wideItems.length < 4 && (
-                <button onClick={addWideItem} className="flex items-center gap-1 rounded-lg border border-dashed border-border/60 px-2.5 py-1 text-xs text-muted-foreground hover:border-primary hover:text-primary">
-                  <Plus size={11} /> 아이템 추가
-                </button>
-              )}
-            </div>
-            <div className="space-y-2">
-              {wideItems.map((item, idx) => (
-                <div key={item.id} className="flex gap-3 rounded-lg border border-border/60 p-3">
-                  <div onClick={() => onWideItemsChange(wideItems.map((w) => w.id === item.id ? { ...w, imageUploaded: !w.imageUploaded } : w))} className={cn('flex h-14 w-14 flex-shrink-0 cursor-pointer items-center justify-center rounded-lg border-2 border-dashed text-xs', item.imageUploaded ? 'border-green-400 bg-green-50 text-green-600' : 'border-border/60 text-muted-foreground hover:border-gray-400')}>
-                    {item.imageUploaded ? <Check size={14} /> : <Image size={14} />}
-                  </div>
-                  <div className="flex flex-1 flex-col gap-1.5">
-                    <p className="text-xs text-muted-foreground">아이템 {idx + 1}</p>
-                    <input type="text" value={item.title} onChange={(e) => onWideItemsChange(wideItems.map((w) => w.id === item.id ? { ...w, title: e.target.value } : w))} placeholder="타이틀" className="rounded-md border border-border/60 px-2.5 py-1.5 text-xs outline-none focus:border-primary" />
-                    <input type="text" value={item.description} onChange={(e) => onWideItemsChange(wideItems.map((w) => w.id === item.id ? { ...w, description: e.target.value } : w))} placeholder="설명" className="rounded-md border border-border/60 px-2.5 py-1.5 text-xs outline-none focus:border-primary" />
-                  </div>
-                  {wideItems.length > 2 && (
-                    <button onClick={() => onWideItemsChange(wideItems.filter((w) => w.id !== item.id))} className="self-start text-muted-foreground hover:text-red-500"><Trash2 size={13} /></button>
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
-          <div className="rounded-xl border border-border/60 bg-white p-4">
-            <div className="mb-1.5 flex justify-between">
-              <label className="text-xs font-medium">본문 내용 <span className="text-red-500">*</span></label>
-              <span className="text-xs text-muted-foreground">{bodyText.length}/400</span>
-            </div>
-            <textarea rows={4} value={bodyText} onChange={(e) => { if (e.target.value.length <= 400) onBodyTextChange(e.target.value); }} placeholder="리스트 하단 본문을 입력하세요" className="w-full resize-none rounded-lg border border-border/60 p-3 text-sm outline-none focus:border-primary" />
-          </div>
-          <div className="rounded-xl border border-border/60 bg-white p-4">
-            <ButtonBuilder buttons={buttons} maxButtons={2} onChange={onButtonsChange} />
-          </div>
-        </div>
-      )}
-
-      {/* 캐러셀 피드형 */}
-      {selectedMessageTypeId === 'carousel' && (
-        <div className="space-y-3">
-          <div className="rounded-xl border border-border/60 bg-white p-4">
-            <div className="mb-3 flex items-center justify-between">
-              <label className="text-xs font-medium">슬라이드 카드 <span className="text-red-500">*</span> <span className="font-normal text-muted-foreground">(2~6장)</span></label>
-              {carouselCards.length < 6 && (
-                <button onClick={addCarouselCard} className="flex items-center gap-1 rounded-lg border border-dashed border-border/60 px-2.5 py-1 text-xs text-muted-foreground hover:border-primary hover:text-primary">
-                  <Plus size={11} /> 카드 추가
-                </button>
-              )}
-            </div>
-            <div className="flex gap-3 overflow-x-auto pb-2">
-              {carouselCards.map((card, idx) => (
-                <div key={card.id} className="min-w-[180px] flex-shrink-0 rounded-xl border border-border/60 bg-gray-50 p-3">
-                  <div className="mb-2 flex items-center justify-between">
-                    <span className="text-xs font-semibold text-muted-foreground">카드 {idx + 1}</span>
-                    {carouselCards.length > 2 && (
-                      <button onClick={() => { if (carouselCards.length > 2) onCarouselCardsChange(carouselCards.filter((c) => c.id !== card.id)); }} className="text-muted-foreground hover:text-red-500"><Trash2 size={11} /></button>
-                    )}
-                  </div>
-                  <div onClick={() => onCarouselCardsChange(carouselCards.map((c) => c.id === card.id ? { ...c, imageUploaded: !c.imageUploaded } : c))} className={cn('mb-2 flex h-20 cursor-pointer items-center justify-center rounded-lg border-2 border-dashed text-xs', card.imageUploaded ? 'border-green-400 bg-green-50 text-green-600' : 'border-border/60 text-muted-foreground')}>
-                    {card.imageUploaded ? <><Check size={13} /><span className="ml-1">이미지</span></> : <><Image size={13} /><span className="ml-1">500×500px</span></>}
-                  </div>
-                  <input type="text" value={card.title} onChange={(e) => onCarouselCardsChange(carouselCards.map((c) => c.id === card.id ? { ...c, title: e.target.value } : c))} placeholder="타이틀" className="mb-1.5 w-full rounded-md border border-border/60 bg-white px-2 py-1.5 text-xs outline-none focus:border-primary" />
-                  <input type="text" value={card.description} onChange={(e) => onCarouselCardsChange(carouselCards.map((c) => c.id === card.id ? { ...c, description: e.target.value } : c))} placeholder="설명" className="mb-2 w-full rounded-md border border-border/60 bg-white px-2 py-1.5 text-xs outline-none focus:border-primary" />
-                  <ButtonBuilder buttons={card.buttons} maxButtons={2} onChange={(btns) => onCarouselCardsChange(carouselCards.map((c) => c.id === card.id ? { ...c, buttons: btns } : c))} />
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* 쿠폰 연동 */}
-      {selectedMessageTypeId && (
-        <div className="mt-3 rounded-xl border border-border/60 bg-white p-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-xs font-medium">쿠폰 연동 <span className="text-muted-foreground">(선택)</span></p>
-              <p className="text-xs text-muted-foreground">메시지에 쿠폰을 포함하여 발송합니다</p>
-            </div>
-            <button type="button" onClick={() => onCouponEnabledChange(!couponEnabled)} className={cn('relative inline-flex h-5 w-9 flex-shrink-0 rounded-full border-2 border-transparent transition-colors', couponEnabled ? 'bg-foreground' : 'bg-gray-200')}>
-              <span className={cn('inline-block h-4 w-4 transform rounded-full bg-white shadow transition-transform', couponEnabled ? 'translate-x-4' : 'translate-x-0')} />
-            </button>
-          </div>
-          {couponEnabled && (
-            <div className="mt-3 grid grid-cols-2 gap-3">
-              <div>
-                <label className="mb-1 block text-xs text-muted-foreground">쿠폰명</label>
-                <input type="text" value={couponName} onChange={(e) => onCouponNameChange(e.target.value)} placeholder="예) 봄맞이 10% 할인" className="w-full rounded-lg border border-border/60 px-3 py-2 text-xs outline-none focus:border-primary" />
+      {selectedMessageType && (
+        <>
+          {/* 이미지 업로드 */}
+          {selectedMessageTypeId === 'basic' && (
+            <div className="mb-4">
+              <div className="mb-2 flex items-center justify-between">
+                <p className="text-sm font-medium">이미지 추가 <span className="text-xs font-normal text-muted-foreground">(선택 · 추가 시 이미지형으로 발송)</span></p>
               </div>
-              <div>
-                <label className="mb-1 block text-xs text-muted-foreground">유효기간</label>
-                <input type="date" className="w-full rounded-lg border border-border/60 px-3 py-2 text-xs outline-none focus:border-primary" />
-              </div>
+              <ImageUploadBox
+                label="이미지를 드래그하거나 클릭하세요"
+                spec="권장 500×250px · JPG/PNG · 최대 5MB"
+                uploaded={imageUploaded}
+                onToggle={() => onImageUploadedChange(!imageUploaded)}
+              />
             </div>
           )}
+          {selectedMessageTypeId === 'wide-image' && (
+            <div className="mb-4">
+              <p className="mb-2 text-sm font-medium">이미지 업로드 <span className="text-xs text-red-500">*</span></p>
+              <ImageUploadBox
+                label="이미지를 드래그하거나 클릭하세요"
+                spec="권장 800×600px · JPG/PNG · 최대 5MB"
+                uploaded={imageUploaded}
+                onToggle={() => onImageUploadedChange(!imageUploaded)}
+              />
+            </div>
+          )}
+
+          {/* 본문 편집기 */}
+          <div className="mb-4 rounded-xl border border-border/60 bg-white">
+            <textarea
+              rows={8}
+              value={bodyText}
+              onChange={(e) => {
+                if (e.target.value.length <= selectedMessageType.maxChars) {
+                  onBodyTextChange(e.target.value);
+                }
+              }}
+              placeholder="친구톡 메시지를 작성해 주세요.(줄바꿈 최대99회)"
+              className="w-full resize-none rounded-t-xl border-none px-4 py-4 text-sm leading-relaxed outline-none placeholder:text-muted-foreground/50"
+            />
+            {/* 글자수 카운터 */}
+            <div className="flex justify-end border-t border-border/40 px-4 py-2">
+              <span className={cn('text-xs', bodyText.length > selectedMessageType.maxChars - 20 ? 'text-red-500' : 'text-muted-foreground')}>
+                [ {bodyText.length} / {selectedMessageType.maxChars} ]
+              </span>
+            </div>
+          </div>
+
+          {/* 도구 모음: 버튼추가, 개인화 변수, 이모티콘, 성인전용 */}
+          <div className="mb-4 space-y-4">
+            {/* 버튼추가 */}
+            <ButtonBuilder buttons={buttons} maxButtons={selectedMessageType.maxButtons} onChange={onButtonsChange} />
+
+            {/* 개인화 변수 */}
+            <div className="relative">
+              <div className="flex items-center gap-2">
+                <p className="text-sm font-medium">개인화 변수</p>
+                <button
+                  type="button"
+                  onClick={() => setShowVarPalette(!showVarPalette)}
+                  className="flex items-center gap-1 rounded-lg border border-border/60 px-3 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:bg-muted"
+                >
+                  <Variable size={12} /> 변수생성
+                </button>
+              </div>
+              {showVarPalette && (
+                <div className="absolute left-24 top-full z-20 mt-1 rounded-xl border border-border/60 bg-white p-2 shadow-lg">
+                  {PERSONALIZATION_VARS.map((v) => (
+                    <button
+                      key={v.label}
+                      onClick={() => insertVar(v.label)}
+                      className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-xs transition-colors hover:bg-muted"
+                    >
+                      <code className="rounded bg-primary/10 px-1.5 py-0.5 font-mono text-primary">{v.label}</code>
+                      <span className="text-muted-foreground">{v.desc}</span>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* 이모티콘 */}
+            <div className="flex items-center gap-2">
+              <p className="text-sm font-medium">이모티콘</p>
+              <button type="button" className="flex items-center gap-1 rounded-lg border border-border/60 px-3 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:bg-muted">
+                <Smile size={12} className="text-green-500" /> 카카오 이모티콘 명령어
+              </button>
+              <button type="button" className="flex items-center gap-1 rounded-lg border border-border/60 px-3 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:bg-muted">
+                <Smile size={12} /> 시스템 이모지
+              </button>
+            </div>
+
+            {/* 성인 전용 메시지 */}
+            <div className="flex items-center gap-2">
+              <p className="text-sm font-medium">성인 전용 메시지</p>
+              <label className="flex cursor-pointer items-center gap-1.5">
+                <input type="checkbox" className="h-4 w-4 rounded" />
+                <span className="text-xs text-muted-foreground">?</span>
+              </label>
+            </div>
+          </div>
+
+          {/* AI 문구 추천 */}
+          <div className="mb-4 rounded-xl border border-primary/20 bg-primary/5 p-4">
+            <div className="mb-3 flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Sparkles size={16} className="text-primary" />
+                <p className="text-sm font-semibold text-primary">AI 문구 추천</p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowAiSuggestions(!showAiSuggestions)}
+                className="rounded-lg bg-primary px-3 py-1.5 text-xs font-medium text-white transition-colors hover:bg-primary/90"
+              >
+                {showAiSuggestions ? '닫기' : '문구 생성하기'}
+              </button>
+            </div>
+            <p className="text-xs text-muted-foreground">캠페인 유형에 맞는 최적의 문구를 AI가 추천해 드립니다.</p>
+            {showAiSuggestions && (
+              <div className="mt-3 space-y-2">
+                {AI_SUGGESTIONS.map((suggestion, idx) => (
+                  <button
+                    key={idx}
+                    type="button"
+                    onClick={() => {
+                      onBodyTextChange(suggestion);
+                      setShowAiSuggestions(false);
+                    }}
+                    className="w-full rounded-lg border border-border/60 bg-white px-4 py-3 text-left text-xs leading-relaxed text-foreground transition-colors hover:border-primary/40 hover:bg-primary/5"
+                  >
+                    {suggestion}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* A/B 테스트 */}
+          <div className="mb-4 rounded-xl border border-border/60 bg-white p-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <FlaskConical size={16} className="text-muted-foreground" />
+                <div>
+                  <p className="text-sm font-medium">A/B 테스트</p>
+                  <p className="text-xs text-muted-foreground">메시지 변형을 만들어 어떤 문구가 더 효과적인지 비교하세요</p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setAbTestEnabled(!abTestEnabled)}
+                className={cn(
+                  'relative inline-flex h-5 w-9 flex-shrink-0 rounded-full border-2 border-transparent transition-colors',
+                  abTestEnabled ? 'bg-primary' : 'bg-gray-200'
+                )}
+              >
+                <span className={cn('inline-block h-4 w-4 transform rounded-full bg-white shadow transition-transform', abTestEnabled ? 'translate-x-4' : 'translate-x-0')} />
+              </button>
+            </div>
+            {abTestEnabled && (
+              <div className="mt-3 rounded-lg border border-dashed border-primary/30 bg-primary/5 p-4 text-center">
+                <p className="text-xs text-primary">변형 B 메시지를 작성하면 전체 대상의 50%씩 나누어 발송합니다.</p>
+                <textarea
+                  rows={4}
+                  placeholder="변형 B 메시지를 입력하세요"
+                  className="mt-2 w-full resize-none rounded-lg border border-border/60 bg-white px-3 py-2.5 text-sm outline-none focus:border-primary"
+                />
+              </div>
+            )}
+          </div>
+
+          {/* 발송 성과 예측 */}
+          <div className="rounded-xl border border-border/60 bg-white p-4">
+            <div className="flex items-center gap-2">
+              <TrendingUp size={16} className="text-emerald-500" />
+              <p className="text-sm font-medium">발송 성과 예측</p>
+            </div>
+            <div className="mt-3 grid grid-cols-3 gap-3">
+              <div className="rounded-lg bg-gray-50 p-3 text-center">
+                <p className="text-lg font-bold text-primary">92%</p>
+                <p className="text-xs text-muted-foreground">예상 도달률</p>
+              </div>
+              <div className="rounded-lg bg-gray-50 p-3 text-center">
+                <p className="text-lg font-bold text-emerald-500">18.5%</p>
+                <p className="text-xs text-muted-foreground">예상 오픈률</p>
+              </div>
+              <div className="rounded-lg bg-gray-50 p-3 text-center">
+                <p className="text-lg font-bold text-amber-500">4.2%</p>
+                <p className="text-xs text-muted-foreground">예상 클릭률</p>
+              </div>
+            </div>
+            <p className="mt-2 text-xs text-muted-foreground">* 유사 캠페인 데이터를 기반으로 한 예측값이며, 실제 성과와 다를 수 있습니다.</p>
+          </div>
+        </>
+      )}
+
+      {/* 기본형: 이미지 없으면 텍스트형, 있으면 이미지형으로 발송 안내 */}
+      {selectedMessageTypeId === 'basic' && imageUploaded && (
+        <div className="rounded-lg border border-green-200 bg-green-50 px-4 py-2.5 text-xs text-green-700">
+          이미지가 추가되어 <span className="font-semibold">이미지형</span>으로 발송됩니다.
         </div>
       )}
     </div>

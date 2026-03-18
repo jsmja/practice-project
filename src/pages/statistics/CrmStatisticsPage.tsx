@@ -152,7 +152,7 @@ export function CrmStatisticsPage() {
   }
 
   return (
-    <div>
+    <div className="space-y-6">
       <PageHeader title="메시지 발송 통계" actions={<ExcelDownloadButton />} />
 
       <PeriodTabGroup
@@ -172,7 +172,7 @@ export function CrmStatisticsPage() {
             className={cn(
               'px-5 py-2.5 text-sm font-medium transition-colors',
               activeTab === tab
-                ? 'border-b-2 border-foreground text-foreground'
+                ? 'border-b-2 border-primary text-foreground'
                 : 'text-muted-foreground hover:text-foreground'
             )}
           >

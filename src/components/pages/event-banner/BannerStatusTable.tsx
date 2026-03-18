@@ -68,14 +68,14 @@ export function BannerStatusTable({ banners, statusFilter, onStatusFilterChange 
               onClick={() => onStatusFilterChange(tab)}
               className={
                 statusFilter === tab
-                  ? 'border-b-2 border-foreground px-3 py-2.5 text-sm font-semibold text-foreground'
+                  ? 'border-b-2 border-primary px-3 py-2.5 text-sm font-semibold text-foreground'
                   : 'px-3 py-2.5 text-sm text-muted-foreground hover:text-foreground'
               }
             >
               {tab}
               <span className={
                 'ml-1.5 inline-flex h-5 min-w-5 items-center justify-center rounded-full px-1.5 text-xs font-bold ' +
-                (statusFilter === tab ? 'bg-foreground text-white' : 'bg-muted text-muted-foreground')
+                (statusFilter === tab ? 'bg-primary text-white' : 'bg-muted text-muted-foreground')
               }>
                 {count}
               </span>
