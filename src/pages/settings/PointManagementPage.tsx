@@ -239,6 +239,7 @@ function ChargeModal({ onClose }: { onClose: () => void }) {
 const REFUND_REASONS = ['서비스 미사용', '구독 취소', '이중 결제', '기타'];
 
 function RefundModal({ onClose }: { onClose: () => void }) {
+  const [refundType, setRefundType] = useState<'card' | 'account'>('card');
   const [refundAmount, setRefundAmount] = useState('');
   const [reason, setReason] = useState(REFUND_REASONS[0]);
   const [customReason, setCustomReason] = useState('');
@@ -248,31 +249,68 @@ function RefundModal({ onClose }: { onClose: () => void }) {
   const [submitted, setSubmitted] = useState(false);
 
   const amount = Number(refundAmount.replace(/,/g, ''));
-  const isValid = amount >= 10000 && amount % 10000 === 0 && amount <= MOCK_POINT_BALANCE && !!accountNo && !!accountHolder;
+  const isCardRefund = refundType === 'card';
+  const isValid = isCardRefund
+    ? amount >= 10000 && amount % 10000 === 0 && amount <= MOCK_POINT_BALANCE
+    : amount >= 10000 && amount % 10000 === 0 && amount <= MOCK_POINT_BALANCE && !!accountNo && !!accountHolder;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
       <div className="w-full max-w-md rounded-2xl bg-white shadow-xl">
         <div className="flex items-center justify-between border-b border-border px-6 py-4">
-          <h2 className="text-base font-semibold">{submitted ? '환불 신청 완료' : '포인트 환불 신청'}</h2>
+          <h2 className="text-base font-semibold">{submitted ? (isCardRefund ? '즉시 환불 완료' : '환불 신청 완료') : '포인트 환불 신청'}</h2>
           <button onClick={onClose} className="text-muted-foreground hover:text-foreground"><X size={18} /></button>
         </div>
 
         <div className="p-6">
           {submitted ? (
             <div className="py-4 text-center">
-              <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-blue-100">
-                <RefreshCw size={28} className="text-blue-600" />
+              <div className={cn('mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full', isCardRefund ? 'bg-green-100' : 'bg-blue-100')}>
+                <RefreshCw size={28} className={isCardRefund ? 'text-green-600' : 'text-blue-600'} />
               </div>
-              <p className="mb-1 text-lg font-bold">환불 신청이 접수되었습니다</p>
-              <p className="mb-6 text-sm text-muted-foreground">검토 후 영업일 기준 3~5일 이내 처리됩니다</p>
+              <p className="mb-1 text-lg font-bold">{isCardRefund ? '즉시 환불 처리되었습니다' : '환불 신청이 접수되었습니다'}</p>
+              <p className="mb-1 text-sm font-medium">{amount.toLocaleString()}P 환불</p>
+              <p className="mb-6 text-sm text-muted-foreground">
+                {isCardRefund ? '결제 카드로 즉시 환불되었습니다.' : '운영팀 검토 후 영업일 기준 3~5일 이내 처리됩니다.'}
+              </p>
               <button onClick={onClose} className="w-full rounded-xl bg-primary py-3 text-sm font-semibold text-white transition-colors hover:bg-primary/90">확인</button>
             </div>
           ) : (
             <>
+              {/* 환불 방식 선택 */}
+              <div className="mb-4">
+                <label className="mb-2 block text-xs font-semibold">환불 방식 <span className="text-red-500">*</span></label>
+                <div className="grid grid-cols-2 gap-2">
+                  <button
+                    onClick={() => setRefundType('card')}
+                    className={cn(
+                      'rounded-lg border-2 p-3 text-left transition-all',
+                      refundType === 'card' ? 'border-primary bg-primary/5' : 'border-border hover:border-primary/30'
+                    )}
+                  >
+                    <p className="text-sm font-medium">카드 즉시 환불</p>
+                    <p className="mt-0.5 text-xs text-muted-foreground">결제 금액 전액 즉시 환불</p>
+                    <span className="mt-1.5 inline-block rounded bg-green-100 px-1.5 py-0.5 text-xs font-medium text-green-700">즉시 처리</span>
+                  </button>
+                  <button
+                    onClick={() => setRefundType('account')}
+                    className={cn(
+                      'rounded-lg border-2 p-3 text-left transition-all',
+                      refundType === 'account' ? 'border-primary bg-primary/5' : 'border-border hover:border-primary/30'
+                    )}
+                  >
+                    <p className="text-sm font-medium">계좌 환불</p>
+                    <p className="mt-0.5 text-xs text-muted-foreground">부분 환불 가능, 운영팀 승인</p>
+                    <span className="mt-1.5 inline-block rounded bg-amber-100 px-1.5 py-0.5 text-xs font-medium text-amber-700">3~5일 소요</span>
+                  </button>
+                </div>
+              </div>
+
               <div className="mb-4 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-xs text-amber-700">
-                환불은 <span className="font-semibold">미사용 충전 포인트</span>에 한해 신청 가능합니다.
-                발송 실패 건은 자동 환불 처리됩니다. 검토 후 영업일 기준 3~5일 이내 처리됩니다.
+                {isCardRefund
+                  ? <>결제 금액 <span className="font-semibold">전액</span>이 결제 카드로 즉시 환불됩니다. 부분 환불은 계좌 환불을 이용해 주세요.</>
+                  : <>계좌 환불은 <span className="font-semibold">운영팀 승인</span> 후 처리됩니다. 영업일 기준 3~5일이 소요됩니다.</>
+                }
               </div>
 
               <div className="space-y-4">
@@ -292,11 +330,6 @@ function RefundModal({ onClose }: { onClose: () => void }) {
                     <span className="text-sm text-muted-foreground">P</span>
                   </div>
                   <p className="mt-1 text-[10px] text-muted-foreground">현재 잔액: {MOCK_POINT_BALANCE.toLocaleString()}P · 최소 10,000P 단위</p>
-                  {refundAmount && amount > 0 && (amount > MOCK_POINT_BALANCE || amount % 10000 !== 0) && (
-                    <p className="mt-1 text-xs text-red-500">
-                      {amount > MOCK_POINT_BALANCE ? '잔액을 초과합니다' : '10,000P 단위로 입력해주세요'}
-                    </p>
-                  )}
                 </div>
 
                 <div>
@@ -312,19 +345,22 @@ function RefundModal({ onClose }: { onClose: () => void }) {
                   )}
                 </div>
 
-                <div>
-                  <label className="mb-1.5 block text-xs font-semibold">환불 계좌 <span className="text-red-500">*</span></label>
-                  <div className="space-y-2">
-                    <div className="relative">
-                      <select value={bank} onChange={(e) => setBank(e.target.value)} className="w-full appearance-none rounded-lg border border-border px-3 py-2.5 text-sm outline-none focus:border-primary">
-                        {BANKS.map((b) => <option key={b}>{b}</option>)}
-                      </select>
-                      <ChevronDown size={14} className="pointer-events-none absolute right-3 top-3 text-muted-foreground" />
+                {/* 계좌 환불일 경우 계좌 입력 */}
+                {!isCardRefund && (
+                  <div>
+                    <label className="mb-1.5 block text-xs font-semibold">환불 계좌 <span className="text-red-500">*</span></label>
+                    <div className="space-y-2">
+                      <div className="relative">
+                        <select value={bank} onChange={(e) => setBank(e.target.value)} className="w-full appearance-none rounded-lg border border-border px-3 py-2.5 text-sm outline-none focus:border-primary">
+                          {BANKS.map((b) => <option key={b}>{b}</option>)}
+                        </select>
+                        <ChevronDown size={14} className="pointer-events-none absolute right-3 top-3 text-muted-foreground" />
+                      </div>
+                      <input type="text" value={accountNo} onChange={(e) => setAccountNo(e.target.value.replace(/[^0-9-]/g, ''))} placeholder="계좌번호 (숫자만)" className="w-full rounded-lg border border-border px-3 py-2.5 text-sm outline-none focus:border-primary" />
+                      <input type="text" value={accountHolder} onChange={(e) => setAccountHolder(e.target.value)} placeholder="예금주명" className="w-full rounded-lg border border-border px-3 py-2.5 text-sm outline-none focus:border-primary" />
                     </div>
-                    <input type="text" value={accountNo} onChange={(e) => setAccountNo(e.target.value.replace(/[^0-9-]/g, ''))} placeholder="계좌번호 (숫자만)" className="w-full rounded-lg border border-border px-3 py-2.5 text-sm outline-none focus:border-primary" />
-                    <input type="text" value={accountHolder} onChange={(e) => setAccountHolder(e.target.value)} placeholder="예금주명" className="w-full rounded-lg border border-border px-3 py-2.5 text-sm outline-none focus:border-primary" />
                   </div>
-                </div>
+                )}
               </div>
 
               <div className="mt-6 flex gap-3">
@@ -334,7 +370,7 @@ function RefundModal({ onClose }: { onClose: () => void }) {
                   disabled={!isValid}
                   className={cn('flex-1 rounded-xl py-3 text-sm font-semibold transition-colors', isValid ? 'bg-primary text-white hover:bg-primary/90' : 'cursor-not-allowed bg-muted text-muted-foreground')}
                 >
-                  신청하기
+                  {isCardRefund ? '즉시 환불하기' : '환불 신청하기'}
                 </button>
               </div>
             </>

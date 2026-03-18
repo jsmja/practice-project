@@ -13,12 +13,13 @@ export const MOCK_SERVICE_PRODUCTS: IServiceProductDto[] = [
 
 export const MOCK_PAYMENT_HISTORY: IPaymentHistoryDto[] = [
   { no: 1, paymentDate: '2026.03.15 11:20', status: '충전완료', productName: '포인트 충전 (50,000P)', subscriptionType: '-', paymentMethod: '신한카드 1234', amount: 55000, reason: '수수료 5,000원 포함', receiptUrl: '#' },
-  { no: 2, paymentDate: '2026.03.10 09:30', status: '환불완료', productName: '포인트 환불', subscriptionType: '-', paymentMethod: '신한카드 1234', amount: -20000, reason: '사용자 환불 요청', receiptUrl: '#' },
-  { no: 3, paymentDate: '2026.02.20 10:30', status: '결제완료', productName: '마수동', subscriptionType: '연간', paymentMethod: '신한카드 1234', amount: 594000, reason: '-', receiptUrl: '#' },
-  { no: 4, paymentDate: '2026.02.15 14:00', status: '충전완료', productName: '포인트 충전 (30,000P)', subscriptionType: '-', paymentMethod: '신한카드 1234', amount: 33000, reason: '수수료 3,000원 포함', receiptUrl: '#' },
-  { no: 5, paymentDate: '2026.02.01 09:00', status: '결제완료', productName: '간편가입', subscriptionType: '월간', paymentMethod: '신한카드 1234', amount: 33000, reason: '-', receiptUrl: '#' },
-  { no: 6, paymentDate: '2026.01.25 16:40', status: '충전완료', productName: '포인트 충전 (100,000P)', subscriptionType: '-', paymentMethod: '신한카드 1234', amount: 110000, reason: '수수료 10,000원 포함', receiptUrl: '#' },
-  { no: 7, paymentDate: '2026.01.20 11:00', status: '결제취소', productName: 'SNS연동 무제한 채팅상담', subscriptionType: '월간', paymentMethod: '신한카드 1234', amount: 9000, reason: '사용자 취소', receiptUrl: '#' },
-  { no: 8, paymentDate: '2026.01.15 14:20', status: '결제실패', productName: '마수동', subscriptionType: '월간', paymentMethod: '신한카드 1234', amount: 50000, reason: '한도 초과', receiptUrl: '' },
-  { no: 9, paymentDate: '2026.01.10 10:00', status: '환불완료', productName: '포인트 환불', subscriptionType: '-', paymentMethod: '신한카드 1234', amount: -10000, reason: '사용자 환불 요청', receiptUrl: '#' },
+  { no: 2, paymentDate: '2026.03.12 15:00', status: '환불대기', productName: '포인트 환불 (계좌)', subscriptionType: '-', paymentMethod: '국민은행 ****5678', amount: -30000, reason: '서비스 미사용', receiptUrl: '' },
+  { no: 3, paymentDate: '2026.03.10 09:30', status: '환불완료', productName: '포인트 환불 (카드)', subscriptionType: '-', paymentMethod: '신한카드 1234', amount: -20000, reason: '즉시 카드 환불', receiptUrl: '#' },
+  { no: 4, paymentDate: '2026.02.20 10:30', status: '결제완료', productName: '마수동', subscriptionType: '연간', paymentMethod: '신한카드 1234', amount: 594000, reason: '-', receiptUrl: '#' },
+  { no: 5, paymentDate: '2026.02.15 14:00', status: '충전완료', productName: '포인트 충전 (30,000P)', subscriptionType: '-', paymentMethod: '신한카드 1234', amount: 33000, reason: '수수료 3,000원 포함', receiptUrl: '#' },
+  { no: 6, paymentDate: '2026.02.01 09:00', status: '결제완료', productName: '간편가입', subscriptionType: '월간', paymentMethod: '신한카드 1234', amount: 33000, reason: '-', receiptUrl: '#' },
+  { no: 7, paymentDate: '2026.01.25 16:40', status: '충전완료', productName: '포인트 충전 (100,000P)', subscriptionType: '-', paymentMethod: '신한카드 1234', amount: 110000, reason: '수수료 10,000원 포함', receiptUrl: '#' },
+  { no: 8, paymentDate: '2026.01.20 11:00', status: '결제취소', productName: 'SNS연동 무제한 채팅상담', subscriptionType: '월간', paymentMethod: '신한카드 1234', amount: 9000, reason: '사용자 취소', receiptUrl: '#' },
+  { no: 9, paymentDate: '2026.01.15 14:20', status: '결제실패', productName: '마수동', subscriptionType: '월간', paymentMethod: '신한카드 1234', amount: 50000, reason: '한도 초과', receiptUrl: '' },
+  { no: 10, paymentDate: '2026.01.10 10:00', status: '환불완료', productName: '포인트 환불', subscriptionType: '-', paymentMethod: '신한카드 1234', amount: -10000, reason: '사용자 환불 요청', receiptUrl: '#' },
 ];

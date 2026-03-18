@@ -11,12 +11,13 @@ import { NOOP_PAGINATION } from '@/lib/constants';
 const STATUS_VARIANT: Record<string, 'success' | 'warning' | 'destructive' | 'default' | 'info'> = {
   결제완료: 'success',
   충전완료: 'info',
-  환불완료: 'warning',
+  환불대기: 'warning',
+  환불완료: 'default',
   결제취소: 'warning',
   결제실패: 'destructive',
 };
 
-const STATUS_TABS = ['전체', '결제완료', '충전완료', '환불완료', '결제취소', '결제실패'];
+const STATUS_TABS = ['전체', '결제완료', '충전완료', '환불대기', '환불완료', '결제취소', '결제실패'];
 const PERIOD_TABS = ['전체', '주', '월'];
 
 const COLUMNS = [
@@ -53,6 +54,22 @@ const COLUMNS = [
         <a href={row.receiptUrl} className="text-xs text-blue-600 underline hover:text-blue-800">
           보기
         </a>
+      ) : (
+        <span className="text-xs text-muted-foreground">-</span>
+      ),
+  },
+  {
+    key: 'action',
+    header: '처리',
+    width: '100px',
+    render: (row: IPaymentHistoryDto) =>
+      row.status === '환불대기' ? (
+        <button
+          onClick={() => alert(`환불 처리 완료: ${Math.abs(row.amount).toLocaleString()}원`)}
+          className="rounded-lg bg-primary px-2.5 py-1 text-xs font-medium text-white transition-colors hover:bg-primary/90"
+        >
+          환불 처리
+        </button>
       ) : (
         <span className="text-xs text-muted-foreground">-</span>
       ),
