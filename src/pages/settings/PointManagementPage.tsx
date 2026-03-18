@@ -13,11 +13,7 @@ import { NOOP_PAGINATION } from '@/lib/constants';
 
 const CHARGE_OPTIONS = [10000, 30000, 50000, 100000, 300000];
 
-const UNIT_PRICES = [
-  { label: '기본형 (텍스트)', price: 12, color: 'bg-gray-100 text-gray-700', desc: '이미지 없이 텍스트만' },
-  { label: '기본형 (이미지)', price: 20, color: 'bg-blue-100 text-blue-700', desc: '이미지 포함' },
-  { label: '와이드 이미지형', price: 20, color: 'bg-green-100 text-green-700', desc: '전체 폭 이미지' },
-];
+const UNIT_PRICE = 25;
 
 const BANKS = ['KB국민은행', '신한은행', '우리은행', '하나은행', 'IBK기업은행', 'NH농협은행', '카카오뱅크', '토스뱅크', '기타'];
 
@@ -467,14 +463,11 @@ export function PointManagementPage() {
 
         <div className="col-span-3 rounded-xl border border-border bg-white p-5">
           <p className="mb-3 text-xs font-semibold">브랜드 메시지 발송 단가</p>
-          <div className="grid grid-cols-3 gap-3">
-            {UNIT_PRICES.map(({ label, price, color, desc }) => (
-              <div key={label} className="rounded-lg border border-border p-3.5">
-                <span className={cn('inline-block rounded-full px-2 py-0.5 text-[10px] font-semibold', color)}>{label}</span>
-                <p className="mt-2 text-xl font-bold">{price}P<span className="text-xs font-normal text-muted-foreground">/건</span></p>
-                <p className="mt-0.5 text-[10px] text-muted-foreground">{desc}</p>
-              </div>
-            ))}
+          <div className="flex items-center gap-4 rounded-lg border border-border p-4">
+            <div>
+              <p className="text-2xl font-bold">{UNIT_PRICE}P<span className="text-sm font-normal text-muted-foreground"> /건</span></p>
+              <p className="mt-0.5 text-xs text-muted-foreground">= {UNIT_PRICE}원/건 (기본형·와이드 이미지형 동일)</p>
+            </div>
           </div>
           <p className="mt-3 text-[10px] text-muted-foreground">
             · 발송 실패 시 해당 건수만큼 자동 환불됩니다 &nbsp;·&nbsp; 잔액 부족 시 발송이 중단됩니다 &nbsp;·&nbsp; 포인트 유효기간: 충전일로부터 1년

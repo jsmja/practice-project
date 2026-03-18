@@ -58,11 +58,7 @@ const MESSAGE_TYPES: IMessageType[] = [
   { id: 'wide-image', name: '와이드 이미지형', icon: <Image size={18} />, description: '전체 폭 이미지로 강렬한 인상', details: '이미지 800×600px · 본문 최대 76자 · 버튼 최대 2개', imageSpec: '800×600px', maxButtons: 2, maxChars: 76 },
 ];
 
-const PRICE_INFO = {
-  textOnly: 12,
-  withImage: 20,
-  wideImage: 20,
-};
+const UNIT_PRICE = 25;
 
 const PERSONALIZATION_VARS = [
   { label: '#{고객명}', desc: '고객 이름' },
@@ -218,9 +214,7 @@ export function CampaignMessageStep({
               {type.icon}
             </div>
             <p className="text-xs font-semibold leading-tight">{type.name}</p>
-            <p className="mt-1 text-xs text-muted-foreground">
-              {type.id === 'basic' ? `${PRICE_INFO.textOnly}P~${PRICE_INFO.withImage}P/건` : `${PRICE_INFO.wideImage}P/건`}
-            </p>
+            <p className="mt-1 text-xs text-muted-foreground">{UNIT_PRICE}P/건</p>
           </button>
         ))}
       </div>
@@ -228,12 +222,7 @@ export function CampaignMessageStep({
       {selectedMessageType && (
         <div className="mb-4 rounded-lg border border-border/60 bg-gray-50 px-4 py-2.5 text-xs text-muted-foreground">
           <span>{selectedMessageType.details}</span>
-          <span className="ml-2 font-medium text-primary">
-            · 발송 단가: {selectedMessageTypeId === 'basic'
-              ? (imageUploaded ? `${PRICE_INFO.withImage}P/건 (이미지 포함)` : `${PRICE_INFO.textOnly}P/건 (텍스트만)`)
-              : `${PRICE_INFO.wideImage}P/건`
-            }
-          </span>
+          <span className="ml-2 font-medium text-primary">· 발송 단가: {UNIT_PRICE}P/건</span>
         </div>
       )}
 
@@ -433,10 +422,10 @@ export function CampaignMessageStep({
         </>
       )}
 
-      {/* 기본형: 이미지 유무에 따른 가격 안내 */}
+      {/* 기본형: 이미지 추가 시 안내 */}
       {selectedMessageTypeId === 'basic' && imageUploaded && (
         <div className="rounded-lg border border-blue-200 bg-blue-50 px-4 py-2.5 text-xs text-blue-700">
-          이미지가 추가되어 <span className="font-semibold">이미지형({PRICE_INFO.withImage}P/건)</span>으로 발송됩니다. 이미지 제거 시 <span className="font-semibold">텍스트형({PRICE_INFO.textOnly}P/건)</span>으로 전환됩니다.
+          이미지가 추가되어 <span className="font-semibold">이미지형</span>으로 발송됩니다.
         </div>
       )}
     </div>
