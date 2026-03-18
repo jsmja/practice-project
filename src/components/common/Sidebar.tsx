@@ -25,15 +25,17 @@ interface IMenuChildItem {
 }
 
 interface IMenuItem {
-  label: string;
+  label?: string;
   icon?: React.ReactNode;
   path?: string;
   highlight?: boolean;
   children?: IMenuChildItem[];
+  divider?: boolean;
 }
 
 const MENU_ITEMS: IMenuItem[] = [
   { label: '대시보드', icon: <LayoutDashboard size={18} />, path: '/dashboard', highlight: true },
+  { divider: true },
   {
     label: '헤이보드',
     icon: <CirclePlus size={18} />,
@@ -41,11 +43,6 @@ const MENU_ITEMS: IMenuItem[] = [
       { label: '버튼/카드관리', path: '/heyboard/buttons' },
       { label: '카드 템플릿 관리', path: '/heyboard/templates' },
     ],
-  },
-  {
-    label: '고객 관리',
-    icon: <Contact size={18} />,
-    children: [{ label: '고객 리스트', path: '/customers', highlight: true }],
   },
   {
     label: '마케팅',
@@ -61,16 +58,7 @@ const MENU_ITEMS: IMenuItem[] = [
     path: '/service-integration',
     highlight: true,
   },
-  {
-    label: '통계',
-    icon: <BarChart2 size={18} />,
-    children: [
-      { label: '고객 유입 통계', path: '/statistics/customers' },
-      { label: '마케팅 통계', path: '/statistics/marketing' },
-      { label: '메시지 발송 통계', path: '/statistics/crm', highlight: true },
-    ],
-  },
-  { label: '멤버 관리', icon: <UserRound size={18} />, path: '/members' },
+  { divider: true },
   {
     label: '구독 서비스',
     icon: <CreditCard size={18} />,
@@ -87,6 +75,23 @@ const MENU_ITEMS: IMenuItem[] = [
       { label: '포인트 관리', path: '/settings/points', highlight: true },
     ],
   },
+  { divider: true },
+  {
+    label: '통계',
+    icon: <BarChart2 size={18} />,
+    children: [
+      { label: '고객 유입 통계', path: '/statistics/customers' },
+      { label: '마케팅 통계', path: '/statistics/marketing' },
+      { label: '메시지 발송 통계', path: '/statistics/crm', highlight: true },
+    ],
+  },
+  { divider: true },
+  {
+    label: '고객 관리',
+    icon: <Contact size={18} />,
+    children: [{ label: '고객 리스트', path: '/customers', highlight: true }],
+  },
+  { label: '멤버 관리', icon: <UserRound size={18} />, path: '/members' },
   {
     label: '설정',
     icon: <SlidersHorizontal size={18} />,
@@ -128,12 +133,16 @@ export function Sidebar() {
 
       {/* Navigation */}
       <nav className="flex-1 overflow-y-auto px-3 py-2">
-        {MENU_ITEMS.map((item) => (
+        {MENU_ITEMS.map((item, idx) => {
+          if (item.divider) {
+            return <div key={`divider-${idx}`} className="my-2 border-t border-border/60" />;
+          }
+          return (
           <div key={item.label} className="mb-0.5">
             {item.children ? (
               <>
                 <button
-                  onClick={() => toggleMenu(item.label)}
+                  onClick={() => toggleMenu(item.label!)}
                   className={cn(
                     'flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-sm transition-colors',
                     isChildActive(item.children)
@@ -143,13 +152,13 @@ export function Sidebar() {
                 >
                   {item.icon}
                   <span className="flex-1 text-left font-medium">{item.label}</span>
-                  {expandedMenus[item.label] ? (
+                  {expandedMenus[item.label!] ? (
                     <ChevronDown size={14} />
                   ) : (
                     <ChevronRight size={14} />
                   )}
                 </button>
-                {expandedMenus[item.label] && (
+                {expandedMenus[item.label!] && (
                   <div className="ml-4 mt-0.5 space-y-0.5 border-l border-border pl-3">
                     {item.children.map((child) => (
                       <NavLink
@@ -197,7 +206,8 @@ export function Sidebar() {
               </NavLink>
             )}
           </div>
-        ))}
+          );
+        })}
       </nav>
 
       {/* Bottom links */}
