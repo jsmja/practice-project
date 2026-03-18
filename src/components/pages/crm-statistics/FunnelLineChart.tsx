@@ -24,8 +24,8 @@ function parseAvgRange(avgRange: string): { min: number; max: number; mid: numbe
 }
 
 export function FunnelLineChart({ points }: IFunnelLineChartProps) {
-  const W = 680;
-  const H = 140;
+  const W = 900;
+  const H = 180;
   const padX = 60;
   const padY = 20;
   const innerW = W - padX * 2;
@@ -85,7 +85,7 @@ export function FunnelLineChart({ points }: IFunnelLineChartProps) {
 
   return (
     <div className="w-full">
-      <svg viewBox={`0 0 ${W} ${H + 50}`} className="w-full" style={{ height: '180px' }}>
+      <svg viewBox={`0 0 ${W} ${H + 50}`} className="w-full" style={{ height: '240px' }}>
         <defs>
           <linearGradient id="funnelGrad" x1="0" y1="0" x2="0" y2="1">
             <stop offset="0%" stopColor="#6366f1" stopOpacity="0.18" />
