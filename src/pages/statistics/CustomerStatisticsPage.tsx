@@ -38,7 +38,7 @@ export function CustomerStatisticsPage() {
   const [activePeriod, setActivePeriod] = useState('일주일');
 
   return (
-    <div>
+    <div className="space-y-6">
       <PageHeader title="고객 유입 통계" description="통계: 매일 오전 4시 기준으로 집계" />
 
       {/* Period tabs */}

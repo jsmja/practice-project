@@ -11,12 +11,12 @@ interface ISectionCardProps {
 
 export function SectionCard({ title, description, titleRight, children, className }: ISectionCardProps) {
   return (
-    <div className={cn('rounded-xl border border-border bg-white p-5', className)}>
+    <div className={cn('rounded-2xl border border-border/60 bg-white p-6 shadow-sm', className)}>
       {(title || description) && (
-        <div className="mb-4 flex items-start justify-between">
+        <div className="mb-5 flex items-center justify-between">
           <div>
-            {title && <h3 className="text-sm font-semibold text-foreground">{title}</h3>}
-            {description && <p className="mt-0.5 text-xs text-muted-foreground">{description}</p>}
+            {title && <h3 className="text-base font-semibold text-foreground">{title}</h3>}
+            {description && <p className="mt-0.5 text-sm text-muted-foreground">{description}</p>}
           </div>
           {titleRight}
         </div>

@@ -77,7 +77,7 @@ export function MarketingStatisticsPage() {
   const [filters, setFilters] = useState(FILTERS);
 
   return (
-    <div>
+    <div className="space-y-6">
       <PageHeader
         title="마케팅 통계"
         description="통계 : 매일 오전 4시 기준으로 집계 (예 : 6.17 = 6.17 04시 ~ 6.18 04시)"

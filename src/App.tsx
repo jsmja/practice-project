@@ -12,6 +12,7 @@ import { CrmStatisticsPage } from '@/pages/statistics/CrmStatisticsPage';
 import { CustomerStatisticsPage } from '@/pages/statistics/CustomerStatisticsPage';
 import { MarketingStatisticsPage } from '@/pages/statistics/MarketingStatisticsPage';
 import { PointManagementPage } from '@/pages/settings/PointManagementPage';
+import { CompanyInfoPage } from '@/pages/settings/CompanyInfoPage';
 import { SubscriptionPage } from '@/pages/payment/SubscriptionPage';
 import { ServiceApplyPage } from '@/pages/payment/ServiceApplyPage';
 import { PaymentHistoryPage } from '@/pages/payment/PaymentHistoryPage';
@@ -35,6 +36,7 @@ function App() {
             <Route path="/statistics/customers" element={<CustomerStatisticsPage />} />
             <Route path="/statistics/marketing" element={<MarketingStatisticsPage />} />
             <Route path="/statistics/crm" element={<CrmStatisticsPage />} />
+            <Route path="/settings/company" element={<CompanyInfoPage />} />
             <Route path="/settings/points" element={<PointManagementPage />} />
             <Route path="/payment/subscription" element={<SubscriptionPage />} />
             <Route path="/payment/apply" element={<ServiceApplyPage />} />

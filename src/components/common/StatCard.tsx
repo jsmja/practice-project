@@ -8,31 +8,41 @@ interface IStatCardProps {
   icon?: ReactNode;
   description?: string;
   className?: string;
+  isActive?: boolean;
+  onClick?: () => void;
 }
 
-export function StatCard({ title, value, change, icon, description, className }: IStatCardProps) {
+export function StatCard({ title, value, change, icon, description, className, isActive, onClick }: IStatCardProps) {
   return (
-    <div className={cn('rounded-xl border border-border bg-white p-5', className)}>
+    <div
+      onClick={onClick}
+      className={cn(
+        'h-full rounded-2xl border border-border/60 bg-white p-5 shadow-sm transition-all',
+        onClick && 'cursor-pointer hover:border-gray-300 hover:shadow-md',
+        isActive && 'border-primary ring-1 ring-foreground/10',
+        className,
+      )}
+    >
       <div className="flex items-start justify-between">
         <div>
-          <p className="text-sm text-muted-foreground">{title}</p>
-          <p className="mt-1 text-2xl font-bold text-foreground">{value}</p>
+          <p className="text-sm font-medium text-muted-foreground">{title}</p>
+          <p className="mt-2 text-3xl font-bold tracking-tight text-foreground">{value}</p>
           {change && (
             <p
               className={cn(
-                'mt-1 text-xs',
-                change.isPositive ? 'text-green-600' : 'text-red-500'
+                'mt-1.5 text-sm font-medium',
+                change.isPositive ? 'text-emerald-600' : 'text-red-500',
               )}
             >
               {change.isPositive ? '↑' : '↓'} {change.value}
             </p>
           )}
           {description && (
-            <p className="mt-1 text-xs text-muted-foreground">{description}</p>
+            <p className="mt-1 text-sm text-muted-foreground">{description}</p>
           )}
         </div>
         {icon && (
-          <div className="rounded-lg bg-muted p-2 text-muted-foreground">{icon}</div>
+          <div className="rounded-xl bg-gray-50 p-2.5 text-muted-foreground">{icon}</div>
         )}
       </div>
     </div>

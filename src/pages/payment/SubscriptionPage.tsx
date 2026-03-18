@@ -15,7 +15,7 @@ export function SubscriptionPage() {
   const navigate = useNavigate();
 
   return (
-    <div>
+    <div className="space-y-6">
       <PageHeader
         title="구독현황"
         description="현재 이용 중인 서비스와 결제 정보를 확인하고 관리할 수 있습니다"
@@ -51,7 +51,7 @@ export function SubscriptionPage() {
               }
             </div>
             <div>
-              <p className="text-xs text-muted-foreground">CRM 발송 포인트 잔액</p>
+              <p className="text-xs text-muted-foreground">메시지 발송 포인트 잔액</p>
               <p className={cn('text-lg font-bold tabular-nums', MOCK_POINT_BALANCE <= 10000 ? 'text-red-600' : MOCK_POINT_BALANCE <= 50000 ? 'text-amber-600' : 'text-foreground')}>
                 {MOCK_POINT_BALANCE.toLocaleString()}P
               </p>
@@ -124,7 +124,7 @@ export function SubscriptionPage() {
               </div>
               <button
                 onClick={() => navigate('/payment/apply')}
-                className="w-full rounded-lg bg-foreground px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-gray-800"
+                className="w-full rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-primary/90"
               >
                 신청
               </button>

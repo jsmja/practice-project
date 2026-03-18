@@ -35,6 +35,23 @@ const AVG_RANGE: Record<string, string> = {
   conversion: '평균 1-8%',
 };
 
+function formatStatSendRound(row: ICrmStatDto) {
+  if (row.sendFrequency === '1회') {
+    return (
+      <span className="inline-flex items-center gap-1">
+        <Badge variant="default">1회</Badge>
+        <span className="text-xs font-medium">1/1</span>
+      </span>
+    );
+  }
+  return (
+    <span className="inline-flex items-center gap-1">
+      <Badge variant="info">반복</Badge>
+      <span className="text-xs font-medium">{row.sendRound}/{row.totalRounds}</span>
+    </span>
+  );
+}
+
 const COLUMNS = [
   { key: 'no', header: 'NO', width: '50px' },
   { key: 'campaignName', header: '캠페인명' },
@@ -43,6 +60,12 @@ const COLUMNS = [
     header: '캠페인 유형',
     width: '130px',
     render: (row: ICrmStatDto) => <Badge variant="default">{row.type}</Badge>,
+  },
+  {
+    key: 'sendRound',
+    header: '회차',
+    width: '100px',
+    render: formatStatSendRound,
   },
   { key: 'sendDate', header: '발송일', width: '120px' },
   {
@@ -120,7 +143,7 @@ export function CrmStatisticsPage() {
   if (!summary) {
     return (
       <div>
-        <PageHeader title="CRM 발송 통계" actions={<ExcelDownloadButton />} />
+        <PageHeader title="메시지 발송 통계" actions={<ExcelDownloadButton />} />
         <div className="flex h-48 items-center justify-center text-muted-foreground">
           데이터를 불러오는 중...
         </div>
@@ -129,8 +152,8 @@ export function CrmStatisticsPage() {
   }
 
   return (
-    <div>
-      <PageHeader title="CRM 발송 통계" actions={<ExcelDownloadButton />} />
+    <div className="space-y-6">
+      <PageHeader title="메시지 발송 통계" actions={<ExcelDownloadButton />} />
 
       <PeriodTabGroup
         tabs={[...PERIOD_TABS]}
@@ -149,7 +172,7 @@ export function CrmStatisticsPage() {
             className={cn(
               'px-5 py-2.5 text-sm font-medium transition-colors',
               activeTab === tab
-                ? 'border-b-2 border-foreground text-foreground'
+                ? 'border-b-2 border-primary text-foreground'
                 : 'text-muted-foreground hover:text-foreground'
             )}
           >

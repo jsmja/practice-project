@@ -3,6 +3,7 @@ export interface IBannerTemplateDto {
   name: string;
   industry: string;
   purpose: string;
+  bannerType: string;
   targetCustomer: string;
   description: string;
   thumbnailColor: string;

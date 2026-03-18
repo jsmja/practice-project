@@ -16,6 +16,7 @@ const COLUMNS = [
   { key: 'title', header: '배너 명', sortable: true },
   { key: 'industry', header: '업종', width: '110px' },
   { key: 'purpose', header: '목적', width: '120px' },
+  { key: 'bannerType', header: '배너 유형', width: '120px' },
   { key: 'targetCustomer', header: '대상 고객', width: '160px' },
   {
     key: 'status',
@@ -58,7 +59,7 @@ export function BannerStatusTable({ banners, statusFilter, onStatusFilterChange 
   return (
     <div>
       {/* 상태 탭 */}
-      <div className="mb-3 flex gap-1 border-b border-border">
+      <div className="mb-4 flex gap-1 border-b border-border">
         {STATUS_TABS.map((tab) => {
           const count = tab === '전체' ? banners.length : banners.filter((b) => b.status === tab).length;
           return (
@@ -67,14 +68,14 @@ export function BannerStatusTable({ banners, statusFilter, onStatusFilterChange 
               onClick={() => onStatusFilterChange(tab)}
               className={
                 statusFilter === tab
-                  ? 'border-b-2 border-foreground px-3 py-2 text-sm font-semibold text-foreground'
-                  : 'px-3 py-2 text-sm text-muted-foreground hover:text-foreground'
+                  ? 'border-b-2 border-primary px-3 py-2.5 text-sm font-semibold text-foreground'
+                  : 'px-3 py-2.5 text-sm text-muted-foreground hover:text-foreground'
               }
             >
               {tab}
               <span className={
-                'ml-1.5 rounded-full px-1.5 py-0.5 text-[10px] font-bold ' +
-                (statusFilter === tab ? 'bg-foreground text-white' : 'bg-muted text-muted-foreground')
+                'ml-1.5 inline-flex h-5 min-w-5 items-center justify-center rounded-full px-1.5 text-xs font-bold ' +
+                (statusFilter === tab ? 'bg-primary text-white' : 'bg-muted text-muted-foreground')
               }>
                 {count}
               </span>

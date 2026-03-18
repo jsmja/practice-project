@@ -4,18 +4,15 @@ import { ArrowLeft, Upload, ExternalLink, HelpCircle, Info, ChevronDown } from '
 import { cn } from '@/lib/utils';
 
 const INDUSTRY_OPTIONS = [
-  '쇼핑몰/이커머스',
-  '뷰티/패션',
-  '음식/식음료',
-  '여행/숙박',
-  '교육/문화',
-  '헬스/피트니스',
-  '엔터테인먼트',
-  '금융/보험',
-  '부동산',
-  '의료/건강',
-  '자동차',
-  '기타',
+  '음식: 식당, 카페, 디저트, 식품 등',
+  '쇼핑: 의류, 잡화, 뷰티, 생활용품 등',
+  '생활/교육: 학원, 뷰티숍, 인테리어, 세탁 등',
+  '건강/병원: 병원, 약국, 피트니스 등',
+  '여행/숙박: 여행사, 호텔, 펜션 등',
+  '문화/여가: 영화, 공연, 전시, 취미 등',
+  '부동산/금융: 부동산, 금융서비스 등',
+  '방송/언론: 방송사, 신문사 등',
+  '서비스/기타: IT, 컨설팅, 서비스 등',
 ];
 
 interface ITermsState {
@@ -30,7 +27,7 @@ export function KakaoMessageApplyPage() {
   // 기본정보
   const [channelId, setChannelId] = useState('');
   const [industry, setIndustry] = useState('');
-  const [isBusinessChannel, setIsBusinessChannel] = useState<boolean | null>(null);
+  const [isBusinessChannel, setIsBusinessChannel] = useState(false);
   const [phone, setPhone] = useState('');
   const [isCodeSent, setIsCodeSent] = useState(false);
   const [verifyCode, setVerifyCode] = useState('');
@@ -56,7 +53,7 @@ export function KakaoMessageApplyPage() {
     if (phone) setIsCodeSent(true);
   };
 
-  const canSubmit = agreement.privacy && agreement.terms;
+  const canSubmit = isBusinessChannel && agreement.privacy && agreement.terms;
 
   const inputClass =
     'rounded-lg border border-border px-3 py-2 text-sm outline-none transition-colors focus:border-gray-400';
@@ -136,38 +133,24 @@ export function KakaoMessageApplyPage() {
               </div>
             </div>
 
-            {/* 비즈니스 채널 여부 */}
+            {/* 비즈니스 채널 인증 확인 */}
             <div className="flex items-start gap-6 py-4">
               <div className="w-48 flex-shrink-0 pt-2">
-                <span className="text-sm font-medium">비즈니스 채널 여부</span>
+                <span className="text-sm font-medium">비즈니스 채널 인증 확인</span>
               </div>
               <div className="flex-1 space-y-2">
-                <div className="flex gap-4">
-                  <label className="flex cursor-pointer items-center gap-2">
-                    <input
-                      type="radio"
-                      name="isBusinessChannel"
-                      checked={isBusinessChannel === true}
-                      onChange={() => setIsBusinessChannel(true)}
-                      className="h-4 w-4"
-                    />
-                    <span className="text-sm">예 (비즈니스 인증 채널)</span>
-                  </label>
-                  <label className="flex cursor-pointer items-center gap-2">
-                    <input
-                      type="radio"
-                      name="isBusinessChannel"
-                      checked={isBusinessChannel === false}
-                      onChange={() => setIsBusinessChannel(false)}
-                      className="h-4 w-4"
-                    />
-                    <span className="text-sm">아니오</span>
-                  </label>
-                </div>
-                {isBusinessChannel === false && (
+                <label className="flex cursor-pointer items-start gap-2.5">
+                  <input
+                    type="checkbox"
+                    checked={isBusinessChannel}
+                    onChange={(e) => setIsBusinessChannel(e.target.checked)}
+                    className="mt-0.5 h-4 w-4 rounded"
+                  />
+                  <span className="text-sm">비즈니스 인증을 받은 채널인지 확인합니다.</span>
+                </label>
+                {!isBusinessChannel && (
                   <p className="rounded-lg bg-amber-50 px-3 py-2 text-xs text-amber-700">
-                    인증되지 않은 채널은 메시지를 발송할 수 없으니, 먼저 카카오 채널 관리자센터에서 인증을
-                    받아주세요.
+                    인증되지 않은 채널은 메시지를 발송할 수 없으니, 먼저 카카오 채널 관리자센터에서 인증을 받아주세요.
                   </p>
                 )}
               </div>
@@ -193,7 +176,7 @@ export function KakaoMessageApplyPage() {
                     className={cn(
                       'rounded-lg px-4 py-2 text-sm font-medium transition-colors',
                       phone
-                        ? 'bg-foreground text-white hover:bg-gray-800'
+                        ? 'bg-primary text-white hover:bg-primary/90'
                         : 'cursor-not-allowed bg-muted text-muted-foreground',
                     )}
                   >
@@ -242,9 +225,14 @@ export function KakaoMessageApplyPage() {
           <div className="divide-y divide-border">
             {/* 모바일 메시지 수신동의 항목 */}
             <div className="flex items-start gap-6 py-4">
-              <div className="flex w-48 flex-shrink-0 items-start gap-1 pt-2">
+              <div className="group relative flex w-48 flex-shrink-0 items-start gap-1 pt-2">
                 <span className="text-sm font-medium">모바일 메시지 수신동의 항목</span>
-                <HelpCircle size={13} className="mt-0.5 flex-shrink-0 text-muted-foreground" />
+                <HelpCircle size={13} className="mt-0.5 flex-shrink-0 cursor-help text-muted-foreground" />
+                <div className="pointer-events-none absolute left-0 top-full z-30 mt-1 hidden w-80 rounded-lg border border-border/60 bg-white p-3 text-xs leading-relaxed text-muted-foreground shadow-lg group-hover:block">
+                  모바일 메시지 수신동의 항목은 고객에게 광고성 정보 수신 동의를 받고 있다는 것을 증명하는 화면 캡쳐 파일입니다.
+                  <br /><br />
+                  회원가입 페이지의 이용약관 동의 항목 중 "모바일 메시지 수신동의" (또는 카카오톡이 언급된 동의 항목) 체크박스가 포함된 화면을 캡쳐하여 첨부해 주세요.
+                </div>
               </div>
               <div className="flex-1">
                 <div className="flex items-center gap-2">
@@ -270,24 +258,24 @@ export function KakaoMessageApplyPage() {
 
             {/* 080 무료수신거부 */}
             <div className="flex items-start gap-6 py-4">
-              <div className="flex w-48 flex-shrink-0 items-center gap-1 pt-2">
+              <div className="group relative flex w-48 flex-shrink-0 items-center gap-1 pt-2">
                 <span className="text-sm font-medium">080 무료수신거부</span>
-                <HelpCircle size={13} className="flex-shrink-0 text-muted-foreground" />
+                <HelpCircle size={13} className="flex-shrink-0 cursor-help text-muted-foreground" />
+                <div className="pointer-events-none absolute left-0 top-full z-30 mt-1 hidden w-80 rounded-lg border border-border/60 bg-white p-3 text-xs leading-relaxed text-muted-foreground shadow-lg group-hover:block">
+                  광고 메시지에 포함되는 무료 수신거부 번호입니다.
+                  <br />고객이 언제든 수신을 거부할 수 있도록 법적으로 반드시 필요합니다.
+                  <br /><br />반드시 정식 발급받은 080번호만 입력하세요.
+                  <br />부정확한 정보 입력으로 인한 서비스 제한은 신청자 책임입니다.
+                </div>
               </div>
               <div className="flex-1">
-                <div className="flex gap-2">
-                  <input
-                    type="text"
-                    value={rejectNumber}
-                    onChange={(e) => setRejectNumber(e.target.value)}
-                    placeholder="번호를 입력해 주세요."
-                    className={cn(inputClass, 'w-56')}
-                  />
-                  <button className="flex items-center gap-1.5 rounded-lg border border-border px-3 py-2 text-sm transition-colors hover:bg-muted">
-                    080 수신거부 서비스
-                    <ExternalLink size={12} />
-                  </button>
-                </div>
+                <input
+                  type="text"
+                  value={rejectNumber}
+                  onChange={(e) => setRejectNumber(e.target.value)}
+                  placeholder="번호를 입력해 주세요."
+                  className={cn(inputClass, 'w-56')}
+                />
               </div>
             </div>
           </div>
@@ -336,10 +324,11 @@ export function KakaoMessageApplyPage() {
               </button>
             </div>
             {expandedTerm === 'privacy' && (
-              <div className="mt-2 rounded-lg bg-gray-50 p-3 text-xs text-muted-foreground">
-                <p>수집 항목: 휴대폰 번호, 카카오 채널 ID, 사업자 정보</p>
-                <p className="mt-0.5">수집 목적: 카카오 메시지 서비스 제공 및 본인 확인</p>
-                <p className="mt-0.5">보유 기간: 서비스 이용 계약 종료 시까지</p>
+              <div className="mt-2 rounded-lg bg-gray-50 p-4 text-xs leading-relaxed text-muted-foreground">
+                <p><span className="font-semibold text-foreground">1. 개인정보의 수집 및 이용 목적</span> : 카카오 브랜드 메시지 발송 서비스 제공</p>
+                <p className="mt-2"><span className="font-semibold text-foreground">2. 수집하는 개인정보 항목</span> : 카카오 채널 검색용 아이디, 휴대폰번호(본인 인증용), 080 무료수신거부 번호</p>
+                <p className="mt-2"><span className="font-semibold text-foreground">3. 개인정보의 보유 및 이용기간</span> : 원칙적으로 개인정보 수집 및 이용목적이 달성된 후에는 해당 정보를 지체 없이 파기합니다. 단, 관계법령의 규정에 의하여 보존할 필요가 있는 경우 일정기간 동안 개인정보를 보관할 수 있습니다.</p>
+                <p className="mt-3 text-amber-600">* 해당 동의를 거부할 수 있으나, 거부 시 서비스 이용에 제한이 있을 수 있습니다.</p>
               </div>
             )}
           </div>
@@ -371,10 +360,24 @@ export function KakaoMessageApplyPage() {
               </button>
             </div>
             {expandedTerm === 'terms' && (
-              <div className="mt-2 rounded-lg bg-gray-50 p-3 text-xs text-muted-foreground">
-                카카오 브랜드메시지 서비스 이용약관에 따라 광고성 정보 수신 동의를 받은 사용자에게만 메시지를
-                발송할 수 있습니다. 불법 수집 전화번호 사용이 금지되며, 수신 동의 목록은 항상 최신 상태로
-                유지해야 합니다.
+              <div className="mt-2 rounded-lg bg-gray-50 p-4 text-xs leading-relaxed text-muted-foreground">
+                <p className="mb-2 font-semibold text-foreground">브랜드 메시지 발송 관련 주의사항 및 책임에 대한 동의 (필수)</p>
+                <p className="mb-3">회원은 아래 사항을 충분히 이해하였으며, 이에 동의합니다.</p>
+
+                <p className="font-semibold text-foreground">1. 신원 정보 및 발신 프로필 관리</p>
+                <p className="mb-2">- 회원은 브랜드 메시지를 발송하기 전, 수신자가 발신자를 명확히 식별할 수 있도록 상호, 대표자명, 사업자등록번호 등 신원정보와 발신 프로필을 정확하게 구성해야 하며, 해당 정보에 변경이 발생한 경우 지체 없이 반영하여야 합니다.</p>
+
+                <p className="font-semibold text-foreground">2. 마케팅 수신 동의 확보</p>
+                <p className="mb-2">- 회원은 브랜드 메시지 수신자에 대해 관련 법령에 따라 유효한 마케팅 수신 동의를 적법하게 사전에 확보하여야 합니다.</p>
+
+                <p className="font-semibold text-foreground">3. 책임의 귀속</p>
+                <p className="mb-2">- 수신 동의의 적법성과 유효성에 대한 책임은 전적으로 회원에게 있으며, 브랜드 메시지 발송 과정에서 수신자 신고, 수신 거부 미처리, 과징금 부과, 민원 제기, 고객응대(CS) 등의 문제가 발생할 경우, 이에 따른 모든 법적·행정적 책임은 회원이 부담합니다.</p>
+
+                <p className="font-semibold text-foreground">4. 금지 행위</p>
+                <p className="mb-2">- 회원은 불법 스팸, 스미싱 메시지 전송, 동일 내용의 반복·중복 발송, 또는 브랜드 메시지 서비스 운영에 중대한 지장을 초래하는 기타 행위를 하여서는 아니되며, 이러한 행위가 의심되거나 발견될 경우 회사 또는 카카오가 계정 이용 제한, 서비스 제공 중지 등의 조치를 즉시 취할 수 있음을 확인합니다.</p>
+
+                <p className="font-semibold text-foreground">5. 템플릿 내역 확인에 대한 동의</p>
+                <p>- 본인은 회사가 브랜드 메시지 서비스 운영 및 관리 목적상, 본인이 해당 서비스를 통해 제작·이용하는 템플릿의 내역을 확인할 수 있음에 동의합니다.</p>
               </div>
             )}
           </div>
@@ -429,7 +432,7 @@ export function KakaoMessageApplyPage() {
           className={cn(
             'rounded-lg px-10 py-3 text-sm font-semibold transition-colors',
             canSubmit
-              ? 'bg-foreground text-white hover:bg-gray-800'
+              ? 'bg-primary text-white hover:bg-primary/90'
               : 'cursor-not-allowed bg-muted text-muted-foreground',
           )}
         >

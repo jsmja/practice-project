@@ -81,11 +81,11 @@ export function ServiceIntegrationPage() {
       iconContent: <MessageCircle size={18} className="text-white" />,
       name: '카카오 브랜드메시지',
       badges: [
-        { label: 'CRM', className: 'rounded bg-amber-100 px-1.5 py-0.5 text-xs font-medium text-amber-700' },
+        { label: '메시지', className: 'rounded bg-amber-100 px-1.5 py-0.5 text-xs font-medium text-amber-700' },
         { label: '미신청', className: 'text-xs text-muted-foreground' },
       ],
       description:
-        '카카오톡으로 CRM 캠페인 메시지를 발송할 수 있어요. 광고성 정보 수신 동의 회원에게 이미지·버튼·쿠폰 등 다양한 마케팅 메시지를 보낼 수 있습니다.',
+        '카카오톡 채널 친구 및 수신 동의 회원에게 다양한 마케팅 메시지를 발송할 수 있어요.',
       actionType: 'apply',
       path: '/service-integration/kakao-message',
     },
@@ -123,7 +123,7 @@ export function ServiceIntegrationPage() {
   };
 
   return (
-    <div>
+    <div className="space-y-6">
       <PageHeader title="서비스 연동" description="웹사이트에 서비스를 연동해 보세요." />
 
       <h3 className="mb-3 text-sm font-semibold">연동 서비스</h3>

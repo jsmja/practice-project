@@ -73,7 +73,7 @@ export function PaymentHistoryPage() {
   }, [activeStatus]);
 
   return (
-    <div>
+    <div className="space-y-6">
       <PageHeader
         title="결제내역"
         actions={<ExcelDownloadButton />}
@@ -88,7 +88,7 @@ export function PaymentHistoryPage() {
               onClick={() => setActivePeriod(tab)}
               className={cn(
                 'rounded-lg border px-3 py-1.5 text-xs transition-colors',
-                activePeriod === tab ? 'border-foreground bg-foreground text-white' : 'border-border hover:bg-muted'
+                activePeriod === tab ? 'border-primary bg-primary text-white' : 'border-border hover:bg-muted'
               )}
             >
               {tab}
@@ -111,14 +111,14 @@ export function PaymentHistoryPage() {
             className={cn(
               'flex items-center gap-1.5 px-4 py-2.5 text-sm transition-colors',
               activeStatus === tab
-                ? 'border-b-2 border-foreground font-semibold text-foreground'
+                ? 'border-b-2 border-primary font-semibold text-foreground'
                 : 'text-muted-foreground hover:text-foreground'
             )}
           >
             {tab}
             <span className={cn(
               'rounded-full px-1.5 py-0.5 text-[10px] font-bold',
-              activeStatus === tab ? 'bg-foreground text-white' : 'bg-muted text-muted-foreground'
+              activeStatus === tab ? 'bg-primary text-white' : 'bg-muted text-muted-foreground'
             )}>
               {statusCounts[tab] ?? 0}
             </span>
