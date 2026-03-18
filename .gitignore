@@ -3,6 +3,7 @@ dist
 dist-ssr
 *.local
 .env
+.env.local
 .env.*
 !.env.example
 .DS_Store
