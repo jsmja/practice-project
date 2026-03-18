@@ -2,11 +2,12 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { PageHeader } from '@/components/common/PageHeader';
 import { Badge } from '@/components/common/Badge';
-import { Check } from 'lucide-react';
+import { Check, CreditCard, Plus } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { MOCK_SERVICE_PRODUCTS } from '@/mocks/payment';
+import type { IServiceProductDto } from '@/models/interface/dto';
 
-const STEPS = ['서비스 선택', '토스페이 카드 등록'];
+const STEPS = ['서비스 / 결제수단 선택', '카드 선택 / 결제'];
 
 const POLICIES = [
   '구독 서비스는 선택한 구독 기간(월간/연간) 단위로 자동 갱신됩니다.',
@@ -195,41 +196,118 @@ export function ServiceApplyPage() {
       )}
 
       {currentStep === 1 && (
-        <div className="rounded-xl border border-border bg-white p-8">
-          <div className="mb-6 text-center">
-            <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-blue-500 text-xl font-bold text-white">T</div>
-            <p className="mb-1 font-semibold">토스페이 카드 등록</p>
-            <p className="text-sm text-muted-foreground">카드를 등록하면 구독 서비스가 매월 자동 결제됩니다</p>
-          </div>
+        <CardSelectStep
+          selectedProducts={selectedProducts}
+          subscriptionType={subscriptionType}
+          totalAmount={totalAmount}
+          onPrev={() => setCurrentStep(0)}
+          onComplete={() => navigate('/payment/subscription')}
+        />
+      )}
+    </div>
+  );
+}
 
-          <div className="mb-6 rounded-xl border border-border bg-gray-50 p-5">
-            <p className="mb-3 text-xs font-semibold text-muted-foreground">구독 정보 확인</p>
-            <div className="space-y-2 text-sm">
-              {selectedProducts.map((p) => (
-                <div key={p.id} className="flex justify-between">
-                  <span className="text-muted-foreground">{p.name}</span>
-                  <span className="font-medium">
-                    {(subscriptionType === '연간' ? Math.floor(p.annualPrice / 12) : p.monthlyPrice).toLocaleString()}원/월
-                  </span>
-                </div>
-              ))}
-              <div className="mt-2 flex justify-between border-t border-border pt-2">
-                <span className="font-semibold">합계</span>
-                <span className="font-bold">{totalAmount.toLocaleString()}원/월 (VAT 포함)</span>
-              </div>
-            </div>
-          </div>
+/* ── 카드 선택 / 결제 (2단계) ── */
+function CardSelectStep({
+  selectedProducts,
+  subscriptionType,
+  totalAmount,
+  onPrev,
+  onComplete,
+}: {
+  selectedProducts: IServiceProductDto[];
+  subscriptionType: '월간' | '연간';
+  totalAmount: number;
+  onPrev: () => void;
+  onComplete: () => void;
+}) {
+  const [paymentMethod, setPaymentMethod] = useState<'existing' | 'new'>('existing');
 
-          <div className="mb-6 rounded-lg border border-blue-200 bg-blue-50 px-4 py-3 text-xs text-blue-700">
-            실제 서비스에서는 여기에 토스페이 카드 등록 창이 표시됩니다. 카드 등록 완료 후 다음 결제일부터 자동 결제가 시작됩니다.
+  return (
+    <div className="space-y-6">
+      {/* 신청 내역 */}
+      <div className="rounded-xl border border-border bg-white p-6">
+        <p className="mb-3 text-sm font-semibold">신청 내역</p>
+        <div className="mb-4 flex gap-2">
+          {selectedProducts.map((p) => (
+            <span key={p.id} className="rounded-lg border border-border px-3 py-1.5 text-sm font-medium">{p.name}</span>
+          ))}
+        </div>
+        <div className="space-y-3 border-t border-border pt-3">
+          <div className="flex items-center justify-between">
+            <span className="text-sm text-muted-foreground">구독 유형</span>
+            <span className="text-sm font-medium">{subscriptionType === '월간' ? '월간 구독' : '연간 구독'}</span>
           </div>
-
-          <div className="flex justify-center gap-3">
-            <button onClick={() => setCurrentStep(0)} className="rounded-lg border border-border px-6 py-2.5 text-sm font-medium transition-colors hover:bg-muted">이전</button>
-            <button onClick={() => navigate('/payment/subscription')} className="rounded-lg bg-primary px-6 py-2.5 text-sm font-medium text-white transition-colors hover:bg-primary/90">카드 등록 완료 (테스트)</button>
+          <div className="flex items-center justify-between">
+            <span className="text-sm text-muted-foreground">결제 금액</span>
+            <span className="text-2xl font-bold">{totalAmount.toLocaleString()}원</span>
           </div>
         </div>
-      )}
+      </div>
+
+      {/* 결제 카드 선택 */}
+      <div>
+        <p className="mb-1 text-sm font-semibold">결제 카드 선택</p>
+        <p className="mb-4 text-xs text-muted-foreground">결제에 사용할 카드를 선택해주세요.</p>
+
+        <div className="space-y-3">
+          {/* 기존 등록 카드 */}
+          <button
+            onClick={() => setPaymentMethod('existing')}
+            className={cn(
+              'flex w-full items-center gap-4 rounded-xl border-2 p-5 text-left transition-all',
+              paymentMethod === 'existing' ? 'border-primary' : 'border-border hover:border-primary/30'
+            )}
+          >
+            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gray-100">
+              <CreditCard size={22} className="text-foreground" />
+            </div>
+            <div className="flex-1">
+              <p className="text-sm font-semibold">신한카드</p>
+              <p className="text-xs text-muted-foreground">0000-xxxx-xxxx-1234</p>
+            </div>
+            {paymentMethod === 'existing' && (
+              <div className="flex h-6 w-6 items-center justify-center rounded-full bg-primary">
+                <Check size={14} className="text-white" />
+              </div>
+            )}
+          </button>
+
+          {/* 신규 카드 등록 */}
+          <button
+            onClick={() => setPaymentMethod('new')}
+            className={cn(
+              'flex w-full items-center gap-4 rounded-xl border-2 border-dashed p-5 text-left transition-all',
+              paymentMethod === 'new' ? 'border-primary bg-primary/5' : 'border-border hover:border-primary/30'
+            )}
+          >
+            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gray-100">
+              <Plus size={22} className="text-muted-foreground" />
+            </div>
+            <div className="flex-1">
+              <p className="text-sm font-semibold">신규 카드로 결제</p>
+              <p className="text-xs text-muted-foreground">새로운 카드를 등록하고 바로 결제합니다.</p>
+            </div>
+          </button>
+        </div>
+      </div>
+
+      {/* 하단 버튼 */}
+      <div className="flex gap-3">
+        <button
+          onClick={onPrev}
+          className="flex flex-1 items-center justify-center gap-1.5 rounded-xl border border-border py-3.5 text-sm font-medium transition-colors hover:bg-muted"
+        >
+          ‹ 이전
+        </button>
+        <button
+          onClick={onComplete}
+          className="flex-1 rounded-xl bg-foreground py-3.5 text-sm font-semibold text-white transition-colors hover:bg-foreground/90"
+        >
+          결제하기 ({totalAmount.toLocaleString()}원)
+        </button>
+      </div>
     </div>
   );
 }

@@ -3,7 +3,7 @@ import { PageHeader } from '@/components/common/PageHeader';
 import { DataTable } from '@/components/common/DataTable';
 import { Badge } from '@/components/common/Badge';
 import { cn } from '@/lib/utils';
-import { Coins, Plus, RefreshCw, X, ChevronDown, AlertTriangle, AlertCircle } from 'lucide-react';
+import { Coins, Plus, RefreshCw, X, ChevronDown, AlertTriangle, AlertCircle, CreditCard, Check } from 'lucide-react';
 import { usePointHistory } from '@/hooks/client/points/usePointsClient';
 import type { IPointHistoryDto } from '@/models/interface/dto';
 import { MOCK_POINT_BALANCE } from '@/mocks/points';
@@ -67,6 +67,7 @@ function ChargeModal({ onClose }: { onClose: () => void }) {
   const [customAmount, setCustomAmount] = useState('');
   const [isCustom, setIsCustom] = useState(false);
   const [step, setStep] = useState<'select' | 'confirm' | 'complete'>('select');
+  const [paymentMethod, setPaymentMethod] = useState<'existing' | 'new'>('existing');
 
   const finalAmount = isCustom ? Number(customAmount.replace(/,/g, '')) : (selectedAmount ?? 0);
   const isValid = finalAmount >= 10000 && finalAmount % 10000 === 0;
@@ -142,14 +143,44 @@ function ChargeModal({ onClose }: { onClose: () => void }) {
                 </div>
               )}
 
-              <div className="mb-6 rounded-xl border border-border bg-gray-50 p-4">
+              <div className="mb-6">
                 <p className="mb-2 text-xs font-semibold">결제 수단</p>
-                <div className="flex items-center gap-3">
-                  <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-500 text-xs font-bold text-white">T</div>
-                  <div>
-                    <p className="text-sm font-medium">토스페이 · 신한카드 1234</p>
-                    <p className="text-xs text-muted-foreground">등록 카드로 즉시 결제</p>
-                  </div>
+                <div className="space-y-2">
+                  <button
+                    onClick={() => setPaymentMethod('existing')}
+                    className={cn(
+                      'flex w-full items-center gap-3 rounded-xl border-2 p-3.5 text-left transition-all',
+                      paymentMethod === 'existing' ? 'border-primary' : 'border-border hover:border-primary/30'
+                    )}
+                  >
+                    <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-gray-100">
+                      <CreditCard size={16} className="text-foreground" />
+                    </div>
+                    <div className="flex-1">
+                      <p className="text-sm font-medium">신한카드 ····1234</p>
+                      <p className="text-xs text-muted-foreground">등록 카드로 즉시 결제</p>
+                    </div>
+                    {paymentMethod === 'existing' && (
+                      <div className="flex h-5 w-5 items-center justify-center rounded-full bg-primary">
+                        <Check size={10} className="text-white" />
+                      </div>
+                    )}
+                  </button>
+                  <button
+                    onClick={() => setPaymentMethod('new')}
+                    className={cn(
+                      'flex w-full items-center gap-3 rounded-xl border-2 border-dashed p-3.5 text-left transition-all',
+                      paymentMethod === 'new' ? 'border-primary bg-primary/5' : 'border-border hover:border-primary/30'
+                    )}
+                  >
+                    <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-gray-100">
+                      <Plus size={16} className="text-muted-foreground" />
+                    </div>
+                    <div className="flex-1">
+                      <p className="text-sm font-medium">신규 카드로 결제</p>
+                      <p className="text-xs text-muted-foreground">새 카드를 등록하고 결제합니다</p>
+                    </div>
+                  </button>
                 </div>
               </div>
 
