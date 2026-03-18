@@ -14,8 +14,7 @@ import { NOOP_PAGINATION } from '@/lib/constants';
 const CHARGE_OPTIONS = [10000, 30000, 50000, 100000, 300000];
 
 const UNIT_PRICES = [
-  { label: '텍스트형', price: 15, color: 'bg-gray-100 text-gray-700' },
-  { label: '이미지형', price: 20, color: 'bg-blue-100 text-blue-700' },
+  { label: '기본형', price: 15, color: 'bg-gray-100 text-gray-700' },
   { label: '와이드형', price: 25, color: 'bg-green-100 text-green-700' },
 ];
 
@@ -467,7 +466,7 @@ export function PointManagementPage() {
 
         <div className="col-span-3 rounded-xl border border-border bg-white p-5">
           <p className="mb-3 text-xs font-semibold">브랜드 메시지 발송 단가</p>
-          <div className="grid grid-cols-3 gap-3">
+          <div className="grid grid-cols-2 gap-3">
             {UNIT_PRICES.map(({ label, price, color }) => (
               <div key={label} className="rounded-lg border border-border p-3.5">
                 <span className={cn('inline-block rounded-full px-2 py-0.5 text-[10px] font-semibold', color)}>{label}</span>
