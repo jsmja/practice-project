@@ -455,69 +455,106 @@ export function PointManagementPage() {
 
       <BalanceWarning balance={balance} onCharge={() => setShowChargeModal(true)} />
 
-      {/* 잔액 카드 (충전/환불 버튼 포함) */}
+      {/* 잔액 + 단가 */}
       {(() => {
-        const pendingRefund = pointHistory
-          .filter((h) => h.type === '환불신청')
-          .reduce((sum, h) => sum + Math.abs(h.amount), 0);
+        const refundItems = pointHistory.filter((h) => h.type === '환불신청');
+        const pendingRefund = refundItems.reduce((sum, h) => sum + Math.abs(h.amount), 0);
         const availableBalance = balance - pendingRefund;
+        const hasPending = pendingRefund > 0;
 
         return (
           <div className="grid grid-cols-4 gap-4">
+            {/* 포인트 현황 */}
             <div className="col-span-2 rounded-xl border border-border bg-white p-5">
-              <div className="mb-4 flex items-center gap-2">
-                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-amber-100">
-                  <Coins size={18} className="text-amber-600" />
+              <div className="mb-4 flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary/10">
+                    <Coins size={18} className="text-primary" />
+                  </div>
+                  <p className="text-sm font-medium">포인트 현황</p>
                 </div>
-                <p className="text-sm font-medium">포인트 현황</p>
               </div>
 
-              <div className="mb-4 space-y-2">
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-muted-foreground">총 잔액</span>
-                  <span className={cn('text-2xl font-bold tabular-nums', balanceColor)}>{balance.toLocaleString()}P</span>
-                </div>
-                {pendingRefund > 0 && (
-                  <>
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm text-amber-600">환불 대기 (출금 보류)</span>
-                      <span className="text-sm font-bold text-amber-600">-{pendingRefund.toLocaleString()}P</span>
+              {/* 잔액 표시 */}
+              <div className="mb-4">
+                {hasPending ? (
+                  <div className="space-y-1">
+                    <div className="flex items-baseline justify-between">
+                      <span className="text-sm text-muted-foreground">사용 가능</span>
+                      <span className="text-2xl font-bold text-primary">{availableBalance.toLocaleString()}P</span>
                     </div>
-                    <div className="border-t border-border pt-2">
-                      <div className="flex items-center justify-between">
-                        <span className="text-sm font-medium">사용 가능 잔액</span>
-                        <span className="text-xl font-bold text-primary">{availableBalance.toLocaleString()}P</span>
-                      </div>
+                    <div className="flex items-center justify-between text-xs text-muted-foreground">
+                      <span>총 {balance.toLocaleString()}P 중 환불 대기 {pendingRefund.toLocaleString()}P 보류</span>
                     </div>
-                  </>
+                  </div>
+                ) : (
+                  <div className="flex items-baseline justify-between">
+                    <span className="text-sm text-muted-foreground">잔액</span>
+                    <span className={cn('text-2xl font-bold tabular-nums', balanceColor)}>{balance.toLocaleString()}P</span>
+                  </div>
                 )}
               </div>
 
+              {/* 환불 대기 상세 (접기) */}
+              {hasPending && (
+                <div className="mb-4 rounded-lg border border-border">
+                  <button
+                    onClick={() => setRefundDetailOpen(!refundDetailOpen)}
+                    className="flex w-full items-center justify-between px-3 py-2"
+                  >
+                    <span className="text-xs text-muted-foreground">환불 대기 {refundItems.length}건 · {pendingRefund.toLocaleString()}P</span>
+                    <ChevronDown size={14} className={cn('text-muted-foreground transition-transform', refundDetailOpen && 'rotate-180')} />
+                  </button>
+                  {refundDetailOpen && (
+                    <div className="space-y-1.5 border-t border-border px-3 pb-3 pt-2">
+                      {refundItems.map((h) => (
+                        <div key={h.no} className="flex items-center justify-between text-xs">
+                          <div>
+                            <p className="font-medium">{h.description}</p>
+                            <p className="text-muted-foreground">{h.date}</p>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <span className="font-bold text-muted-foreground">{h.amount.toLocaleString()}P</span>
+                            <button
+                              onClick={(e) => { e.stopPropagation(); alert('환불 신청이 취소되었습니다.'); }}
+                              className="rounded border border-border px-2 py-0.5 text-[10px] text-muted-foreground transition-colors hover:border-red-300 hover:text-red-500"
+                            >
+                              취소
+                            </button>
+                          </div>
+                        </div>
+                      ))}
+                      <p className="pt-1 text-[10px] text-muted-foreground">영업일 3~5일 이내 처리</p>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* 버튼 */}
               <div className="flex gap-2">
                 <button
                   onClick={() => setShowChargeModal(true)}
                   className="flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-primary py-2.5 text-sm font-semibold text-white transition-colors hover:bg-primary/90"
                 >
                   <Plus size={14} />
-                  충전하기
+                  충전
                 </button>
                 <button
                   onClick={() => setShowRefundModal(true)}
-                  disabled={pendingRefund > 0}
-                  title={pendingRefund > 0 ? '처리 중인 환불 신청이 있습니다' : undefined}
+                  disabled={hasPending}
+                  title={hasPending ? '처리 중인 환불이 있습니다' : undefined}
                   className={cn(
                     'flex flex-1 items-center justify-center gap-1.5 rounded-lg border py-2.5 text-sm font-medium transition-colors',
-                    pendingRefund > 0
-                      ? 'cursor-not-allowed border-border bg-muted text-muted-foreground'
-                      : 'border-border hover:bg-muted'
+                    hasPending ? 'cursor-not-allowed border-border bg-muted text-muted-foreground' : 'border-border hover:bg-muted'
                   )}
                 >
                   <RefreshCw size={14} />
-                  {pendingRefund > 0 ? '환불 처리중' : '환불 신청'}
+                  환불
                 </button>
               </div>
             </div>
 
+            {/* 발송 단가 */}
             <div className="col-span-2 rounded-xl border border-border bg-white p-5">
               <p className="mb-3 text-sm font-medium">브랜드 메시지 발송 단가</p>
               <div className="flex items-center gap-4 rounded-lg border border-border p-4">
@@ -535,50 +572,6 @@ export function PointManagementPage() {
           </div>
         );
       })()}
-
-      {/* 환불 신청 현황 (접기형) */}
-      {pointHistory.some((h) => h.type === '환불신청') && (
-        <div className="rounded-xl border border-amber-200 bg-amber-50">
-          <button
-            onClick={() => setRefundDetailOpen(!refundDetailOpen)}
-            className="flex w-full items-center justify-between px-5 py-3"
-          >
-            <div className="flex items-center gap-2">
-              <AlertTriangle size={14} className="text-amber-500" />
-              <span className="text-sm font-semibold text-amber-700">환불 신청 현황</span>
-              <span className="rounded bg-amber-200 px-1.5 py-0.5 text-xs font-bold text-amber-800">처리 대기중</span>
-              <span className="text-sm font-bold text-red-500">
-                {pointHistory.filter((h) => h.type === '환불신청').reduce((s, h) => s + Math.abs(h.amount), 0).toLocaleString()}P
-              </span>
-            </div>
-            <ChevronDown size={16} className={cn('text-amber-500 transition-transform', refundDetailOpen && 'rotate-180')} />
-          </button>
-          {refundDetailOpen && (
-            <div className="border-t border-amber-200 px-5 pb-4 pt-3">
-              <div className="space-y-2">
-                {pointHistory.filter((h) => h.type === '환불신청').map((h) => (
-                  <div key={h.no} className="flex items-center justify-between rounded-lg border border-amber-200 bg-white px-4 py-3">
-                    <div>
-                      <p className="text-sm font-medium">{h.description}</p>
-                      <p className="text-xs text-muted-foreground">{h.date}</p>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <p className="text-sm font-bold text-red-500">{h.amount.toLocaleString()}P</p>
-                      <button
-                        onClick={() => alert('환불 신청이 취소되었습니다.')}
-                        className="rounded-lg border border-red-200 px-2.5 py-1 text-xs font-medium text-red-500 transition-colors hover:bg-red-50"
-                      >
-                        신청 취소
-                      </button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-              <p className="mt-2 text-xs text-amber-600">운영팀 검토 후 영업일 기준 3~5일 이내 처리됩니다.</p>
-            </div>
-          )}
-        </div>
-      )}
 
       {/* 내역 */}
       <div className="mb-3 flex items-center justify-between">
