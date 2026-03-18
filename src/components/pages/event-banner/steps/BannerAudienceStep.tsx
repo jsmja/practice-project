@@ -170,7 +170,7 @@ export function BannerAudienceStep({ audience, onChange }: IBannerAudienceStepPr
               className={cn(
                 'mb-3 w-full rounded-lg border py-2 text-sm font-medium transition-colors',
                 audience.allDays
-                  ? 'border-primary bg-primary text-white'
+                  ? 'border-primary bg-primary/8 text-primary'
                   : 'border-border/60 text-muted-foreground hover:bg-muted'
               )}
             >
@@ -184,7 +184,7 @@ export function BannerAudienceStep({ audience, onChange }: IBannerAudienceStepPr
                   className={cn(
                     'flex-1 rounded-lg border py-2 text-sm font-medium transition-colors',
                     audience.visitDays.includes(day)
-                      ? 'border-primary bg-primary text-white'
+                      ? 'border-primary bg-primary/8 text-primary'
                       : 'border-border/60 text-muted-foreground hover:border-gray-400'
                   )}
                 >
@@ -222,7 +222,7 @@ export function BannerAudienceStep({ audience, onChange }: IBannerAudienceStepPr
                     className={cn(
                       'flex-1 rounded-lg border py-2 text-xs font-medium transition-colors',
                       audience.visitCount === num
-                        ? 'border-primary bg-primary text-white'
+                        ? 'border-primary bg-primary/8 text-primary'
                         : 'border-border/60 text-muted-foreground hover:border-gray-400'
                     )}
                   >
@@ -260,7 +260,7 @@ export function BannerAudienceStep({ audience, onChange }: IBannerAudienceStepPr
                   className={cn(
                     'flex-1 rounded-lg border py-1.5 text-xs font-medium transition-colors',
                     audience.revisitPeriodPreset === preset
-                      ? 'border-primary bg-primary text-white'
+                      ? 'border-primary bg-primary/8 text-primary'
                       : 'border-border/60 text-muted-foreground hover:border-gray-400'
                   )}
                 >
@@ -316,7 +316,7 @@ export function BannerAudienceStep({ audience, onChange }: IBannerAudienceStepPr
                     className={cn(
                       'flex-1 rounded-lg border py-2 text-xs font-medium transition-colors',
                       audience.stayTimeValue === num
-                        ? 'border-primary bg-primary text-white'
+                        ? 'border-primary bg-primary/8 text-primary'
                         : 'border-border/60 text-muted-foreground hover:border-gray-400'
                     )}
                   >
@@ -356,7 +356,7 @@ export function BannerAudienceStep({ audience, onChange }: IBannerAudienceStepPr
                     className={cn(
                       'flex-1 rounded-lg border py-2 text-xs font-medium transition-colors',
                       audience.scrollPercent === num
-                        ? 'border-primary bg-primary text-white'
+                        ? 'border-primary bg-primary/8 text-primary'
                         : 'border-border/60 text-muted-foreground hover:border-gray-400'
                     )}
                   >
