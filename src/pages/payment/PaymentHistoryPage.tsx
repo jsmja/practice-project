@@ -79,6 +79,8 @@ const COLUMNS = [
 export function PaymentHistoryPage() {
   const [activeStatus, setActiveStatus] = useState('전체');
   const [activePeriod, setActivePeriod] = useState('전체');
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
 
   const statusCounts = useMemo(() => {
     const counts: Record<string, number> = { 전체: MOCK_PAYMENT_HISTORY.length };
@@ -89,9 +91,22 @@ export function PaymentHistoryPage() {
   }, []);
 
   const filteredData = useMemo(() => {
-    if (activeStatus === '전체') return MOCK_PAYMENT_HISTORY;
-    return MOCK_PAYMENT_HISTORY.filter((item) => item.status === activeStatus);
-  }, [activeStatus]);
+    let data = MOCK_PAYMENT_HISTORY;
+    if (activeStatus !== '전체') {
+      data = data.filter((item) => item.status === activeStatus);
+    }
+    if (startDate) {
+      data = data.filter((item) => item.paymentDate >= startDate);
+    }
+    if (endDate) {
+      data = data.filter((item) => item.paymentDate <= endDate + ' 23:59');
+    }
+    return data;
+  }, [activeStatus, startDate, endDate]);
+
+  const totalPositive = filteredData.filter((d) => d.amount > 0).reduce((s, d) => s + d.amount, 0);
+  const totalNegative = filteredData.filter((d) => d.amount < 0).reduce((s, d) => s + d.amount, 0);
+  const totalNet = totalPositive + totalNegative;
 
   return (
     <div className="space-y-6">
@@ -100,31 +115,61 @@ export function PaymentHistoryPage() {
         actions={<ExcelDownloadButton />}
       />
 
-      {/* 기간 + 검색 */}
-      <div className="mb-4 flex items-center justify-between">
-        <div className="flex gap-1">
-          {PERIOD_TABS.map((tab) => (
-            <button
-              key={tab}
-              onClick={() => setActivePeriod(tab)}
-              className={cn(
-                'rounded-lg border px-3 py-1.5 text-xs transition-colors',
-                activePeriod === tab ? 'border-primary bg-primary text-white' : 'border-border hover:bg-muted'
-              )}
-            >
-              {tab}
-            </button>
-          ))}
+      {/* 검색 기간 */}
+      <div className="flex items-center justify-between rounded-xl border border-border bg-white px-5 py-4">
+        <div className="flex items-center gap-3">
+          <span className="text-sm font-medium">검색 기간</span>
+          <div className="flex items-center gap-2">
+            <input
+              type="date"
+              value={startDate}
+              onChange={(e) => setStartDate(e.target.value)}
+              className="rounded-lg border border-border px-3 py-1.5 text-sm outline-none focus:border-primary"
+            />
+            <span className="text-sm text-muted-foreground">~</span>
+            <input
+              type="date"
+              value={endDate}
+              onChange={(e) => setEndDate(e.target.value)}
+              className="rounded-lg border border-border px-3 py-1.5 text-sm outline-none focus:border-primary"
+            />
+          </div>
+          <div className="flex gap-1">
+            {PERIOD_TABS.map((tab) => (
+              <button
+                key={tab}
+                onClick={() => { setActivePeriod(tab); setStartDate(''); setEndDate(''); }}
+                className={cn(
+                  'rounded-lg border px-3 py-1.5 text-xs transition-colors',
+                  activePeriod === tab ? 'border-primary bg-primary/8 text-primary' : 'border-border hover:bg-muted'
+                )}
+              >
+                {tab}
+              </button>
+            ))}
+          </div>
         </div>
-        <input
-          type="text"
-          placeholder="검색"
-          className="rounded-lg border border-border px-3 py-1.5 text-sm outline-none focus:border-primary"
-        />
+        <span className="text-xs text-muted-foreground">조회 {filteredData.length}건</span>
+      </div>
+
+      {/* 합계 카드 */}
+      <div className="grid grid-cols-3 gap-4">
+        <div className="rounded-xl border border-border bg-white p-4 text-center">
+          <p className="text-xs text-muted-foreground">결제/충전 합계</p>
+          <p className="mt-1 text-lg font-bold text-foreground">+{totalPositive.toLocaleString()}원</p>
+        </div>
+        <div className="rounded-xl border border-border bg-white p-4 text-center">
+          <p className="text-xs text-muted-foreground">환불/취소 합계</p>
+          <p className="mt-1 text-lg font-bold text-red-500">{totalNegative.toLocaleString()}원</p>
+        </div>
+        <div className="rounded-xl border border-border bg-white p-4 text-center">
+          <p className="text-xs text-muted-foreground">순 결제 금액</p>
+          <p className={cn('mt-1 text-lg font-bold', totalNet >= 0 ? 'text-primary' : 'text-red-500')}>{totalNet >= 0 ? '+' : ''}{totalNet.toLocaleString()}원</p>
+        </div>
       </div>
 
       {/* 상태 탭 */}
-      <div className="mb-4 flex gap-1 border-b border-border">
+      <div className="flex gap-1 border-b border-border">
         {STATUS_TABS.map((tab) => (
           <button
             key={tab}
