@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - main_branch_대시보드변경
 
 permissions:
   contents: read
