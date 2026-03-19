@@ -106,9 +106,26 @@ const COLUMNS = [
       </div>
     ),
   },
-  { key: 'targetCount', header: '대상 수', width: '75px' },
-  { key: 'successCount', header: '성공 수', width: '75px' },
-  { key: 'failCount', header: '실패 수', width: '75px' },
+  {
+    key: 'sendResult',
+    header: '발송',
+    width: '120px',
+    render: (row: ICampaignDto) => (
+      <span className="text-sm">
+        <span className="font-medium">{row.successCount.toLocaleString()}</span>
+        <span className="text-muted-foreground">/{row.targetCount.toLocaleString()}</span>
+      </span>
+    ),
+  },
+  {
+    key: 'sendRate',
+    header: '발송률',
+    width: '80px',
+    render: (row: ICampaignDto) => {
+      const rate = row.targetCount > 0 ? Math.round((row.successCount / row.targetCount) * 100) : 0;
+      return <span className={cn('text-sm font-medium', rate >= 90 ? 'text-emerald-600' : rate >= 50 ? 'text-foreground' : 'text-red-500')}>{rate}%</span>;
+    },
+  },
 ];
 
 type ViewType = 'list' | 'create';
@@ -245,31 +262,59 @@ export function CrmManagementPage() {
       {devToggle}
 
       {/* 포인트 잔액 */}
-      <div className={cn(
-        'flex items-center justify-between rounded-xl border p-4',
-        MOCK_POINT_BALANCE <= 10000 ? 'border-red-200 bg-red-50' : MOCK_POINT_BALANCE <= 50000 ? 'border-amber-200 bg-amber-50' : 'border-border bg-white'
-      )}>
-        <div className="flex items-center gap-3">
-          <div className={cn('flex h-9 w-9 items-center justify-center rounded-lg', MOCK_POINT_BALANCE <= 50000 ? 'bg-amber-100' : 'bg-muted')}>
-            {MOCK_POINT_BALANCE <= 50000
-              ? <AlertTriangle size={16} className="text-amber-600" />
-              : <Coins size={16} className="text-muted-foreground" />
-            }
+      {(() => {
+        const scheduledPoints = campaigns
+          .filter((c) => c.status === CAMPAIGN_STATUS.SCHEDULED)
+          .reduce((sum, c) => sum + c.targetCount * 25, 0);
+        const available = MOCK_POINT_BALANCE - scheduledPoints;
+
+        return (
+          <div className="rounded-xl border border-border bg-white p-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary/10">
+                  <Coins size={16} className="text-primary" />
+                </div>
+                <div>
+                  {scheduledPoints > 0 ? (
+                    <>
+                      <div className="flex items-center gap-3">
+                        <div>
+                          <p className="text-xs text-muted-foreground">사용 가능</p>
+                          <p className="text-base font-bold text-primary">{available.toLocaleString()}P</p>
+                        </div>
+                        <div className="h-8 w-px bg-border" />
+                        <div>
+                          <p className="text-xs text-muted-foreground">예약 차감 예정</p>
+                          <p className="text-sm font-medium text-amber-600">-{scheduledPoints.toLocaleString()}P</p>
+                        </div>
+                        <div className="h-8 w-px bg-border" />
+                        <div>
+                          <p className="text-xs text-muted-foreground">총 잔액</p>
+                          <p className="text-sm font-medium text-foreground">{MOCK_POINT_BALANCE.toLocaleString()}P</p>
+                        </div>
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <p className="text-xs text-muted-foreground">포인트 잔액</p>
+                      <p className={cn('text-base font-bold tabular-nums', MOCK_POINT_BALANCE <= 10000 ? 'text-red-600' : MOCK_POINT_BALANCE <= 50000 ? 'text-amber-600' : 'text-foreground')}>
+                        {MOCK_POINT_BALANCE.toLocaleString()}P
+                      </p>
+                    </>
+                  )}
+                </div>
+              </div>
+              <button
+                onClick={() => navigate('/settings/points')}
+                className="rounded-lg border border-border px-3 py-1.5 text-xs font-medium transition-colors hover:bg-muted"
+              >
+                충전하기
+              </button>
+            </div>
           </div>
-          <div>
-            <p className="text-xs text-muted-foreground">메시지 발송 포인트 잔액</p>
-            <p className={cn('text-base font-bold tabular-nums', MOCK_POINT_BALANCE <= 10000 ? 'text-red-600' : MOCK_POINT_BALANCE <= 50000 ? 'text-amber-600' : 'text-foreground')}>
-              {MOCK_POINT_BALANCE.toLocaleString()}P
-            </p>
-          </div>
-        </div>
-        <button
-          onClick={() => navigate('/settings/points')}
-          className="rounded-lg border border-border bg-white px-3 py-1.5 text-xs font-medium transition-colors hover:bg-muted"
-        >
-          충전하기
-        </button>
-      </div>
+        );
+      })()}
 
       {/* 상태별 StatCard */}
       <div className="grid grid-cols-5 gap-4">
