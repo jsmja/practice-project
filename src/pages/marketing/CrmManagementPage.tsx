@@ -90,9 +90,20 @@ const COLUMNS = [
   {
     key: 'status',
     header: '상태',
-    width: '90px',
+    width: '110px',
     render: (row: ICampaignDto) => (
-      <Badge variant={STATUS_VARIANT[row.status] ?? 'default'}>{row.status}</Badge>
+      <div className="group relative inline-flex items-center gap-1">
+        <Badge variant={STATUS_VARIANT[row.status] ?? 'default'}>{row.status}</Badge>
+        {row.status === '실패' && row.failReason && (
+          <>
+            <AlertTriangle size={13} className="cursor-help text-red-400" />
+            <div className="pointer-events-none absolute bottom-full left-0 z-30 mb-1 hidden w-64 rounded-lg border border-border bg-white p-3 text-xs leading-relaxed text-muted-foreground shadow-lg group-hover:block">
+              <p className="mb-1 font-semibold text-red-500">실패 사유</p>
+              {row.failReason}
+            </div>
+          </>
+        )}
+      </div>
     ),
   },
   { key: 'targetCount', header: '대상 수', width: '75px' },
@@ -263,7 +274,7 @@ export function CrmManagementPage() {
       {/* 상태별 StatCard */}
       <div className="grid grid-cols-5 gap-4">
         <StatCard
-          title="성공"
+          title="진행"
           value={successCount}
           icon={<CheckCircle size={18} />}
           isActive={statusFilter === CAMPAIGN_STATUS.SUCCESS}

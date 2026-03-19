@@ -10,4 +10,5 @@ export interface ICampaignDto {
   targetCount: number;
   successCount: number;
   failCount: number;
+  failReason?: string;
 }

@@ -1,7 +1,7 @@
 export type BadgeVariantType = 'default' | 'success' | 'warning' | 'destructive' | 'info' | 'kakao';
 
 export const CAMPAIGN_STATUS = {
-  SUCCESS: '성공',
+  SUCCESS: '진행',
   FAILED: '실패',
   ENDED: '종료',
   SCHEDULED: '예정',
