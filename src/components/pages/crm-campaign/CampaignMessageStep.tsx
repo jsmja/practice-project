@@ -3,8 +3,6 @@ import {
   AlignLeft,
   Image,
   Trash2,
-  Check,
-  Upload,
   ChevronDown,
   Sparkles,
   Variable,
@@ -15,6 +13,7 @@ import {
   TrendingUp,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { ImageUploadWithSamples } from '@/components/common/SampleImagePicker';
 
 // ─── 타입 ────────────────────────────────────────────────────────────────────
 
@@ -120,26 +119,6 @@ function ButtonBuilder({ buttons, maxButtons, onChange }: { buttons: IButton[]; 
   );
 }
 
-function ImageUploadBox({ label, spec, uploaded, onToggle }: { label: string; spec: string; uploaded: boolean; onToggle: () => void }) {
-  return (
-    <div onClick={onToggle} className={cn('flex cursor-pointer flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed py-6 text-center transition-colors', uploaded ? 'border-green-400 bg-green-50' : 'border-border/60 hover:border-gray-400')}>
-      {uploaded ? (
-        <>
-          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-green-100 text-green-600"><Check size={18} /></div>
-          <p className="text-xs font-medium text-green-600">이미지 업로드 완료</p>
-          <p className="text-xs text-green-500">{spec}</p>
-        </>
-      ) : (
-        <>
-          <Upload size={24} className="text-muted-foreground" />
-          <p className="text-xs text-muted-foreground">{label}</p>
-          <p className="text-xs text-muted-foreground">{spec}</p>
-        </>
-      )}
-    </div>
-  );
-}
-
 // ─── 메인 컴포넌트 ───────────────────────────────────────────────────────────
 
 interface ICampaignMessageStepProps {
@@ -177,6 +156,7 @@ export function CampaignMessageStep({
   const [showVarPalette, setShowVarPalette] = useState(false);
   const [showAiSuggestions, setShowAiSuggestions] = useState(false);
   const [abTestEnabled, setAbTestEnabled] = useState(false);
+  const [selectedSampleImage, setSelectedSampleImage] = useState<{ id: string; name: string; category: string; gradient: string; icon: string } | null>(null);
 
   const insertVar = (varLabel: string) => {
     onBodyTextChange(bodyText + varLabel);
@@ -228,28 +208,29 @@ export function CampaignMessageStep({
 
       {selectedMessageType && (
         <>
-          {/* 이미지 업로드 */}
+          {/* 이미지 업로드 + 샘플 */}
           {selectedMessageTypeId === 'basic' && (
             <div className="mb-4">
-              <div className="mb-2 flex items-center justify-between">
-                <p className="text-sm font-medium">이미지 추가 <span className="text-xs font-normal text-muted-foreground">(선택 · 추가 시 이미지형으로 발송)</span></p>
-              </div>
-              <ImageUploadBox
-                label="이미지를 드래그하거나 클릭하세요"
+              <ImageUploadWithSamples
+                label="이미지 추가 (선택 · 추가 시 이미지형으로 발송)"
                 spec="권장 500×250px · JPG/PNG · 최대 5MB"
                 uploaded={imageUploaded}
-                onToggle={() => onImageUploadedChange(!imageUploaded)}
+                selectedSample={selectedSampleImage}
+                onToggleUpload={() => { onImageUploadedChange(!imageUploaded); setSelectedSampleImage(null); }}
+                onSelectSample={(img) => { setSelectedSampleImage(img); if (img) onImageUploadedChange(true); }}
               />
             </div>
           )}
           {selectedMessageTypeId === 'wide-image' && (
             <div className="mb-4">
-              <p className="mb-2 text-sm font-medium">이미지 업로드 <span className="text-xs text-red-500">*</span></p>
-              <ImageUploadBox
-                label="이미지를 드래그하거나 클릭하세요"
+              <ImageUploadWithSamples
+                label="이미지 업로드"
                 spec="권장 800×600px · JPG/PNG · 최대 5MB"
                 uploaded={imageUploaded}
-                onToggle={() => onImageUploadedChange(!imageUploaded)}
+                selectedSample={selectedSampleImage}
+                onToggleUpload={() => { onImageUploadedChange(!imageUploaded); setSelectedSampleImage(null); }}
+                onSelectSample={(img) => { setSelectedSampleImage(img); if (img) onImageUploadedChange(true); }}
+                required
               />
             </div>
           )}

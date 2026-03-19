@@ -1,6 +1,6 @@
 import { useState } from 'react';
+import { ImageUploadWithSamples } from '@/components/common/SampleImagePicker';
 import {
-  Trash2,
   Plus,
   GripVertical,
   Info,
@@ -90,29 +90,20 @@ function BasicTypeContent({
   onSubTitleChange,
   onBodyTextChange,
 }: IBannerContentSettingsStepProps) {
+  const [iconUploaded, setIconUploaded] = useState(false);
+  const [iconSample, setIconSample] = useState<{ id: string; name: string; category: string; gradient: string; icon: string } | null>(null);
+
   return (
     <div className="max-w-xl space-y-6">
       {/* 아이콘 이미지 등록 */}
-      <div>
-        <p className="mb-2 text-sm font-medium">아이콘 이미지 등록</p>
-        <div className="flex items-start gap-4">
-          <div className="flex h-[72px] w-[72px] flex-shrink-0 items-center justify-center rounded-lg border border-dashed border-border/60 bg-gray-50 text-xs text-muted-foreground">
-            46 × 46
-          </div>
-          <div className="flex-1">
-            <button className="mb-2 w-full rounded-lg border border-border/60 py-2.5 text-sm text-muted-foreground transition-colors hover:bg-muted">
-              이미지 업로드
-            </button>
-            <div className="flex items-start gap-1.5 text-xs text-muted-foreground">
-              <Info size={12} className="mt-0.5 flex-shrink-0" />
-              <span>권장 해상도 46 x 46, (이미지 비율 1:1) (JPG, PNG, GIF) 파일 사이즈 5MB 이하</span>
-            </div>
-          </div>
-          <button className="mt-2 text-muted-foreground hover:text-foreground">
-            <Trash2 size={16} />
-          </button>
-        </div>
-      </div>
+      <ImageUploadWithSamples
+        label="아이콘 이미지 등록"
+        spec="권장 해상도 46×46, 1:1 비율, JPG/PNG/GIF, 5MB 이하"
+        uploaded={iconUploaded}
+        selectedSample={iconSample}
+        onToggleUpload={() => { setIconUploaded(!iconUploaded); setIconSample(null); }}
+        onSelectSample={(img) => { setIconSample(img); if (img) setIconUploaded(false); }}
+      />
 
       {/* 아이콘 배경 컬러 */}
       <div>
@@ -228,29 +219,15 @@ function PromoTypeContent({
 
           {/* 이미지 등록 */}
           <div className="mb-5">
-            <p className="mb-2 text-sm font-medium">
-              이미지 등록 <span className="text-red-500">*</span>
-            </p>
-            {card.imageUploaded ? (
-              <div className="mb-2 flex h-40 items-center justify-center rounded-lg bg-gradient-to-br from-purple-200 to-pink-200">
-                <span className="text-sm text-purple-600">이미지 미리보기</span>
-              </div>
-            ) : null}
-            <div className="flex items-center gap-2">
-              <button
-                onClick={() => updateCard(activeCardIdx, { imageUploaded: true })}
-                className="flex-1 rounded-lg border border-border/60 py-2.5 text-sm text-muted-foreground transition-colors hover:bg-muted"
-              >
-                이미지 업로드
-              </button>
-              <button className="text-muted-foreground hover:text-foreground">
-                <Trash2 size={16} />
-              </button>
-            </div>
-            <div className="mt-1.5 flex items-start gap-1.5 text-xs text-muted-foreground">
-              <Info size={12} className="mt-0.5 flex-shrink-0" />
-              <span>권장 해상도 360 x 240, (이미지 비율 3:2) JPG, PNG, GIF 파일 사이즈 5MB 이하</span>
-            </div>
+            <ImageUploadWithSamples
+              label="이미지 등록"
+              spec="권장 해상도 360×240, 3:2 비율, JPG/PNG/GIF, 5MB 이하"
+              uploaded={card.imageUploaded}
+              selectedSample={null}
+              onToggleUpload={() => updateCard(activeCardIdx, { imageUploaded: !card.imageUploaded })}
+              onSelectSample={() => updateCard(activeCardIdx, { imageUploaded: true })}
+              required
+            />
           </div>
 
           {/* 메인 타이틀 */}
@@ -411,29 +388,15 @@ function ConsentTypeContent({
   return (
     <div className="max-w-xl space-y-6">
       {/* 이미지 등록 */}
-      <div>
-        <p className="mb-2 text-sm font-medium">
-          이미지 등록 <span className="text-red-500">*</span>
-        </p>
-        <div className="mb-2 flex h-48 items-center justify-center rounded-lg bg-gradient-to-br from-violet-200 to-indigo-200">
-          <div className="text-center">
-            <div className="mx-auto mb-2 flex h-16 w-16 items-center justify-center rounded-full bg-primary/80 text-xl font-bold text-white">Hello!</div>
-            <span className="text-xs text-violet-500">이미지 미리보기</span>
-          </div>
-        </div>
-        <div className="flex items-center gap-2">
-          <button className="flex-1 rounded-lg border border-border/60 py-2.5 text-sm text-muted-foreground transition-colors hover:bg-muted">
-            이미지 업로드
-          </button>
-          <button className="text-muted-foreground hover:text-foreground">
-            <Trash2 size={16} />
-          </button>
-        </div>
-        <div className="mt-1.5 flex items-start gap-1.5 text-xs text-muted-foreground">
-          <Info size={12} className="mt-0.5 flex-shrink-0" />
-          <span>권장 해상도 360 x 240, (이미지 비율 3:2, JPG, PNG, GIF) 파일 사이즈 5MB 이하</span>
-        </div>
-      </div>
+      <ImageUploadWithSamples
+        label="이미지 등록"
+        spec="권장 해상도 360×240, 3:2 비율, JPG/PNG/GIF, 5MB 이하"
+        uploaded={false}
+        selectedSample={null}
+        onToggleUpload={() => {}}
+        onSelectSample={() => {}}
+        required
+      />
 
       {/* 메인 타이틀 */}
       <FieldWithCounter
