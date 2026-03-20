@@ -203,15 +203,15 @@ export const MOCK_RECOMMENDED_ACTIONS: IRecommendedAction[] = [
     title: '메시지 클릭률이 평균보다 낮습니다',
     description: '현재 클릭률 8.8%는 업종 평균 12%보다 낮습니다. 메시지 문구와 CTA 버튼을 변경하면 클릭률을 개선할 수 있습니다.',
     impact: '예상 클릭률 +3.2%p 개선',
-    action: '메시지 문구 수정',
-    actionPath: '/marketing/crm',
+    action: '성과 분석 보기',
+    actionPath: '/statistics/crm',
   },
   {
     id: 2,
     title: '신규 방문자 전용 캠페인이 없습니다',
     description: '지난 7일간 신규 방문자 2,340명 중 캠페인 노출은 0건입니다. 신규 방문자 대상 웰컴 쿠폰 캠페인을 추가하면 전환율이 증가할 수 있습니다.',
     impact: '예상 전환율 +1.8%p 증가',
-    action: '캠페인 만들기',
+    action: '신규 캠페인 만들기',
     actionPath: '/marketing/crm',
   },
   {
@@ -219,7 +219,7 @@ export const MOCK_RECOMMENDED_ACTIONS: IRecommendedAction[] = [
     title: '장바구니 이탈 고객을 놓치고 있습니다',
     description: '최근 7일간 장바구니 이탈 고객 187명에게 리마인드 메시지를 보내지 않았습니다. 장바구니 리마인드 캠페인은 평균 15% 구매 전환을 기록합니다.',
     impact: '예상 추가 매출 약 28건',
-    action: '리마인드 캠페인 설정',
+    action: '리마인드 캠페인 만들기',
     actionPath: '/marketing/crm',
   },
 ];
