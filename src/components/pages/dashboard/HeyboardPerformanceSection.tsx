@@ -15,7 +15,7 @@ export function HeyboardPerformanceSection() {
         <div className="flex items-center gap-3">
           <span className="text-xs text-muted-foreground">이번달 기준</span>
           <button
-            onClick={() => navigate('/statistics/marketing')}
+            onClick={() => navigate('/statistics/customers')}
             className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground"
           >
             상세보기 <ArrowRight size={14} />
