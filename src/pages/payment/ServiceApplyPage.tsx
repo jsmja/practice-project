@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { PageHeader } from '@/components/common/PageHeader';
 import { Badge } from '@/components/common/Badge';
 import { Check, CreditCard, Plus } from 'lucide-react';
@@ -18,10 +18,19 @@ const POLICIES = [
 
 export function ServiceApplyPage() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [currentStep, setCurrentStep] = useState(0);
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [subscriptionType, setSubscriptionType] = useState<'월간' | '연간'>('월간');
   const [agreedPolicy, setAgreedPolicy] = useState(false);
+
+  // URL에서 select 파라미터로 서비스 자동 선택
+  useEffect(() => {
+    const selectParam = searchParams.get('select');
+    if (selectParam) {
+      setSelectedIds(new Set([selectParam]));
+    }
+  }, [searchParams]);
 
   const toggleService = (id: string) => {
     setSelectedIds((prev) => {
