@@ -63,7 +63,7 @@ export function SiteOverviewSection() {
         <div className="flex items-center gap-3">
           <span className="text-xs text-muted-foreground">2026-03-16 기준</span>
           <button
-            onClick={() => navigate('/statistics/page')}
+            onClick={() => navigate('/statistics/customers')}
             className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground"
           >
             상세보기 <ArrowRight size={14} />

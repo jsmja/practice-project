@@ -103,7 +103,7 @@ export function CrmCampaignListPage() {
         title="메시지 캠페인 현황"
         actions={
           <button
-            onClick={() => navigate('/marketing/crm/create')}
+            onClick={() => navigate('/marketing/crm')}
             className="flex items-center gap-2 rounded-lg bg-kakao px-4 py-2.5 text-sm font-medium text-kakao-foreground shadow-sm transition-colors hover:bg-yellow-400"
           >
             <Plus size={16} />

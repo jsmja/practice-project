@@ -190,11 +190,11 @@ export const MOCK_ACTIVE_CAMPAIGNS: IActiveCampaign[] = [
 ];
 
 export const MOCK_ALERTS: IOperationalAlert[] = [
-  { id: 5, type: 'destructive', severity: 3, message: '인스타그램 연동이 만료되었습니다. 재연결이 필요합니다.', action: '서비스 연결', actionPath: '/settings/integrations' },
-  { id: 1, type: 'warning', severity: 3, message: '잔여 포인트가 5,000P 이하입니다. 충전이 필요합니다.', action: '충전하기', actionPath: '/points' },
+  { id: 5, type: 'destructive', severity: 3, message: '인스타그램 연동이 만료되었습니다. 재연결이 필요합니다.', action: '서비스 연결', actionPath: '/service-integration' },
+  { id: 1, type: 'warning', severity: 3, message: '잔여 포인트가 5,000P 이하입니다. 충전이 필요합니다.', action: '충전하기', actionPath: '/settings/points' },
   { id: 3, type: 'destructive', severity: 2, message: '봄 신메뉴 캠페인 클릭률이 전주 대비 15% 하락했습니다.', action: '캠페인 분석', actionPath: '/statistics/crm' },
-  { id: 4, type: 'warning', severity: 2, message: '마케팅 수신 동의 고객이 50명 이하입니다. 수신 동의 유도 캠페인을 설정하세요.', action: '수신 동의 관리', actionPath: '/marketing/consent' },
-  { id: 2, type: 'info', severity: 1, message: '신규 캠페인을 시작하여 전환율을 높여보세요.', action: '캠페인 만들기', actionPath: '/campaigns/create' },
+  { id: 4, type: 'warning', severity: 2, message: '마케팅 수신 동의 고객이 50명 이하입니다. 수신 동의 유도 캠페인을 설정하세요.', action: '배너 관리', actionPath: '/marketing/event-banners' },
+  { id: 2, type: 'info', severity: 1, message: '신규 캠페인을 시작하여 전환율을 높여보세요.', action: '캠페인 만들기', actionPath: '/marketing/crm' },
 ];
 
 export const MOCK_RECOMMENDED_ACTIONS: IRecommendedAction[] = [
@@ -204,7 +204,7 @@ export const MOCK_RECOMMENDED_ACTIONS: IRecommendedAction[] = [
     description: '현재 클릭률 8.8%는 업종 평균 12%보다 낮습니다. 메시지 문구와 CTA 버튼을 변경하면 클릭률을 개선할 수 있습니다.',
     impact: '예상 클릭률 +3.2%p 개선',
     action: '메시지 문구 수정',
-    actionPath: '/campaigns',
+    actionPath: '/marketing/crm',
   },
   {
     id: 2,
@@ -212,7 +212,7 @@ export const MOCK_RECOMMENDED_ACTIONS: IRecommendedAction[] = [
     description: '지난 7일간 신규 방문자 2,340명 중 캠페인 노출은 0건입니다. 신규 방문자 대상 웰컴 쿠폰 캠페인을 추가하면 전환율이 증가할 수 있습니다.',
     impact: '예상 전환율 +1.8%p 증가',
     action: '캠페인 만들기',
-    actionPath: '/campaigns/create',
+    actionPath: '/marketing/crm',
   },
   {
     id: 3,
@@ -220,6 +220,6 @@ export const MOCK_RECOMMENDED_ACTIONS: IRecommendedAction[] = [
     description: '최근 7일간 장바구니 이탈 고객 187명에게 리마인드 메시지를 보내지 않았습니다. 장바구니 리마인드 캠페인은 평균 15% 구매 전환을 기록합니다.',
     impact: '예상 추가 매출 약 28건',
     action: '리마인드 캠페인 설정',
-    actionPath: '/campaigns/create',
+    actionPath: '/marketing/crm',
   },
 ];

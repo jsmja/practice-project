@@ -62,7 +62,7 @@ export function ServiceSummarySection() {
         <div className="mb-4 flex items-center justify-between">
           <h4 className="text-sm font-semibold text-foreground">헤이보드 현황</h4>
           <button
-            onClick={() => navigate('/heyboard')}
+            onClick={() => navigate('/dashboard')}
             className="text-xs text-muted-foreground hover:text-foreground"
           >
             상세보기 →
@@ -116,7 +116,7 @@ export function ServiceSummarySection() {
           </div>
         </div>
         <button
-          onClick={() => navigate('/settings/chat')}
+          onClick={() => navigate('/service-integration')}
           className="mt-4 flex w-full items-center justify-center gap-1.5 rounded-xl border border-amber-200 bg-amber-50 px-4 py-2 text-xs font-medium text-amber-700 transition-colors hover:bg-amber-100"
         >
           <Zap size={12} />
@@ -129,7 +129,7 @@ export function ServiceSummarySection() {
         <div className="mb-4 flex items-center justify-between">
           <h4 className="text-sm font-semibold text-foreground">마케팅 현황</h4>
           <button
-            onClick={() => navigate('/campaigns')}
+            onClick={() => navigate('/marketing/crm')}
             className="text-xs text-muted-foreground hover:text-foreground"
           >
             상세보기 →

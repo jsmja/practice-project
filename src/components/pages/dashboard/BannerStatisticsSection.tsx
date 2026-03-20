@@ -22,7 +22,7 @@ export function BannerStatisticsSection() {
       title="마케팅 팝업 통계"
       titleRight={
         <button
-          onClick={() => navigate('/banners')}
+          onClick={() => navigate('/marketing/event-banners')}
           className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground"
         >
           상세보기 <ArrowRight size={14} />

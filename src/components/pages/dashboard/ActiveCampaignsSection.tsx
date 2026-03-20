@@ -32,7 +32,7 @@ export function ActiveCampaignsSection() {
       title="메시지 캠페인"
       titleRight={
         <button
-          onClick={() => navigate('/campaigns')}
+          onClick={() => navigate('/marketing/crm')}
           className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground"
         >
           전체보기 <ArrowRight size={14} />
@@ -43,7 +43,7 @@ export function ActiveCampaignsSection() {
         <div className="flex flex-col items-center py-10 text-center">
           <p className="text-sm text-muted-foreground">활성 캠페인이 없습니다.</p>
           <button
-            onClick={() => navigate('/campaigns/create')}
+            onClick={() => navigate('/marketing/crm')}
             className="mt-4 rounded-lg bg-primary px-5 py-2.5 text-sm text-primary-foreground hover:bg-primary/90"
           >
             캠페인 만들기
