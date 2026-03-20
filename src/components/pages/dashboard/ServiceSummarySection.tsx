@@ -62,7 +62,7 @@ export function ServiceSummarySection() {
         <div className="mb-4 flex items-center justify-between">
           <h4 className="text-sm font-semibold text-foreground">헤이보드 현황</h4>
           <button
-            onClick={() => navigate('/dashboard')}
+            onClick={() => navigate('/statistics/customers')}
             className="text-xs text-muted-foreground hover:text-foreground"
           >
             상세보기 →
@@ -129,7 +129,7 @@ export function ServiceSummarySection() {
         <div className="mb-4 flex items-center justify-between">
           <h4 className="text-sm font-semibold text-foreground">마케팅 현황</h4>
           <button
-            onClick={() => navigate('/marketing/crm')}
+            onClick={() => navigate('/marketing/event-banners')}
             className="text-xs text-muted-foreground hover:text-foreground"
           >
             상세보기 →
