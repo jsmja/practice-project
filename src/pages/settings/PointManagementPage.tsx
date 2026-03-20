@@ -435,8 +435,20 @@ export function PointManagementPage() {
   const [showChargeModal, setShowChargeModal] = useState(false);
   const [showRefundModal, setShowRefundModal] = useState(false);
   const [refundDetailOpen, setRefundDetailOpen] = useState(false);
+  const [cancelledRefundIds, setCancelledRefundIds] = useState<Set<number>>(new Set());
 
-  const { data: pointHistory = [] } = usePointHistory();
+  const { data: rawPointHistory = [] } = usePointHistory();
+
+  // 취소된 환불 건 제외
+  const pointHistory = useMemo(() =>
+    rawPointHistory.filter((h) => !cancelledRefundIds.has(h.no)),
+    [rawPointHistory, cancelledRefundIds]
+  );
+
+  const handleCancelRefund = (no: number) => {
+    setCancelledRefundIds((prev) => new Set(prev).add(no));
+    setRefundDetailOpen(false);
+  };
 
   const filteredHistory = useMemo(() => {
     if (activeType === '전체') return pointHistory;
@@ -516,7 +528,7 @@ export function PointManagementPage() {
                           <div className="flex items-center gap-2">
                             <span className="font-bold text-muted-foreground">{h.amount.toLocaleString()}P</span>
                             <button
-                              onClick={(e) => { e.stopPropagation(); alert('환불 신청이 취소되었습니다.'); }}
+                              onClick={(e) => { e.stopPropagation(); handleCancelRefund(h.no); }}
                               className="rounded border border-border px-2 py-0.5 text-[10px] text-muted-foreground transition-colors hover:border-red-300 hover:text-red-500"
                             >
                               취소
