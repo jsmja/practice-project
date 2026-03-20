@@ -192,7 +192,7 @@ export const MOCK_ACTIVE_CAMPAIGNS: IActiveCampaign[] = [
 export const MOCK_ALERTS: IOperationalAlert[] = [
   { id: 5, type: 'destructive', severity: 3, message: '인스타그램 연동이 만료되었습니다. 재연결이 필요합니다.', action: '서비스 연결', actionPath: '/service-integration' },
   { id: 1, type: 'warning', severity: 3, message: '잔여 포인트가 5,000P 이하입니다. 충전이 필요합니다.', action: '충전하기', actionPath: '/settings/points' },
-  { id: 3, type: 'destructive', severity: 2, message: '봄 신메뉴 캠페인 클릭률이 전주 대비 15% 하락했습니다.', action: '캠페인 분석', actionPath: '/statistics/crm' },
+  { id: 3, type: 'destructive', severity: 2, message: '봄 신메뉴 캠페인 클릭률이 전주 대비 15% 하락했습니다.', action: '성과 확인하기', actionPath: '/statistics/crm' },
   { id: 4, type: 'warning', severity: 2, message: '마케팅 수신 동의 고객이 50명 이하입니다. 수신 동의 유도 캠페인을 설정하세요.', action: '배너 관리', actionPath: '/marketing/event-banners' },
   { id: 2, type: 'info', severity: 1, message: '신규 캠페인을 시작하여 전환율을 높여보세요.', action: '캠페인 만들기', actionPath: '/marketing/crm' },
 ];

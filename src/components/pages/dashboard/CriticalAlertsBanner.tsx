@@ -10,7 +10,7 @@ interface ICriticalAlertsBannerProps {
 
 const SEVERITY_LABEL: Record<number, string> = {
   3: '서비스 중단 위험',
-  2: '데이터 이상',
+  2: '데이터 경고',
   1: '개선 제안',
 };
 

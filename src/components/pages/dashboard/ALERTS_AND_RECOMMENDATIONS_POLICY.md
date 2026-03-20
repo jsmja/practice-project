@@ -97,8 +97,8 @@
 |:---:|------|------|--------|--------|:---:|
 | 3 | **서비스 중단 위험** | `destructive` | 빨강 (red-50, border-l-red-500) | `AlertCircle` | O |
 | 3 | **서비스 중단 위험** | `warning` | 노랑 (amber-50, border-l-amber-500) | `AlertTriangle` | O |
-| 2 | **데이터 이상** | `destructive` | 빨강 | `AlertCircle` | O |
-| 2 | **데이터 이상** | `warning` | 노랑 | `AlertTriangle` | O |
+| 2 | **데이터 경고** | `destructive` | 빨강 | `AlertCircle` | O |
+| 2 | **데이터 경고** | `warning` | 노랑 | `AlertTriangle` | O |
 | 1 | 개선 제안 | `info` | - | - | X (운영 알림 섹션에서만) |
 
 > severity 2 이상인 알림만 대시보드 최상단 배너에 표시됩니다. severity 1(개선 제안)은 하단 운영 알림 섹션에서만 표시됩니다.
@@ -118,7 +118,7 @@
 | C. 수신 동의 | `destructive` | 수신 동의 고객 ≤ 10명 | "마케팅 수신 동의 고객이 {N}명뿐입니다. 캠페인 발송이 제한됩니다." | 수신 동의 관리 → `/marketing/consent` |
 | D. 캠페인 성과 | `destructive` | 발송 실패율 ≥ 5% | "발송 실패율이 {N}%를 초과했습니다. 수신자 목록을 확인하세요." | 발송 현황 → `/statistics/crm` |
 
-#### 데이터 이상 (severity 2)
+#### 데이터 경고 (severity 2)
 
 | 카테고리 | type | 조건 | 메시지 예시 | 액션 |
 |---------|------|------|----------|------|
