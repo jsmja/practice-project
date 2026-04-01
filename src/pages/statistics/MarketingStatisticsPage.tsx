@@ -27,7 +27,7 @@ const MOCK_DATA: IMarketingStat[] = [
     name: '마케팅 수신동의 받기',
     period: '25.12.17 14:30 ~ 26.12.31 23:59',
     type: '마케팅수신동의',
-    status: '중지',
+    status: '일시중지',
     sendCount: '접속 할 때마다 (오늘 하루 보지 않기)',
     target: '마케팅 수신 미동의',
     impressions: 0,
@@ -60,7 +60,7 @@ const COLUMNS = [
     sortable: true,
     width: '80px',
     render: (row: IMarketingStat) => (
-      <Badge variant={row.status === '중지' ? 'destructive' : 'success'}>{row.status}</Badge>
+      <Badge variant={row.status === '일시중지' ? 'destructive' : 'success'}>{row.status}</Badge>
     ),
   },
   { key: 'sendCount', header: '발송 횟수', sortable: true },

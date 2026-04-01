@@ -4,15 +4,15 @@ import { PageHeader } from '@/components/common/PageHeader';
 import { StatCard } from '@/components/common/StatCard';
 import { DataTable } from '@/components/common/DataTable';
 import { Badge } from '@/components/common/Badge';
-import { FilterBar } from '@/components/common/FilterBar';
 import { Plus, CheckCircle, Clock, AlertTriangle, Ban, CircleStop, MessageCircle, ArrowRight, Settings, Coins } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { MOCK_POINT_BALANCE } from '@/mocks/points';
 import type { ICampaignDto } from '@/models/interface/dto';
 import { CAMPAIGN_STATUS } from '@/models/type';
-import { useFilterState } from '@/hooks/useFilterState';
+import { RotateCcw } from 'lucide-react';
 import { NOOP_PAGINATION } from '@/lib/constants';
-import { useCampaignList } from '@/hooks/client/campaigns/useCampaignsClient';
+import { useCampaignList, useDeleteCampaign, useDuplicateCampaign, useToggleCampaignPause } from '@/hooks/client/campaigns/useCampaignsClient';
+import { CampaignDetailPanel } from './CampaignDetailPanel';
 import { useServiceStore } from '@/store/useServiceStore';
 import { CrmCampaignCreateForm } from './CrmCampaignCreatePage';
 
@@ -32,24 +32,26 @@ const TYPE_VARIANT: Record<string, 'default' | 'info' | 'warning' | 'success'> =
   '구매 감사': 'info',
   '생일 축하': 'success',
   'VIP 전용': 'warning',
+  '장기 미접속 이탈방지': 'info',
+  '장바구니 리마인딩': 'warning',
+  '장기 미구매 구매 유도': 'default',
+  '전체 친구 대상': 'success',
+  '시즌 캠페인': 'info',
 };
 
-const FILTERS = [
-  {
-    key: 'type',
-    label: '유형',
-    value: 'all',
-    options: [
-      { label: '전체', value: 'all' },
-      { label: '커스텀 캠페인', value: '커스텀 캠페인' },
-      { label: '웰컴백 캠페인', value: '웰컴백 캠페인' },
-      { label: '신규회원 이탈방지', value: '신규회원 이탈방지' },
-      { label: '재구매 유도', value: '재구매 유도' },
-      { label: '구매 감사', value: '구매 감사' },
-      { label: '생일 축하', value: '생일 축하' },
-      { label: 'VIP 전용', value: 'VIP 전용' },
-    ],
-  },
+const CAMPAIGN_TYPE_OPTIONS = [
+  '커스텀 캠페인',
+  '웰컴백 캠페인',
+  '신규회원 이탈방지',
+  '재구매 유도',
+  '구매 감사',
+  '생일 축하',
+  'VIP 전용',
+  '장기 미접속 이탈방지',
+  '장바구니 리마인딩',
+  '장기 미구매 구매 유도',
+  '전체 친구 대상',
+  '시즌 캠페인',
 ];
 
 function formatSendRound(row: ICampaignDto) {
@@ -134,8 +136,12 @@ export function CrmManagementPage() {
   const navigate = useNavigate();
   const [activeView, setActiveView] = useState<ViewType>('list');
   const [statusFilter, setStatusFilter] = useState<string>('all');
-  const { filters, handleFilterChange, handleReset } = useFilterState(FILTERS);
+  const [typeFilters, setTypeFilters] = useState<Set<string>>(new Set());
+  const [selectedCampaign, setSelectedCampaign] = useState<ICampaignDto | null>(null);
   const { data: campaigns = [] } = useCampaignList();
+  const deleteMutation = useDeleteCampaign();
+  const duplicateMutation = useDuplicateCampaign();
+  const togglePauseMutation = useToggleCampaignPause();
   const { kakaoLinked, setKakaoLinked } = useServiceStore();
 
   const successCount = useMemo(() => campaigns.filter((c) => c.status === CAMPAIGN_STATUS.SUCCESS).length, [campaigns]);
@@ -150,15 +156,58 @@ export function CrmManagementPage() {
     if (statusFilter !== 'all') {
       result = result.filter((c) => c.status === statusFilter);
     }
-    const typeFilterValue = filters.find((f) => f.key === 'type')?.value;
-    if (typeFilterValue && typeFilterValue !== 'all') {
-      result = result.filter((c) => c.type === typeFilterValue);
+    if (typeFilters.size > 0) {
+      result = result.filter((c) => typeFilters.has(c.type));
     }
     return result;
-  }, [campaigns, statusFilter, filters]);
+  }, [campaigns, statusFilter, typeFilters]);
 
   const handleStatCardClick = (status: string) => {
     setStatusFilter(statusFilter === status ? 'all' : status);
+  };
+
+  const handleTypeToggle = (type: string) => {
+    setTypeFilters((prev) => {
+      const next = new Set(prev);
+      if (next.has(type)) {
+        next.delete(type);
+      } else {
+        next.add(type);
+      }
+      return next;
+    });
+  };
+
+  const handleFilterReset = () => {
+    setStatusFilter('all');
+    setTypeFilters(new Set());
+  };
+
+  const handleEdit = (_campaign: ICampaignDto) => {
+    setSelectedCampaign(null);
+    // TODO: 수정 모드 지원 시 editTarget 상태로 전환
+    setActiveView('create');
+  };
+
+  const handleDuplicate = (campaign: ICampaignDto) => {
+    duplicateMutation.mutate(campaign, {
+      onSuccess: () => setSelectedCampaign(null),
+    });
+  };
+
+  const handleDelete = (campaign: ICampaignDto) => {
+    if (!window.confirm(`"${campaign.name}" 캠페인을 삭제하시겠습니까?`)) return;
+    deleteMutation.mutate(campaign.no, {
+      onSuccess: () => setSelectedCampaign(null),
+    });
+  };
+
+  const handleTogglePause = (campaign: ICampaignDto) => {
+    const newStatus = campaign.status === '진행' ? '일시중지' : '진행';
+    togglePauseMutation.mutate(
+      { campaignNo: campaign.no, newStatus },
+      { onSuccess: () => setSelectedCampaign({ ...campaign, status: newStatus }) },
+    );
   };
 
   const devToggle = (
@@ -220,12 +269,12 @@ export function CrmManagementPage() {
               <ArrowRight size={12} className="text-border" />
               <span className="flex items-center gap-1.5">
                 <span className="flex h-5 w-5 items-center justify-center rounded-full bg-primary text-xs text-white">3</span>
-                채널 인증 완료
+                운영팀 검수 및 카카오 심사
               </span>
               <ArrowRight size={12} className="text-border" />
               <span className="flex items-center gap-1.5">
                 <span className="flex h-5 w-5 items-center justify-center rounded-full bg-primary text-xs text-white">4</span>
-                캠페인 만들기 시작!
+                연동 완료 · 캠페인 시작!
               </span>
             </div>
           </div>
@@ -340,7 +389,7 @@ export function CrmManagementPage() {
           onClick={() => handleStatCardClick(CAMPAIGN_STATUS.ENDED)}
         />
         <StatCard
-          title="중지"
+          title="일시중지"
           value={pausedCount}
           icon={<Ban size={18} />}
           isActive={statusFilter === CAMPAIGN_STATUS.PAUSED}
@@ -355,9 +404,54 @@ export function CrmManagementPage() {
         />
       </div>
 
-      <FilterBar filters={filters} onFilterChange={handleFilterChange} onReset={() => { handleReset(); setStatusFilter('all'); }} />
+      {/* 유형 멀티 필터 */}
+      <div className="flex flex-wrap items-center gap-2">
+        <span className="text-xs font-medium text-muted-foreground">유형</span>
+        {CAMPAIGN_TYPE_OPTIONS.map((type) => (
+          <button
+            key={type}
+            onClick={() => handleTypeToggle(type)}
+            className={cn(
+              'rounded-lg border px-3 py-1.5 text-xs font-medium transition-colors',
+              typeFilters.has(type)
+                ? 'border-primary bg-primary/10 text-primary'
+                : 'border-border bg-white text-muted-foreground hover:border-gray-400 hover:text-foreground',
+            )}
+          >
+            {type}
+          </button>
+        ))}
+        <button
+          onClick={handleFilterReset}
+          disabled={typeFilters.size === 0 && statusFilter === 'all'}
+          className={cn(
+            'flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs transition-colors',
+            typeFilters.size > 0 || statusFilter !== 'all'
+              ? 'text-muted-foreground hover:bg-muted hover:text-foreground'
+              : 'cursor-default text-border',
+          )}
+        >
+          <RotateCcw size={12} />
+          초기화
+        </button>
+      </div>
 
-      <DataTable columns={COLUMNS} data={filteredCampaigns} pagination={NOOP_PAGINATION} />
+      <DataTable
+        columns={COLUMNS}
+        data={filteredCampaigns}
+        pagination={NOOP_PAGINATION}
+        onRowClick={(row) => setSelectedCampaign(row)}
+      />
+
+      <CampaignDetailPanel
+        campaign={selectedCampaign}
+        isOpen={!!selectedCampaign}
+        onClose={() => setSelectedCampaign(null)}
+        onEdit={handleEdit}
+        onDuplicate={handleDuplicate}
+        onDelete={handleDelete}
+        onTogglePause={handleTogglePause}
+      />
     </div>
   );
 }

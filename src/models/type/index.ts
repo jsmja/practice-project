@@ -5,12 +5,12 @@ export const CAMPAIGN_STATUS = {
   FAILED: '실패',
   ENDED: '종료',
   SCHEDULED: '예정',
-  PAUSED: '중지',
+  PAUSED: '일시중지',
 } as const;
 
 export const MARKETING_STATUS = {
   ACTIVE: '진행중',
-  PAUSED: '중지',
+  PAUSED: '일시중지',
 } as const;
 
 export const CONSENT_STATUS = {
@@ -25,7 +25,7 @@ export const POINT_TYPE = {
 
 export const BANNER_STATUS = {
   ACTIVE: '진행중',
-  PAUSED: '중지',
+  PAUSED: '일시중지',
   DRAFT: '임시저장',
   ENDED: '종료',
 } as const;

@@ -12,7 +12,7 @@ const STATUS_BADGE_MAP: Record<string, BadgeVariantType> = {
   '실패': 'destructive',
   '종료': 'default',
   '예정': 'info',
-  '중지': 'warning',
+  '일시중지': 'warning',
 };
 
 const PAGE_SIZE = 5;

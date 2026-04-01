@@ -10,7 +10,7 @@ import { useMarketingList } from '@/hooks/client/marketing/useMarketingClient';
 
 const FILTERS = [
   { key: 'type', label: '유형', value: 'all', options: [{ label: '전체', value: 'all' }] },
-  { key: 'status', label: '상태', value: 'all', options: [{ label: '전체', value: 'all' }, { label: '진행중', value: 'active' }, { label: '중지', value: 'paused' }] },
+  { key: 'status', label: '상태', value: 'all', options: [{ label: '전체', value: 'all' }, { label: '진행중', value: 'active' }, { label: '일시중지', value: 'paused' }] },
   { key: 'sendCount', label: '발송 횟수', value: 'all', options: [{ label: '전체', value: 'all' }] },
 ];
 

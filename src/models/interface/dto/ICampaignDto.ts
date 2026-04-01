@@ -11,4 +11,10 @@ export interface ICampaignDto {
   successCount: number;
   failCount: number;
   failReason?: string;
+  description?: string;
+  createdDate?: string;
+  lastModifiedDate?: string;
+  messageContent?: string;
+  messageButtons?: string[];
+  audienceTags?: string[];
 }

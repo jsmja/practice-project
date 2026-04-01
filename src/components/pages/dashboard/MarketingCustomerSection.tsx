@@ -1,7 +1,7 @@
 import { cn } from '@/lib/utils';
 import { SectionCard } from '@/components/common/SectionCard';
 import { MOCK_MARKETING_CONSENT } from '@/mocks/dashboard';
-import { Users, UserPlus, ArrowRight, Sparkles } from 'lucide-react';
+import { Users, UserPlus, ArrowRight, Sparkles, TrendingUp } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 export function MarketingCustomerSection() {
@@ -28,7 +28,8 @@ export function MarketingCustomerSection() {
             </div>
           </div>
           <div className="mt-3 flex items-center gap-1 text-sm text-green-600">
-            <span>↑ 전주 대비 +{consent.consentChange}%</span>
+            <TrendingUp size={14} />
+            <span>전주 대비 +{consent.consentChange}%</span>
           </div>
         </div>
 

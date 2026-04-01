@@ -69,7 +69,7 @@ export const MOCK_BANNERS: IBannerDto[] = [
     purpose: '리뷰 유도',
     bannerType: '슬라이드인',
     targetCustomer: '신규 방문 고객',
-    status: '중지',
+    status: '일시중지',
     impressions: 560,
     clicks: 45,
     ctr: '8.0%',

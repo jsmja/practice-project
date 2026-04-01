@@ -136,7 +136,7 @@ export function CrmCampaignListPage() {
           onClick={() => handleStatCardClick(CAMPAIGN_STATUS.ENDED)}
         />
         <StatCard
-          title="중지"
+          title="일시중지"
           value={pausedCount}
           icon={<Ban size={18} />}
           isActive={statusFilter === CAMPAIGN_STATUS.PAUSED}

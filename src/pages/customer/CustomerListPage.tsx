@@ -4,12 +4,14 @@ import { FilterBar } from '@/components/common/FilterBar';
 import { DataTable } from '@/components/common/DataTable';
 import { Badge } from '@/components/common/Badge';
 import { CustomerDetailPanel } from './CustomerDetailPanel';
-import { MessageSquare, Search } from 'lucide-react';
+import { ExcelUploadModal } from '@/components/customer/ExcelUploadModal';
+import { MessageSquare, Search, Upload, FileDown } from 'lucide-react';
 import type { ICustomerDto } from '@/models/interface/dto';
 import { CONSENT_STATUS } from '@/models/type';
 import { useFilterState } from '@/hooks/useFilterState';
 import { NOOP_PAGINATION } from '@/lib/constants';
 import { useCustomerList } from '@/hooks/client/customers/useCustomersClient';
+import { generateTemplateCsv, downloadCsvFile } from '@/lib/csv-parser';
 
 const FILTERS = [
   { key: 'source', label: '유입 경로', value: 'all', options: [{ label: '전체', value: 'all' }, { label: '카페24', value: 'cafe24' }, { label: '직접유입', value: 'direct' }] },
@@ -47,6 +49,7 @@ export function CustomerListPage() {
   const [selectedCustomer, setSelectedCustomer] = useState<ICustomerDto | null>(null);
   const [searchCategory, setSearchCategory] = useState('all');
   const [searchKeyword, setSearchKeyword] = useState('');
+  const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
 
   const { data: customers = [] } = useCustomerList();
 
@@ -55,12 +58,28 @@ export function CustomerListPage() {
       <PageHeader
         title="고객 리스트"
         actions={
-          selectedRows.size > 0 ? (
-            <button className="flex items-center gap-2 rounded-lg bg-kakao px-4 py-2.5 text-sm font-medium text-kakao-foreground shadow-sm transition-colors hover:bg-yellow-400">
-              <MessageSquare size={16} />
-              선택 고객 카카오 발송 ({selectedRows.size}명)
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => downloadCsvFile(generateTemplateCsv(), '고객_업로드_템플릿.csv')}
+              className="flex items-center gap-2 rounded-lg border border-border bg-white px-4 py-2 text-sm font-medium transition-colors hover:bg-muted"
+            >
+              <FileDown size={14} />
+              템플릿 다운로드
             </button>
-          ) : undefined
+            <button
+              onClick={() => setIsUploadModalOpen(true)}
+              className="flex items-center gap-2 rounded-lg border border-border bg-white px-4 py-2 text-sm font-medium transition-colors hover:bg-muted"
+            >
+              <Upload size={14} />
+              엑셀 업로드
+            </button>
+            {selectedRows.size > 0 && (
+              <button className="flex items-center gap-2 rounded-lg bg-kakao px-4 py-2.5 text-sm font-medium text-kakao-foreground shadow-sm transition-colors hover:bg-yellow-400">
+                <MessageSquare size={16} />
+                선택 고객 카카오 발송 ({selectedRows.size}명)
+              </button>
+            )}
+          </div>
         }
       />
 
@@ -118,6 +137,13 @@ export function CustomerListPage() {
         customer={selectedCustomer}
         isOpen={!!selectedCustomer}
         onClose={() => setSelectedCustomer(null)}
+      />
+
+      {/* Excel Upload Modal */}
+      <ExcelUploadModal
+        isOpen={isUploadModalOpen}
+        onClose={() => setIsUploadModalOpen(false)}
+        existingCustomerCount={customers.length}
       />
     </div>
   );

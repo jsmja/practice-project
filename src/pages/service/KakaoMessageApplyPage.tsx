@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Upload, ExternalLink, HelpCircle, Info, ChevronDown } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Upload, ExternalLink, HelpCircle, Info, ChevronDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useServiceStore } from '@/store/useServiceStore';
 
@@ -241,9 +241,20 @@ export function KakaoMessageApplyPage() {
                   <span className="text-sm">비즈니스 인증을 받은 채널인지 확인합니다.</span>
                 </label>
                 {!isBusinessChannel && (
-                  <p className="rounded-lg bg-amber-50 px-3 py-2 text-xs text-amber-700">
-                    인증되지 않은 채널은 메시지를 발송할 수 없으니, 먼저 카카오 채널 관리자센터에서 인증을 받아주세요.
-                  </p>
+                  <div className="space-y-2">
+                    <p className="rounded-lg bg-amber-50 px-3 py-2 text-xs text-amber-700">
+                      인증되지 않은 채널은 메시지를 발송할 수 없으니, 먼저 카카오 채널 관리자센터에서 인증을 받아주세요.
+                    </p>
+                    <a
+                      href="https://center-pf.kakao.com"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 rounded-lg border border-yellow-300 bg-yellow-50 px-3 py-2 text-xs font-medium text-yellow-800 transition-colors hover:bg-yellow-100"
+                    >
+                      카카오채널 관리자센터 바로가기
+                      <ArrowRight size={12} />
+                    </a>
+                  </div>
                 )}
               </div>
             </div>

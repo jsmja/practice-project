@@ -126,7 +126,7 @@ export function ActiveCampaignsSection() {
                           <Copy size={15} />
                         </button>
                         <button
-                          title="중지"
+                          title="일시중지"
                           className="rounded-lg p-1.5 text-muted-foreground transition-colors hover:bg-red-50 hover:text-red-500"
                         >
                           <Pause size={15} />
