@@ -1,5 +1,5 @@
 export type { ICustomerDto } from './ICustomerDto';
-export type { ICampaignDto } from './ICampaignDto';
+export type { ICampaignDto, ICampaignButtonDto } from './ICampaignDto';
 export type { IMarketingDto } from './IMarketingDto';
 export type { ICrmStatDto } from './ICrmStatDto';
 export type { IPageStatDto } from './IPageStatDto';
